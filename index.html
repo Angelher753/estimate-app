@@ -1,384 +1,1100 @@
-<div style="max-width:860px;margin:0 auto;padding:18px;border:1px solid #e6e6e6;border-radius:12px;">
-  <h2 style="margin:0 0 12px 0;">Re-Plaster Estimate</h2>
-  <p style="margin:0 0 18px 0;opacity:.8;">
-    Internal only. Subject to accounting approval.
-  </p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="3M Estimate">
+<meta name="theme-color" content="#0e2a47">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAVRUlEQVR4nO2deVgT19rA35lJJisk7JsCAXFDbV3A4oZUse5arUvrtdZel17Br63W2tv69bu2t/Vqn1qvWrXUtnb53PcFl4r1at23T7EsoiKKLCJIQCD7fH/EB1NgwiSZSWbi+T35IyTvnPPOyY/JnDlnTjD/nhMAgWgJEUVRns4BwVNwTyeA4C9IDgQtSA4ELUgOBC1IDgQtSA4ELUgOBC1IDgQtSA4ELUgOBC1IDgQtIgA0toJoGXTkQNCC5EDQguRA0ILkQNCC5EDQguRA0ILkQNAiQpc5EHSgIweCFiQHghYkB4IWJAeCFncPvAUHqGMjw2KjwqMiQoL9VUEB6mB/lb+fr1wqkZBiqYQUi0Rmi8VkMun0xurax9raurKKR8VlFYV3y3JuFl3LL3ykfezOhJ9lRJyWjuNYe02b7p1jn+/c7vlOMZ1iI5UKGYOtCLGIkEklfiolAECnp29RFJVz8+7xs1d3/3r60vUC1zM8v3NVu+hwR7fS6Q1dhs6q0ta6ngAAzJg4bNkHM5zYcOHS9d9uOchKDi3CrRxjU/uuX/IuiwViGBYfFxUfF5U2dXT+7eK1G/dv2nvMaDKzWAUTpBLyL2MHrfxxt+tFYRg2c/Iw18vhAgGfc3SIabNi0Vuntq4YkNDV/bVPHzug9vp+ymRwsZyBL3SLi45wbtv64quPruzUV9xyMQc6BCyHlXbR4TvXfrxw9kQ31xsVFTVyxHB95R0Xy5k1eTgb6XCC4OUAABzHF86e9Nnbr7q53vT0dP3D2+DCMgWaNqGpfXuymBK7eIMcVv427ZUpg936/TJo0KCO7aKNNaVOlzBj0lAcx1hMiV28Rw4AWPLxe36WB+6sMT09XVdx27lt5TLJa6NfZDcfdvEqOZRK5byZk/UPC91W49SpUxW43qyrcWLbySMHqnwUrKfEIl4lBwBMmzaNqiywGBvcU51SqXzjjTf0Th08Zk7i76moFW6vc7TIzZs3L1++nJeXl5ubW1BQUF1dXVNTU1NTY7FYfHx8AgICOnbs2KNHj1GjRvXs6fDJmlKpHNC/7/HL+fI2z3OQewukpaWtWr2GCo/HCDHzrZJ7d+sQ04a7rFjBTXJotdq9e/ceO3YsKyvr3r17dGFVVVVVVVUFBQX79u1bvHhxYmLiF198MWDAAIfqSkhIOPJrliy8K4YTLifeOnFxcS8NGfyf7CJJUDvmW81+dQR3KbEFt3IYjaZDJy7+75ad275brtfrbd/CJUqRXI1LfAipDyFRYoQYI0TWfz7KYqJMBrOuNvtederIccuXLE5LS2Neafv27SmLyfT4odg3hOX9oSE9Pf3wuEnM5YiKCB7Sj7892Ea4HXjbd+zMvmNnDI+KrWZghFisChP7BImUQThJO8iCEWKMEOMShVgVCtDxo693dHu+R/++SQwrVavVAGCufyT2DWYQzsLuDxs2LKZtaFlNGUMdZ04axnYPlpMP0R0npBiGi1WhCk2iuutwRVRP0j/SjhnNwaXq1ZuzmMcTBAEAZr37Bm8xDEtLS2N4WiqTSqaMGcR1SqyAAwVcP8SqcKUmiVRFOF3dqUs5zHepqqoKACiTgVHhLDF9+nTSXGvR1bVa4+QRHPRgufnghNGVrW/Q6Q1GhsHl5eVc5FBSUmLnXZVKNXXqVN3D1g8eM1sbTLl//75jmXGGMOTwUcglJNOO4oULFwDAoY4lE9atW2c/ID093VBVRFnszR9ITuzWMbatnQCdTrdhwwYn0uMCYcjRr1c8w0iLxXLixAkAwMVSdnPYsGFDba292T3x8fEDB/QzVN21EzPz1VYOG5s2bXr48KEz+XGAAOTAcSzt9TEMg/fv319aWgoAhFzNbhq1tbWt/k/PnTtXT//NEhkePHRAgv0SVq1a5URuHIFzfz7q0gPDsU/nTe/TozOTnaEoatmyZQAAgBGKQIZVMGf16tX2f0dg9OjREcFq4+OKFiv6a2s92FOnTl25csWRjAC4bHxeHzkSunXYvW7x36aMZBi/atWqU6dOAYBYFcr61woA3Lhx49gZex8eQRBz5sxpsU8rk0qmjm2lB7ty5UqX8mMbD4yttAiB4zKZRC6VRIQEaNqG9oiPezHp+U7tIpmXcPTo0YULF1qfS4LjuEkTMjbuH9Snh52AGTNm/GPxYouhHifltq9PGpGs9lXa2bCkpGTnzp0AgJN8Gar1gBwSUlx2bgu7Ze7ateu1117T6XQAIAmKFSkC2C2/kSMnLxYWl2nahNIFBAQEvDp58sYDp2ThfzqJnjmplVnEa9euNZlMACBScpW8o/D6a4UJjx49evPNN8eNG2c1Q+QTLA1j2rVxAoqi1rd2N8DcuXMNVXds+7T9E7p0jouys4ler8/IyAAAXCwlpCpWUnUdActRWFg4f/78yMjIH374wfqKWBWu0LzA9WDsL7uz6ht0dgK6d++elNjLWF3c+EqrY7Bbtmx58OABAJCBMcCbeYO4h3ohLlFQUDB48OCYmJjly5c/fvwYADBCLI/sodAkYrije+QoVM3jus37j9sPmjt3rr7ilrWKtmGBQ5OZ9WAxXBJg7wBDlxJHD0EeOeLi4g4dOnTkyJGXX36ZkChkEV18418i/R04e3WRjM2Z9gPGjx8frJab6qoAYMak4QRur53Pnj178eJFACD9IjCRhMU8XUSQcgCASCRKTU3duXPnlavZw8dMwHC3nlnn3773n/PX7ASIxeLZs2cbHt6WSsipYwfbL62xBysJjGUtRTYQqhyNdO2g2f71x0sW/JUUu9WPjE0H7AfMnj2bqquYMLTPkzt+aSgrK9u+fTsAiBT+rF/VdRHBy2HlrddG7lj9oVRCuq3GQycuFN23N/wbGho64ZXxMycOtV/OunXrjEYjWE9FeYaXyAEA/RK7/7QkXUy46VzfYqG+23rIfszy5cu7du5gJ8BgMHzzzTcAgIulpNrhm/25xnvkAIDUlP5zxyfZHzRnkZ93H23Q6e0EhIS0Mmtw27ZtZWVlAEAGRAPGu8/CAwnpDUa/7i+rnxuN2SCTyQIDA6Ojo5OTk2fNmrVmzZo7d+44UfgH770TLdMCZWE76xaornm8NfOEKyU09mDJgGhWUmIXvtiq0+kqKyuLiopOnDjx7bffpqWlaTSaXr167d6926FyxGLxwrff0pXf4CbNpmRsbuW01A4XLlw4d+4cAJDqCC6GCV3HY+uQYhihfm5skxcpygxmM2UxWYwNFl3t9aKq8ZOmDB08cOPGjSoV04vK48ePf3fe/PqGGkLqy3LS0PTKWc6NolOX/ujb05kL9jY92Jg/fQqOfiIsXFZsGb4cOaxgGIGJSJyUixQBZEC0LOI5305DTt6sTx01ocltL3YgSXLsmNF6dx08vtm434mtysvLt27dCgCE3I+Q+7GdFDvwS44WIWTqghrFZ//+jvkmSUlJBm0JZWLqkytk/na+uKzC0a0yMjIMBgNYDxt8RQByWPnlwBmD0cQwODExESiLUev8yhnMMVssrfZpm2A0Gq3TlTGRhFQ7ueaTG/DUwJvDj0fa2suMlw8MCwsDAFN9JRcDb80fP+04otc7sDjYjh07rDc6SAKiAcM4yurZGngrKWc6LVulUuE4bq6v5jKdp1Rpa7cfOsk8nuc92EaEJIeF8epbGIbJ5XKL0d6sC3ZpdailkUuXLp0+fRoASFUYP3uwjQhJjvBgB+bP1dfXU2YjV528ZlzLu332Si6TyMabD3g4mNIEwcjhq5T37MJ02rB1KRgAcNuldADI2NR6n7aiomLz5s0AQMjUIoU/90m5hGDkmPpyqoTxoOvNmzetT9yzfouVfVlnSx9U2o/JyMiwXrDhcw+2Ea7kWL9k/txpY+1PxmdOx9jIRelTmMdnZ2cDAEaIwI0TMk1m8/fbDtsLMJme9mD9+NuDbYQrOaLahHzy7hs5R75b8fGc7p0dWA+pOX16xh/4/jOH5mocPXoUPHEDyI87DttZDWDXrl3FxcUAIAmI4uEYbHO4nT0lk0qmjRsybdyQkvLKzOPnMn87//vFbObr2Me0DVswa+LEEQMdWgdHr9cfPHgQAAgZB2Mrdqmo0oYmTtCV39CV0Z+cYhjPe7CNuGlqXXhIwIxJw2dMGq7TG3JuFl3Pv5OdX5h/+16VtlZbU6etratv0EmlpEIuC/ZXtY9p2yUuKrV/ry7to52oa9u2bZWVlQAgUgaxvBvMkARE6crz6aYNiFVhuNiBhY08iLvveJNKyB7xcT3iubpd0WQyff755wAAGC72cdOCcU3ARBJ1t1EeqZpdBPDN5xBfffVVbm4uAJDqCEzkvimlXolXyXH27NmPPvoIAADDuLuX+tnB3b/xxh05OTljxoyxzuSWBMUSUiU3u8bZ1Brn4SolLzlynD59OiUlxXq7qUjuJwvt6OmMvAHBy2E2m7/88suBAwdazSCkPgpNoiCuIvAfYf+W/fHjx+fNm9e4VJJI7q+ITsAICYc7xcNvFeAqJa66slPe/mxockJqQrtBKckyGcvdep1Ot2fPnpUrV1rHvgEAMEwSGCML7YSOGSzClRwPKqt/2vnr18s+JildSkpK3759e/funZCQ4Ovr/FXL0tLSrKysQ4cO7d+/X6vVNr4uUgbKwuIJGdPp6QiGYOpuo7krnTLpjTVlxppy0+MKymLGMKxjx47x8fHR0dEajUaj0URERCiVSoVCoVAo5HI5RVEGg8FgMFRXV1dWVlZUVBQVFd26dSsvL+/SpUtNlvbFMFykCpMEakRyV8e+a/KPWZitla6KH8b68rcton94u6HkOpNIWURXSYCGixy4vUKKiSSkfxTpH0VZzKa6h+a6qoJ7FXk3dlNmplOFm4OLpSJloMgnWOwT4p7P6ZmF2yMHHWZ9rUVXazE0WAx1FkO9xaijLCbKYgaLmbKYAQMMwwHDMUKEESQmkuBiGSFR4BIlIVPzfGqdN+GZpSYJiQ8h8fFI1QjmoHN7BC1IDgQtSA4ELSKKjxf8ELwAHTkQtCA5ELQgORC0IDkQtCA5ELQgORC0IDkQtCA5ELTw5TfemNA/pc/8D//L9hWz2aytrsnPubF3R2buH/m2b5Gk+MUhA5P6J2pioxQKhU6nKystv3LxWuaew1WVj5qUzDzYNoeJI6YaWrozlpSQY18ZmdQ/MSwiTCwS1dXV1Whri++VXL2cfXDvERYawl0Iag5ps1QJgvAP8Evq3/uFfolrV6w/ciDL+np4m7APP13Qpu3T1cQVSkVsXExsXMzIsUP/vXTNmd/PN77lUHDTBUObpUSS4s+X/6Nd+6crLPiqfH1Vvm0iI/z9/Q7uEZYcwmTi8KkGgzE4NOjt9+fEd+uEYdiMOdPO/n6hRlujUCr+519/DwkNBoCiwrtrV6y/daPQP9BvyvRJA17sK5VJ31v09qL5n1iPNA4FM2HwsBSrGfk5N75enlF6v1zpowiLCE1M6hUS5pl7d51GMKsJNvs/pQCoB2UPvl/7o/VvUkI+1yMegBrzynDrh202m/+5aFneH/lGo6G8tPyrJasKb90BAEJEvDnndWsJDgW3mEOTR6cuT26Z+e3Xk3fv3DMaDY+qHuVk527I+Hnp4uWebj3HHoI/IS0rfdD4XKVWAUC/lD7WP8+fvlhR/nT5WIqiDux6smBoXIfY4NAgR4OZYDY9mQE5atywxD69pDIBz1sT6tdKI6HhT2+l11ZrSVIcHhFm/bOo8F6T4KLCu43PNTFR1VXVzIMfMFumOC+nYGDqAACIaBv+4ScLLBbL3TvFOdm5J387nXs9j+le8QNhHzmCQ4PefOt163OD3nDtyh9yxdPfga7R1jSJr65++opcIXcomGFKv2Zm2UqA43h0TOTwMS8tWbH43b/PZVgITxDqkWNr5i+2f1IU9f26n61HjsYXfVVN75FRq5++Ul9XX19XzzyYYWJms3nRe58MGjIweXC/Dp3bi0RPWzh5UL8LZy79fvy0nc15hVDlsGI2m2u0tfk5N/btzPzjWi4AGAzGkvul1i+LyOg2TeIjNW0bn9+5fdehYAeyMpmPZGYdycwiSXH7TnGJfXqNGDuUIAgA6NSlA5KDcyYO/0uLF6AA4PfjZyZOGQcAvfskBAYFPKx4svwjhmEjxj75QfmC/FvlZQ8cDXYUg8F4/WrO9as5QSFBSf0SAYAghPQ9LqRcGbJ3+35rv4MQEYs++8B6bA8JDX5nYVpMu2gAMJvNP6z7yYlgJkybOWXBf7+TPKhflCZS6aMgJWR8t86d4p/8DGB+DtO1/fmAUI8cdnhcW7f4gyUf/nNBeERYdEzk0pWf2r6r0+lXfbEmJzvPieAmNDnvsVgs44a8KlfI+yYn9U1Oah6fn1tw4rdTLu2be/FCOQCg+N79d2a9P3hoygv9EqNjohRKuV5vKCsp/7+LVw/sOVxZUel0cKsc3Hu48mFVpy4dQsNCfHx95AqZrkFXfLfkzMlzB/YcMjNeZpMPYKquIz2dA+c0LP2Xo5vIFn7ARSbCwsvlcEKL5jyzonihHKwI0ZxnUBFM1XWEp3NgjYalS7muQrZwIddV8AcvkcMNWjTHi0Wxtqfg5fCIFrZ4mSK27SlgOTyuhS1eoEjz9hSkHLzSwhaBKkLXnpiqi5DkaFjGUy1skb0vGEXstydGZl4XxM4IQgtbeN6qTNoTIzP/tJ4hD3dJcFrYIuj2bCqHFZ7skqC1sEWg7dmyHFY8uEteo4UtgmtPe3JYcdsueaUQzXGzIq60autyWOF0l5jvAF5wm3mxljj+/rCvINqTqRxWWN8lJrvhkBB0PCOisNuejslhi+z9953bsGHZslZjWBGiOXxWxIoTrcqkPa042qrOy8ERHGnRHP6LwgqutCePpgm6TQvb6rxYEdfbkxdyuFmL5lV7mSJstaeH5fCgFrZ4jSLstqfH5OCJFrYIWhEu2tMDcvBQC1sEpwh37elWOXiuhS2CUITr9nSTHALSwhbeKuKe9uRcDoFqYQuvFHFne3IohxdoYYvHFXF/e3Iih5dpYYtHFPFUe7ImhxcL0Rw3KMKH9mRBDj7shkew3XEWReFPezopB392gCe4KAo/21PEz7QEjdc0qRcu+4RgCyQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHghYkB4IWJAeCFiQHgpb/B19WwzVtorqUAAAAAElFTkSuQmCC">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e2a47'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'%3E3M%3C/text%3E%3C/svg%3E">
+<title>3M Pools · Field Estimator</title>
+<style>
+/* ════════════════════ RESET ════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 
-  <!-- POOL -->
-  <div style="padding:14px;border:1px solid #f0f0f0;border-radius:10px;margin-bottom:14px;">
-    <h3 style="margin:0 0 10px 0;">Pool</h3>
+/* ════════════════════ TOKENS ════════════════════ */
+:root{
+  --ink:#0a1929;
+  --navy:#0e2a47;
+  --navy-2:#143a61;
+  --aqua:#06b6d4;
+  --aqua-soft:#cffafe;
+  --aqua-line:#67e8f9;
+  --money:#047857;
+  --money-bg:#ecfdf5;
+  --money-ring:#6ee7b7;
+  --surface:#ffffff;
+  --bg:#eaeef3;
+  --line:#d8e0e9;
+  --line-soft:#e7edf3;
+  --muted:#5e7186;
+  --muted-2:#90a0b2;
+  --r:14px;
+  --r-sm:10px;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,"Roboto Mono",Menlo,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --bar-h:74px;
+}
 
-    <label>Pool Type</label>
-    <select id="poolType" style="width:100%;padding:10px;margin:6px 0 12px 0;">
-      <option value="rect">Standard Rectangle</option>
-      <option value="freeform">Freeform (Manual Total LF)</option>
-      <option value="custom">Custom</option>
-    </select>
+/* ════════════════════ BASE ════════════════════ */
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--ink);
+  font-size:16px;line-height:1.5;
+  padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom) + 24px);
+  overscroll-behavior-y:none;
+}
 
-    <!-- Rectangle Inputs -->
-    <div id="poolRect" style="display:block;">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:160px;">
-          <label>Pool Length (ft)</label>
-          <input id="Lp" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="e.g. 30">
+/* ════════════════════ HEADER ════════════════════ */
+.hd{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(180deg,var(--navy),#0c2440);
+  padding:calc(env(safe-area-inset-top) + 13px) 18px 13px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 1px 0 rgba(255,255,255,.04), 0 6px 18px rgba(8,20,35,.18);
+}
+.hd-icon{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(160deg,var(--aqua),var(--navy-2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;letter-spacing:-.5px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);
+}
+.hd-txt h1{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.2px;line-height:1.1}
+.hd-txt p{font-size:10px;color:rgba(190,233,245,.6);letter-spacing:.9px;margin-top:2px;font-weight:600}
+
+/* ════════════════════ WRAP ════════════════════ */
+.wrap{max-width:600px;margin:0 auto;padding:14px 14px 0}
+
+/* ════════════════════ CARD ════════════════════ */
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  margin-bottom:12px;
+  overflow:hidden;
+  box-shadow:0 1px 2px rgba(13,38,66,.04);
+}
+.card-hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:15px 16px 13px;
+}
+.card-hd .ttl{
+  display:flex;align-items:center;gap:9px;
+  font-size:12px;font-weight:800;letter-spacing:1.4px;color:var(--navy);
+}
+.card-hd .dot{width:7px;height:7px;border-radius:50%;background:var(--aqua)}
+.card-hd .lf-chip{
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  color:var(--muted);background:var(--bg);
+  padding:4px 9px;border-radius:99px;
+  font-variant-numeric:tabular-nums;letter-spacing:-.3px;
+}
+.card-hd .lf-chip.live{color:var(--navy);background:var(--aqua-soft)}
+.card-bd{padding:0 16px 16px}
+
+/* ════════════════════ PILLS ════════════════════ */
+.pills{display:flex;gap:6px;margin-bottom:14px}
+.pill{
+  flex:1;border:1.5px solid var(--line);background:#fff;
+  border-radius:var(--r-sm);padding:11px 6px;
+  font-size:13px;font-weight:700;color:var(--muted);
+  cursor:pointer;transition:.13s;line-height:1.2;
+  font-family:var(--sans);
+}
+.pill:active{transform:scale(.97)}
+.pill.on{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 2px 8px rgba(14,42,71,.25)}
+
+/* ════════════════════ FIELDS ════════════════════ */
+.fld{margin-bottom:13px}
+.fld:last-child{margin-bottom:0}
+.lbl{display:block;font-size:12.5px;font-weight:700;color:#42536a;margin-bottom:6px;letter-spacing:.1px}
+.inp{
+  display:block;width:100%;
+  padding:13px 14px;
+  border:1.5px solid var(--line);border-radius:var(--r-sm);
+  font-size:16px;font-family:var(--sans);color:var(--ink);
+  background:#fff;-webkit-appearance:none;appearance:none;outline:none;
+  transition:border-color .13s, box-shadow .13s;
+}
+.inp:focus{border-color:var(--aqua);box-shadow:0 0 0 3px rgba(6,182,212,.13)}
+.inp::placeholder{color:var(--muted-2)}
+select.inp{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235e7186' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;
+}
+.two{display:flex;gap:10px}
+.two>*{flex:1;min-width:0}
+.hint{font-size:11.5px;color:var(--muted-2);margin-top:6px;font-style:italic}
+
+/* ════════════════════ SIDES ════════════════════ */
+.sides{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.side{display:flex;gap:8px;align-items:center}
+.side .tag{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted);min-width:46px}
+.side .inp{flex:1}
+.side .rm{
+  flex-shrink:0;width:42px;height:46px;border:1.5px solid #f3cccc;border-radius:var(--r-sm);
+  background:#fff;color:#d9534f;font-size:16px;cursor:pointer;transition:.13s;
+}
+.side .rm:active{background:#fdf0f0}
+.add-side{
+  width:100%;border:1.5px dashed var(--line);background:#fbfdff;
+  border-radius:var(--r-sm);padding:11px;font-size:13px;font-weight:700;
+  color:var(--muted);cursor:pointer;transition:.13s;font-family:var(--sans);
+}
+.add-side:active{border-color:var(--aqua);color:var(--navy)}
+
+/* ════════════════════ DIVIDER ════════════════════ */
+.div{height:1px;background:var(--line-soft);margin:15px 0}
+.sub{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--muted-2);margin-bottom:11px}
+
+/* ════════════════════ TOGGLE ROWS ════════════════════ */
+.tog{
+  display:flex;align-items:center;gap:13px;
+  padding:13px 14px;border:1.5px solid var(--line);
+  border-radius:var(--r-sm);cursor:pointer;transition:.13s;
+  user-select:none;
+}
+.tog+.tog{margin-top:8px}
+.tog .box{
+  width:22px;height:22px;border-radius:7px;flex-shrink:0;
+  border:2px solid var(--line);background:#fff;
+  display:flex;align-items:center;justify-content:center;transition:.13s;
+}
+.tog .box svg{width:13px;height:13px;opacity:0;transform:scale(.6);transition:.13s}
+.tog .nm{flex:1;font-size:15px;font-weight:600}
+.tog .nm small{display:block;font-size:11.5px;color:var(--muted-2);font-weight:500;margin-top:1px}
+.tog .rt{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.tog.on{border-color:var(--aqua);background:#f4feff}
+.tog.on .box{background:var(--aqua);border-color:var(--aqua)}
+.tog.on .box svg{opacity:1;transform:scale(1)}
+.tog.on .rt{color:var(--navy)}
+
+/* adder field that appears under a checked tile/coping */
+.adder{
+  margin-top:0;max-height:0;overflow:hidden;
+  transition:max-height .2s ease, margin-top .2s ease;
+}
+.adder.open{max-height:120px;margin-top:8px}
+.adder-in{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 13px;background:#f7fbfd;border:1.5px dashed var(--aqua-line);
+  border-radius:var(--r-sm);
+}
+.adder-in .plus{font-family:var(--mono);font-size:15px;font-weight:800;color:var(--aqua);}
+.adder-in label{font-size:12.5px;font-weight:700;color:#42536a;white-space:nowrap}
+.adder-in input{
+  flex:1;min-width:0;padding:9px 11px;border:1.5px solid var(--line);
+  border-radius:8px;font-size:16px;outline:none;-webkit-appearance:none;appearance:none;
+  font-family:var(--sans);
+}
+.adder-in input:focus{border-color:var(--aqua)}
+
+/* ════════════════════ STEPPERS (lights) ════════════════════ */
+.stp{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft)}
+.stp:last-child{border-bottom:none}
+.stp .info{flex:1}
+.stp .info .nm{font-size:14.5px;font-weight:700}
+.stp .info .pr{font-size:11.5px;color:var(--muted-2);margin-top:1px}
+.stepper{display:flex;align-items:center;gap:0;border:1.5px solid var(--line);border-radius:99px;overflow:hidden}
+.stepper button{
+  width:38px;height:38px;border:none;background:#fff;font-size:20px;font-weight:600;
+  color:var(--navy);cursor:pointer;line-height:1;transition:.1s;font-family:var(--sans);
+}
+.stepper button:active{background:var(--bg)}
+.stepper .q{
+  width:34px;text-align:center;font-family:var(--mono);font-size:15px;font-weight:700;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.stepper.hot{border-color:var(--aqua);background:#f4feff}
+
+/* ════════════════════ STICKY ACTION BAR ════════════════════ */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--line);
+  padding:11px 14px calc(11px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:12px;
+}
+.bar-lf{flex-shrink:0;line-height:1.05}
+.bar-lf .big{font-family:var(--mono);font-size:21px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.bar-lf .sm{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+.bar-btn{
+  flex:1;border:none;border-radius:12px;
+  background:linear-gradient(180deg,#13365a,var(--navy));
+  color:#fff;font-size:17px;font-weight:800;padding:15px;cursor:pointer;
+  letter-spacing:-.2px;transition:.12s;box-shadow:0 4px 14px rgba(14,42,71,.3);
+  font-family:var(--sans);
+}
+.bar-btn:active{transform:scale(.985);box-shadow:0 2px 8px rgba(14,42,71,.3)}
+
+/* ════════════════════ OUTPUT / RECEIPT ════════════════════ */
+.out{display:none;margin-bottom:12px;animation:rise .32s cubic-bezier(.2,.7,.2,1)}
+.out.show{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.receipt{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;box-shadow:0 8px 30px rgba(13,38,66,.1);
+}
+.r-hd{
+  background:var(--navy);color:#fff;padding:15px 17px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+}
+.r-hd .l .job{font-size:16px;font-weight:800;letter-spacing:-.2px}
+.r-hd .l .co{font-size:10px;letter-spacing:1.3px;color:rgba(190,233,245,.65);font-weight:700;margin-top:3px}
+.r-hd .date{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.7);white-space:nowrap;text-align:right}
+
+.r-body{padding:6px 17px 0}
+.r-block{padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.r-block .h{font-size:10px;font-weight:800;letter-spacing:1.2px;color:var(--muted-2);margin-bottom:9px;display:flex;justify-content:space-between}
+.r-block .h .lf{font-family:var(--mono);color:var(--navy);font-variant-numeric:tabular-nums}
+.r-line{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;font-size:14px}
+.r-line .k{color:var(--muted)}
+.r-line .v{font-weight:600;text-align:right;font-family:var(--mono);font-size:13.5px;font-variant-numeric:tabular-nums}
+.r-line .v.word{font-family:var(--sans);font-size:14px}
+.r-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.r-tag{font-size:12px;font-weight:700;background:var(--bg);color:#42536a;padding:4px 10px;border-radius:99px}
+
+/* pricing zone */
+.r-price{padding:17px;background:linear-gradient(180deg,#fff,#f6fbf8)}
+.peek-row{display:flex;justify-content:flex-end;align-items:center;margin-bottom:6px}
+.peek{
+  font-family:var(--mono);font-size:13px;font-weight:700;color:var(--muted-2);
+  font-variant-numeric:tabular-nums;letter-spacing:1px;margin-right:9px;min-width:74px;text-align:right;
+  user-select:none;
+}
+.lock{
+  width:34px;height:30px;border:1.5px solid var(--line);border-radius:8px;background:#fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--muted);touch-action:none;user-select:none;-webkit-user-select:none;
+  -webkit-touch-callout:none;transition:.12s;
+}
+.lock:active,.lock.held{background:var(--navy);border-color:var(--navy);color:#fff}
+.lock svg{width:15px;height:15px;pointer-events:none}
+
+.quote-wrap{
+  border:2px solid var(--money-ring);background:var(--money-bg);
+  border-radius:12px;padding:15px 17px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.quote-wrap .ql{font-size:11px;font-weight:800;letter-spacing:1.4px;color:var(--money)}
+.quote-wrap .ql small{display:block;font-size:10px;letter-spacing:.4px;color:#3a9a72;font-weight:600;margin-top:2px}
+.quote-wrap .qn{font-family:var(--mono);font-size:34px;font-weight:800;color:var(--money);font-variant-numeric:tabular-nums;letter-spacing:-1.5px;line-height:1}
+
+.agreed{display:flex;align-items:center;gap:10px;margin-top:12px}
+.agreed label{font-size:12.5px;font-weight:700;color:#42536a;white-space:nowrap}
+.agreed .ai{position:relative;flex:1}
+.agreed .ai span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-weight:700;color:var(--muted)}
+.agreed input{
+  width:100%;padding:11px 12px 11px 26px;border:1.5px solid var(--line);border-radius:9px;
+  font-family:var(--mono);font-size:16px;font-weight:700;outline:none;-webkit-appearance:none;appearance:none;
+  font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.agreed input:focus{border-color:var(--money-ring);box-shadow:0 0 0 3px rgba(110,231,183,.25)}
+
+/* advanced breakdown */
+.adv-toggle{
+  width:100%;margin-top:13px;border:1.5px solid var(--line);background:#fff;
+  border-radius:10px;padding:11px 13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--sans);font-size:12.5px;font-weight:800;letter-spacing:.8px;color:var(--muted);
+  transition:.12s;
+}
+.adv-toggle:active{border-color:var(--navy)}
+.adv-toggle .chev{width:11px;height:7px;transition:transform .2s}
+.adv-toggle.open{color:var(--navy);border-color:var(--line)}
+.adv-toggle.open .chev{transform:rotate(180deg)}
+.adv{max-height:0;overflow:hidden;transition:max-height .26s ease}
+.adv.open{max-height:1600px}
+.adv-inner{padding:13px 4px 2px}
+.adv-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-size:13.5px;border-bottom:1px solid var(--line-soft)}
+.adv-row .k{color:#42536a;font-weight:600}
+.adv-row .k small{display:block;font-weight:500;color:var(--muted-2);font-size:11px}
+.adv-row .v{font-family:var(--mono);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.adv-row.sub .k{padding-left:14px;color:var(--muted);font-weight:500}
+.adv-row.sub .v{color:var(--muted)}
+.adv-row.tot{border-bottom:none;border-top:2px solid var(--navy);margin-top:5px;padding-top:10px}
+.adv-row.tot .k{font-weight:800;color:var(--navy);font-size:14px;letter-spacing:.3px}
+.adv-row.tot .v{font-weight:800;color:var(--navy);font-size:16px}
+
+.r-foot{padding:11px 17px calc(13px);text-align:center;font-size:10.5px;letter-spacing:.5px;color:var(--muted-2);background:var(--bg);font-weight:600}
+
+/* secondary actions under receipt */
+.r-acts{display:flex;gap:9px;margin-top:11px}
+.r-acts button{
+  flex:1;padding:12px;border:1.5px solid var(--line);background:#fff;border-radius:11px;
+  font-size:13.5px;font-weight:700;color:#42536a;cursor:pointer;transition:.12s;font-family:var(--sans);
+}
+.r-acts button:active{border-color:var(--navy)}
+
+/* ════════════════════ MISC ════════════════════ */
+.hidden{display:none!important}
+.foot-note{text-align:center;font-size:11px;color:var(--muted-2);padding:4px 14px 10px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="hd">
+  <div class="hd-icon">3M</div>
+  <div class="hd-txt">
+    <h1>Field Estimator</h1>
+    <p>INTERNAL · SUBJECT TO ACCOUNTING APPROVAL</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ══════════════ POOL ══════════════ -->
+  <section class="card">
+    <div class="card-hd">
+      <div class="ttl"><span class="dot"></span>POOL</div>
+      <div class="lf-chip" id="poolChip">0.0 LF</div>
+    </div>
+    <div class="card-bd">
+
+      <div class="pills" id="poolPills">
+        <button class="pill on" data-shape="rect"     onclick="setShape('pool','rect')">Rectangle</button>
+        <button class="pill"    data-shape="freeform" onclick="setShape('pool','freeform')">Freeform</button>
+        <button class="pill"    data-shape="custom"   onclick="setShape('pool','custom')">Custom</button>
+      </div>
+
+      <!-- rect -->
+      <div id="pool_rect" class="shape">
+        <div class="two">
+          <div class="fld"><label class="lbl">Length (ft)</label><input id="pLen" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="30"></div>
+          <div class="fld"><label class="lbl">Width (ft)</label><input id="pWid" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="15"></div>
         </div>
-        <div style="flex:1;min-width:160px;">
-          <label>Pool Width (ft)</label>
-          <input id="Wp" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="e.g. 15">
+        <div class="hint">Adds all four sides automatically.</div>
+      </div>
+
+      <!-- freeform -->
+      <div id="pool_freeform" class="shape hidden">
+        <div class="fld"><label class="lbl">Measured Perimeter (LF)</label><input id="pManLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="Walk &amp; tape the full edge"></div>
+      </div>
+
+      <!-- custom -->
+      <div id="pool_custom" class="shape hidden">
+        <label class="lbl">Each Side (ft)</label>
+        <div class="sides" id="pSides"></div>
+        <button class="add-side" onclick="addSide('pool')">＋ Add another side</button>
+      </div>
+
+      <div class="fld" style="margin-top:13px">
+        <label class="lbl">＋ Extra LF <span style="font-weight:500;color:var(--muted-2)">(steps, notch, bay — anything extra)</span></label>
+        <input id="pExtra" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0">
+      </div>
+
+      <div class="div"></div>
+
+      <div class="fld">
+        <label class="lbl">Pool Finish</label>
+        <select id="pFinish" class="inp">
+          <option value="none">None (tile / coping only)</option>
+          <option value="plaster" selected>Standard Plaster</option>
+          <option value="mini">Mini Pebble</option>
+          <option value="micro">Micro Pebble</option>
+          <option value="hydrazzo">Hydrazzo</option>
+          <option value="glass">Glass Bead</option>
+        </select>
+      </div>
+
+      <!-- pool tile -->
+      <div class="tog" id="pTileTog" onclick="toggleAddon('pTile')">
+        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="nm">Tile Replacement<small>6" waterline · demo + reset included</small></div>
+        <div class="rt" id="pTileLF">—</div>
+      </div>
+      <div class="adder" id="pTileAdder">
+        <div class="adder-in"><span class="plus">＋</span><label>Extra LF</label><input id="pTileExtra" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. spillway 5"></div>
+      </div>
+
+      <!-- pool coping -->
+      <div class="tog" id="pCopeTog" onclick="toggleAddon('pCope')" style="margin-top:8px">
+        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="nm">Coping<small>cap around the edge</small></div>
+        <div class="rt" id="pCopeLF">—</div>
+      </div>
+      <div class="adder" id="pCopeAdder">
+        <div class="adder-in"><span class="plus">＋</span><label>Extra LF</label><input id="pCopeExtra" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. raised wall 8"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════ SPA ══════════════ -->
+  <section class="card">
+    <div class="card-hd">
+      <div class="ttl"><span class="dot"></span>SPA</div>
+      <div class="lf-chip" id="spaChip">0.0 LF</div>
+    </div>
+    <div class="card-bd">
+
+      <div class="pills" id="spaPills">
+        <button class="pill on" data-shape="none"   onclick="setShape('spa','none')">None</button>
+        <button class="pill"    data-shape="rect"   onclick="setShape('spa','rect')">Rect</button>
+        <button class="pill"    data-shape="round"  onclick="setShape('spa','round')">Round</button>
+        <button class="pill"    data-shape="custom" onclick="setShape('spa','custom')">Custom</button>
+      </div>
+
+      <div id="spa_body" class="hidden">
+        <!-- rect -->
+        <div id="spa_rect" class="shape hidden">
+          <div class="two">
+            <div class="fld"><label class="lbl">Length (ft)</label><input id="sLen" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="7"></div>
+            <div class="fld"><label class="lbl">Width (ft)</label><input id="sWid" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="7"></div>
+          </div>
+        </div>
+
+        <!-- round -->
+        <div id="spa_round" class="shape hidden">
+          <div class="fld"><label class="lbl">Diameter (ft)</label><input id="sDiam" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="8">
+          <div class="hint">Perimeter = π × diameter, calculated for you.</div></div>
+        </div>
+
+        <!-- custom -->
+        <div id="spa_custom" class="shape hidden">
+          <label class="lbl">Each Side (ft)</label>
+          <div class="sides" id="sSides"></div>
+          <button class="add-side" onclick="addSide('spa')">＋ Add another side</button>
+        </div>
+
+        <div class="fld" style="margin-top:13px">
+          <label class="lbl">＋ Extra LF</label>
+          <input id="sExtra" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0">
+        </div>
+
+        <div class="div"></div>
+
+        <div class="fld">
+          <label class="lbl">Spa Finish</label>
+          <select id="sFinish" class="inp">
+            <option value="none">None (tile / coping only)</option>
+            <option value="plaster" selected>Standard Plaster</option>
+            <option value="mini">Mini Pebble</option>
+            <option value="micro">Micro Pebble</option>
+            <option value="hydrazzo">Hydrazzo</option>
+            <option value="glass">Glass Bead</option>
+          </select>
+        </div>
+
+        <!-- spa tile -->
+        <div class="tog" id="sTileTog" onclick="toggleAddon('sTile')">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Tile Replacement<small>add spillway LF below if any</small></div>
+          <div class="rt" id="sTileLF">—</div>
+        </div>
+        <div class="adder" id="sTileAdder">
+          <div class="adder-in"><span class="plus">＋</span><label>Extra LF</label><input id="sTileExtra" type="number" inputmode="decimal" min="0" step="0.5" placeholder="spillway 5"></div>
+        </div>
+
+        <!-- spa coping -->
+        <div class="tog" id="sCopeTog" onclick="toggleAddon('sCope')" style="margin-top:8px">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Coping<small>add or trim LF for partial</small></div>
+          <div class="rt" id="sCopeLF">—</div>
+        </div>
+        <div class="adder" id="sCopeAdder">
+          <div class="adder-in"><span class="plus">＋</span><label>Extra LF</label><input id="sCopeExtra" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"></div>
         </div>
       </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════ JOB-WIDE ══════════════ -->
+  <section class="card">
+    <div class="card-hd"><div class="ttl"><span class="dot"></span>JOB OPTIONS</div></div>
+    <div class="card-bd">
+
+      <div class="tog" id="demoTog" onclick="toggleAddon('demo')">
+        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="nm">Demo / Plaster Removal<small>pool + spa perimeter only</small></div>
+        <div class="rt" id="demoLF">—</div>
+      </div>
+
+      <div class="tog" id="permitTog" onclick="toggleAddon('permit')">
+        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="nm">Permit<small>flat fee</small></div>
+        <div class="rt">flat</div>
+      </div>
+
+      <div class="div"></div>
+      <div class="sub">LIGHTING</div>
+
+      <div class="stp" id="lHVC_stp">
+        <div class="info"><div class="nm">HV Color Light</div><div class="pr">High voltage</div></div>
+        <div class="stepper"><button onclick="step('lHVC',-1)">−</button><span class="q" id="lHVC">0</span><button onclick="step('lHVC',1)">＋</button></div>
+      </div>
+      <div class="stp" id="lHVW_stp">
+        <div class="info"><div class="nm">HV White Light</div><div class="pr">High voltage</div></div>
+        <div class="stepper"><button onclick="step('lHVW',-1)">−</button><span class="q" id="lHVW">0</span><button onclick="step('lHVW',1)">＋</button></div>
+      </div>
+      <div class="stp" id="lLVC_stp">
+        <div class="info"><div class="nm">LV Color Light</div><div class="pr">Low voltage</div></div>
+        <div class="stepper"><button onclick="step('lLVC',-1)">−</button><span class="q" id="lLVC">0</span><button onclick="step('lLVC',1)">＋</button></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════ JOB INFO ══════════════ -->
+  <section class="card">
+    <div class="card-hd"><div class="ttl"><span class="dot"></span>JOB INFO</div></div>
+    <div class="card-bd">
+      <div class="fld"><label class="lbl">Job Name</label><input id="jobName" class="inp" type="text" placeholder="Alan – Pasadena"></div>
+      <div class="fld"><label class="lbl">Notes</label><textarea id="jobNotes" class="inp" rows="2" placeholder="Anything to remember about this job"></textarea></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ OUTPUT ══════════════ -->
+  <div class="out" id="out">
+    <div class="receipt" id="receipt">
+      <div class="r-hd">
+        <div class="l">
+          <div class="job" id="rJob">Estimate</div>
+          <div class="co">3M POOLS · FIELD ESTIMATE</div>
+        </div>
+        <div class="date" id="rDate"></div>
+      </div>
+
+      <div class="r-body">
+        <div class="r-block" id="rPoolBlock">
+          <div class="h">POOL <span class="lf" id="rPoolLF"></span></div>
+          <div id="rPoolDetail"></div>
+        </div>
+        <div class="r-block" id="rSpaBlock">
+          <div class="h">SPA <span class="lf" id="rSpaLF"></span></div>
+          <div id="rSpaDetail"></div>
+        </div>
+        <div class="r-block" id="rJobBlock" style="border-bottom:none">
+          <div class="h">JOB</div>
+          <div class="r-tags" id="rJobTags"></div>
+          <div id="rNotesLine"></div>
+        </div>
+      </div>
+
+      <div class="r-price">
+        <div class="peek-row">
+          <span class="peek" id="peek">• • • •</span>
+          <button class="lock" id="lock" aria-label="Hold to reveal cost">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M5 7V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.6"/></svg>
+          </button>
+        </div>
+        <div class="quote-wrap">
+          <div class="ql" id="qLabel">QUOTE<small id="qSub"></small></div>
+          <div class="qn" id="rQuote">$0</div>
+        </div>
+        <div class="agreed">
+          <label>Total</label>
+          <div class="ai"><span>$</span><input id="agreed" type="number" inputmode="decimal" min="0" placeholder=""></div>
+        </div>
+
+        <button class="adv-toggle" id="advToggle" onclick="toggleAdv()">
+          <span>Breakdown</span>
+          <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="adv" id="advPanel"><div class="adv-inner" id="advLines"></div></div>
+      </div>
+
+      <div class="r-foot">SUBJECT TO ACCOUNTING APPROVAL · 3M POOLS INC.</div>
     </div>
 
-    <!-- Freeform Inputs -->
-    <div id="poolFreeform" style="display:none;">
-      <label>Pool Total Linear Feet (LF)</label>
-      <input id="poolManualLF" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="Enter measured total LF">
-    </div>
-
-    <!-- Custom Inputs -->
-    <div id="poolCustom" style="display:none;">
-      <label>Custom Mode</label>
-      <div style="display:flex;gap:14px;align-items:center;margin:6px 0 12px 0;flex-wrap:wrap;">
-        <label><input type="radio" name="poolCustomMode" value="dims" checked> Enter Lengths/Widths</label>
-        <label><input type="radio" name="poolCustomMode" value="manual"> Manual Total LF</label>
-      </div>
-
-      <div id="poolDims">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:120px;"><label>Length 1</label><input id="pL1" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-          <div style="flex:1;min-width:120px;"><label>Length 2</label><input id="pL2" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-          <div style="flex:1;min-width:120px;"><label>Width 1</label><input id="pW1" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-          <div style="flex:1;min-width:120px;"><label>Width 2</label><input id="pW2" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-        </div>
-      </div>
-
-      <div id="poolCustomManual" style="display:none;">
-        <label>Pool Total Linear Feet (LF)</label>
-        <input id="poolCustomLF" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;">
-      </div>
+    <div class="r-acts">
+      <button onclick="copyEst()">Copy Text</button>
+      <button onclick="saveEst()">Save File</button>
+      <button onclick="resetAll()">Reset All</button>
     </div>
   </div>
 
-  <!-- SPA -->
-  <div style="padding:14px;border:1px solid #f0f0f0;border-radius:10px;margin-bottom:14px;">
-    <h3 style="margin:0 0 10px 0;">Spa</h3>
+  <div class="foot-note">Tip: add to your Home Screen (Share → Add to Home Screen) for full-screen, offline use.</div>
 
-    <label>Spa Type</label>
-    <select id="spaType" style="width:100%;padding:10px;margin:6px 0 12px 0;">
-      <option value="none">None</option>
-      <option value="rect">Standard Rectangle</option>
-      <option value="custom">Custom</option>
-    </select>
+</div><!-- /wrap -->
 
-    <div id="spaRect" style="display:none;">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <div style="flex:1;min-width:160px;">
-          <label>Spa Length (ft)</label>
-          <input id="Ls" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="e.g. 7">
-        </div>
-        <div style="flex:1;min-width:160px;">
-          <label>Spa Width (ft)</label>
-          <input id="Ws" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="e.g. 7">
-        </div>
-      </div>
-    </div>
-
-    <div id="spaCustom" style="display:none;">
-      <label>Custom Mode</label>
-      <div style="display:flex;gap:14px;align-items:center;margin:6px 0 12px 0;flex-wrap:wrap;">
-        <label><input type="radio" name="spaCustomMode" value="dims" checked> Enter Lengths/Widths</label>
-        <label><input type="radio" name="spaCustomMode" value="manual"> Manual Total LF</label>
-      </div>
-
-      <div id="spaDims">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:120px;"><label>Length 1</label><input id="sL1" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-          <div style="flex:1;min-width:120px;"><label>Length 2</label><input id="sL2" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-          <div style="flex:1;min-width:120px;"><label>Width 1</label><input id="sW1" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-          <div style="flex:1;min-width:120px;"><label>Width 2</label><input id="sW2" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;"></div>
-        </div>
-      </div>
-
-      <div id="spaCustomManual" style="display:none;">
-        <label>Spa Total Linear Feet (LF)</label>
-        <input id="spaCustomLF" type="number" min="0" step="0.1" style="width:100%;padding:10px;margin:6px 0 12px 0;">
-      </div>
-    </div>
+<!-- ══════════════ STICKY BAR ══════════════ -->
+<div class="bar">
+  <div class="bar-lf">
+    <div class="big" id="barLF">0.0</div>
+    <div class="sm">TOTAL LF</div>
   </div>
-
-  <!-- OPTIONS -->
-  <div style="padding:14px;border:1px solid #f0f0f0;border-radius:10px;margin-bottom:14px;">
-    <h3 style="margin:0 0 10px 0;">Options</h3>
-
-    <label>Finish</label>
-    <select id="finishRate" style="width:100%;padding:10px;margin:6px 0 12px 0;">
-      <option value="60">Plaster</option>
-      <option value="80">Mini Pebble</option>
-      <option value="115">Micro Pebble</option>
-      <option value="155">Hydrazzo</option>
-    </select>
-
-    <div style="display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 12px 0;">
-      <label style="display:flex;align-items:center;gap:10px;">
-        <input id="addTile" type="checkbox">
-        Include Tile Replacement
-      </label>
-
-      <label style="display:flex;align-items:center;gap:10px;">
-        <input id="addCoping" type="checkbox">
-        Include Coping
-      </label>
-
-      <label style="display:flex;align-items:center;gap:10px;">
-        <input id="permit" type="checkbox">
-        Include Permit
-      </label>
-    </div>
-
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
-      <button id="calcBtn" type="button" style="padding:12px 16px;border-radius:10px;border:1px solid #111;background:#111;color:#fff;cursor:pointer;">
-        Calculate
-      </button>
-      <button id="resetBtn" type="button" style="padding:12px 16px;border-radius:10px;border:1px solid #ccc;background:#fff;cursor:pointer;">
-        Reset
-      </button>
-    </div>
-  </div>
-
-  <!-- SAVE / EMAIL -->
-  <div style="margin-top:14px;border-top:1px solid #eee;padding-top:12px;">
-    <h4 style="margin:0 0 10px 0;">Save / Email</h4>
-
-    <label>Job Name (Name + City)</label>
-    <input id="jobName" type="text" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="e.g. Alan - Pasadena">
-
-    <label>Notes</label>
-    <textarea id="jobNotes" rows="3" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="e.g. 2 estimates: with tile + without tile"></textarea>
-
-    <label>Your Email (to)</label>
-    <input id="toEmail" type="email" style="width:100%;padding:10px;margin:6px 0 12px 0;" placeholder="you@3mpools.com">
-
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <button id="emailBtn" type="button" style="padding:12px 16px;border-radius:10px;border:1px solid #111;background:#111;color:#fff;cursor:pointer;">
-        Send to Email
-      </button>
-      <button id="saveBtn" type="button" style="padding:12px 16px;border-radius:10px;border:1px solid #ccc;background:#fff;cursor:pointer;">
-        Save to This Device
-      </button>
-    </div>
-  </div>
-
-  <!-- OUTPUT -->
-  <div style="padding:14px;border:1px solid #eaeaea;border-radius:10px;background:#fafafa;">
-    <h3 style="margin:0 0 10px 0;">Your Estimate</h3>
-    <div id="out" style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;white-space:pre-wrap;">
-Pool LF: —
-Spa LF: —
-Total LF: —
-Finish: —
-Add-ons: —
-ESTIMATE: —
-    </div>
-  </div>
-
-  <p style="margin:14px 0 0 0;opacity:.65;font-size:12px;">
-    Subject to accounting approval.
-  </p>
+  <button class="bar-btn" onclick="calculate()">Calculate Estimate</button>
 </div>
 
 <script>
-  const $ = (id) => document.getElementById(id);
-  const num = (v) => {
-    const n = parseFloat(v);
-    return Number.isFinite(n) ? n : 0;
+"use strict";
+/* ════════════════════════════════════════════════════════════
+   3M POOLS — FIELD ESTIMATOR
+   Pricing config (internal). Edit rates here only.
+   ════════════════════════════════════════════════════════════ */
+const CFG = {
+  demo:   25,    // $/LF — pool+spa perimeter only
+  tile:   35,    // $/LF — demo + reset included
+  coping: 45,    // $/LF — demo + reset included
+  permit: 900,   // flat
+  QUOTE_MULT: 1.10,            // green number = actual cost × this (10% buffer)
+  finish: { none:0, plaster:60, mini:80, micro:115, hydrazzo:155, glass:155 },
+  finishName: { none:"None", plaster:"Plaster", mini:"Mini Pebble", micro:"Micro Pebble", hydrazzo:"Hydrazzo", glass:"Glass Bead" },
+  lights: [
+    { id:"lHVC", name:"HV Color", rate:1500 },
+    { id:"lHVW", name:"HV White", rate:1200 },
+    { id:"lLVC", name:"LV Color", rate:950  }
+  ]
+};
+const STORE_KEY = "mmm_pools_estimator_v1";
+
+/* ── shorthand ── */
+const $ = id => document.getElementById(id);
+const num = v => { const n = parseFloat(v); return Number.isFinite(n) && n > 0 ? n : 0; };
+const usd = v => v.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0});
+
+/* ── UI state (non-input) ── */
+const ui = {
+  poolShape: "rect",
+  spaShape:  "none",
+  pSides: ["","","",""],
+  sSides: ["","","",""],
+  addon: { pTile:false, pCope:false, sTile:false, sCope:false, demo:false, permit:false },
+  lights: { lHVC:0, lHVW:0, lLVC:0 }
+};
+
+/* ════════════ SHAPE PILLS ════════════ */
+function setShape(which, shape){
+  ui[which+"Shape"] = shape;
+  const pills = $(which+"Pills").children;
+  for(const b of pills) b.classList.toggle("on", b.dataset.shape===shape);
+
+  if(which==="pool"){
+    ["rect","freeform","custom"].forEach(s=>$("pool_"+s).classList.toggle("hidden", s!==shape));
+    if(shape==="custom") renderSides("pool");
+  } else {
+    const has = shape!=="none";
+    $("spa_body").classList.toggle("hidden", !has);
+    ["rect","round","custom"].forEach(s=>$("spa_"+s).classList.toggle("hidden", s!==shape));
+    if(shape==="custom") renderSides("spa");
+  }
+  recalc(); save();
+}
+
+/* ════════════ SIDES ════════════ */
+function renderSides(which){
+  const arr = ui[which==="pool"?"pSides":"sSides"];
+  const host = $(which==="pool"?"pSides":"sSides");
+  const pfx  = which==="pool"?"ps":"ss";
+  host.innerHTML = "";
+  arr.forEach((val,i)=>{
+    const row = document.createElement("div");
+    row.className = "side";
+    row.innerHTML =
+      `<span class="tag">Side ${i+1}</span>`+
+      `<input class="inp" id="${pfx}${i}" type="number" inputmode="decimal" min="0" step="0.5" placeholder="ft" value="${val||""}">`+
+      (arr.length>2?`<button class="rm" aria-label="remove">✕</button>`:"");
+    host.appendChild(row);
+    $(pfx+i).addEventListener("input", ()=>{ arr[i]=$(pfx+i).value; recalc(); save(); });
+    const rm = row.querySelector(".rm");
+    if(rm) rm.addEventListener("click", ()=>{ syncSides(which); arr.splice(i,1); renderSides(which); recalc(); save(); });
+  });
+}
+function syncSides(which){
+  const arr = ui[which==="pool"?"pSides":"sSides"];
+  const pfx = which==="pool"?"ps":"ss";
+  arr.forEach((_,i)=>{ const el=$(pfx+i); if(el) arr[i]=el.value; });
+}
+function addSide(which){
+  syncSides(which);
+  ui[which==="pool"?"pSides":"sSides"].push("");
+  renderSides(which); save();
+}
+function sidesLF(which){
+  const arr = ui[which==="pool"?"pSides":"sSides"];
+  const pfx = which==="pool"?"ps":"ss";
+  return arr.reduce((s,_,i)=>{ const el=$(pfx+i); return s + (el?num(el.value):0); },0);
+}
+
+/* ════════════ LF COMPUTE ════════════ */
+function poolLF(){
+  let base=0;
+  if(ui.poolShape==="rect")      base = 2*num($("pLen").value)+2*num($("pWid").value);
+  else if(ui.poolShape==="freeform") base = num($("pManLF").value);
+  else                            base = sidesLF("pool");
+  return base + num($("pExtra").value);
+}
+function spaLF(){
+  if(ui.spaShape==="none") return 0;
+  let base=0;
+  if(ui.spaShape==="rect")       base = 2*num($("sLen").value)+2*num($("sWid").value);
+  else if(ui.spaShape==="round") base = Math.PI*num($("sDiam").value);
+  else                            base = sidesLF("spa");
+  return base + num($("sExtra").value);
+}
+
+/* ════════════ ADD-ONS ════════════ */
+function toggleAddon(key){
+  ui.addon[key] = !ui.addon[key];
+  const map = { pTile:"pTileTog", pCope:"pCopeTog", sTile:"sTileTog", sCope:"sCopeTog", demo:"demoTog", permit:"permitTog" };
+  $(map[key]).classList.toggle("on", ui.addon[key]);
+  if(key==="pTile") $("pTileAdder").classList.toggle("open", ui.addon[key]);
+  if(key==="pCope") $("pCopeAdder").classList.toggle("open", ui.addon[key]);
+  if(key==="sTile") $("sTileAdder").classList.toggle("open", ui.addon[key]);
+  if(key==="sCope") $("sCopeAdder").classList.toggle("open", ui.addon[key]);
+  recalc(); save();
+}
+function step(id, d){
+  ui.lights[id] = Math.max(0, ui.lights[id] + d);
+  $(id).textContent = ui.lights[id];
+  $(id+"_stp").querySelector(".stepper").classList.toggle("hot", ui.lights[id]>0);
+  save();
+}
+
+/* ════════════ LIVE RECALC (LF chips only — no prices) ════════════ */
+function recalc(){
+  const p = poolLF(), s = spaLF(), t = p+s;
+  $("poolChip").textContent = p.toFixed(1)+" LF";
+  $("spaChip").textContent  = s.toFixed(1)+" LF";
+  $("poolChip").classList.toggle("live", p>0);
+  $("spaChip").classList.toggle("live", s>0);
+  $("barLF").textContent = t.toFixed(1);
+
+  // add-on LF readouts
+  $("pTileLF").textContent = ui.addon.pTile ? (p+num($("pTileExtra").value)).toFixed(1)+" LF" : "—";
+  $("pCopeLF").textContent = ui.addon.pCope ? (p+num($("pCopeExtra").value)).toFixed(1)+" LF" : "—";
+  $("sTileLF").textContent = ui.addon.sTile ? (s+num($("sTileExtra").value)).toFixed(1)+" LF" : "—";
+  $("sCopeLF").textContent = ui.addon.sCope ? (s+num($("sCopeExtra").value)).toFixed(1)+" LF" : "—";
+  $("demoLF").textContent  = ui.addon.demo  ? t.toFixed(1)+" LF" : "—";
+}
+
+/* ════════════ FULL CALCULATION ════════════ */
+function compute(){
+  const p = poolLF(), s = spaLF(), t = p+s;
+  const pFin = CFG.finish[$("pFinish").value];
+  const sFin = CFG.finish[$("sFinish").value];
+
+  const pFinishCost = p*pFin;
+  const sFinishCost = s*sFin;
+  const demoCost    = ui.addon.demo ? t*CFG.demo : 0;
+
+  const pTileLF = p+num($("pTileExtra").value), sTileLF = s+num($("sTileExtra").value);
+  const pCopeLF = p+num($("pCopeExtra").value), sCopeLF = s+num($("sCopeExtra").value);
+  const pTileCost = ui.addon.pTile ? pTileLF*CFG.tile   : 0;
+  const sTileCost = ui.addon.sTile ? sTileLF*CFG.tile   : 0;
+  const pCopeCost = ui.addon.pCope ? pCopeLF*CFG.coping : 0;
+  const sCopeCost = ui.addon.sCope ? sCopeLF*CFG.coping : 0;
+  const permitCost = ui.addon.permit ? CFG.permit : 0;
+
+  let lightCost=0; const lightLines=[]; const lightItems=[];
+  CFG.lights.forEach(l=>{ const q=ui.lights[l.id]; if(q>0){ const cost=q*l.rate; lightCost+=cost; lightLines.push(`${l.name} ×${q}`); lightItems.push({name:l.name, qty:q, cost}); } });
+
+  const actual = pFinishCost+sFinishCost+demoCost+pTileCost+sTileCost+pCopeCost+sCopeCost+permitCost+lightCost;
+  const quote  = actual*CFG.QUOTE_MULT;
+
+  // raw extras (for breakdown split of base vs added)
+  const pTileExtraLF=num($("pTileExtra").value), sTileExtraLF=num($("sTileExtra").value);
+  const pCopeExtraLF=num($("pCopeExtra").value), sCopeExtraLF=num($("sCopeExtra").value);
+
+  return {
+    p,s,t, pFin,sFin,
+    pFinName:CFG.finishName[$("pFinish").value], sFinName:CFG.finishName[$("sFinish").value],
+    pTileLF,sTileLF,pCopeLF,sCopeLF,
+    pTileExtraLF,sTileExtraLF,pCopeExtraLF,sCopeExtraLF,
+    pFinishCost,sFinishCost,demoCost,
+    pTileCost,sTileCost,pCopeCost,sCopeCost,permitCost,
+    lightLines, lightItems, actual, quote
   };
-  const money = (v) => v.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+}
 
-  // Locked rates (kept out of sight)
-  const RATES = {
-    demo_per_lf: 25,
-    tile_per_lf: 35,
-    coping_per_lf: 45,
-    permit_flat: 900,
-    buffer_pct: 0.10
-  };
+/* ── describe what was entered, per structure ── */
+function describe(which){
+  if(which==="spa" && ui.spaShape==="none") return null;
+  const shape = ui[which+"Shape"];
+  const extra = num($(which==="pool"?"pExtra":"sExtra").value);
+  let desc="";
+  if(shape==="rect"){
+    const L=num($(which==="pool"?"pLen":"sLen").value), W=num($(which==="pool"?"pWid":"sWid").value);
+    desc = `Rectangle ${L} × ${W} ft`;
+  } else if(shape==="freeform"){
+    desc = `Freeform ${num($("pManLF").value)} LF measured`;
+  } else if(shape==="round"){
+    desc = `Round · Ø ${num($("sDiam").value)} ft`;
+  } else { // custom
+    syncSides(which);
+    const arr = ui[which==="pool"?"pSides":"sSides"].map(v=>num(v)).filter(v=>v>0);
+    desc = `Custom · sides ${arr.join(" / ")||"—"}`;
+  }
+  if(extra>0) desc += ` + ${extra} extra`;
+  return desc;
+}
 
-  function updatePoolUI() {
-    const t = $("poolType").value;
-    $("poolRect").style.display = (t === "rect") ? "block" : "none";
-    $("poolFreeform").style.display = (t === "freeform") ? "block" : "none";
-    $("poolCustom").style.display = (t === "custom") ? "block" : "none";
+/* ════════════ RENDER OUTPUT (RECEIPT) ════════════ */
+let LAST=null;
+function calculate(){
+  const c = compute();
+  if(c.t<=0){ alert("Enter pool or spa measurements first."); return; }
+  LAST=c;
+
+  $("rJob").textContent  = $("jobName").value.trim() || "Estimate";
+  $("rDate").textContent = new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+
+  // POOL block (hide if no pool entered — e.g. spa-only)
+  const poolBlock = $("rPoolBlock");
+  if(c.p<=0){
+    poolBlock.style.display="none";
+  } else {
+    poolBlock.style.display="block";
+    $("rPoolLF").textContent = c.p.toFixed(1)+" LF";
+    let pd = `<div class="r-line"><span class="k">Shape</span><span class="v word">${describe("pool")}</span></div>`;
+    pd += `<div class="r-line"><span class="k">Finish</span><span class="v word">${CFG.finishName[$("pFinish").value]}</span></div>`;
+    if(ui.addon.pTile) pd += `<div class="r-line"><span class="k">Tile</span><span class="v">${c.pTileLF.toFixed(1)} LF</span></div>`;
+    if(ui.addon.pCope) pd += `<div class="r-line"><span class="k">Coping</span><span class="v">${c.pCopeLF.toFixed(1)} LF</span></div>`;
+    $("rPoolDetail").innerHTML = pd;
   }
 
-  function updatePoolCustomMode() {
-    const mode = document.querySelector('input[name="poolCustomMode"]:checked')?.value || "dims";
-    $("poolDims").style.display = (mode === "dims") ? "block" : "none";
-    $("poolCustomManual").style.display = (mode === "manual") ? "block" : "none";
+  // SPA block
+  const spaBlock = $("rSpaBlock");
+  if(ui.spaShape==="none"){
+    spaBlock.style.display="none";
+  } else {
+    spaBlock.style.display="block";
+    $("rSpaLF").textContent = c.s.toFixed(1)+" LF";
+    let sd = `<div class="r-line"><span class="k">Shape</span><span class="v word">${describe("spa")}</span></div>`;
+    sd += `<div class="r-line"><span class="k">Finish</span><span class="v word">${CFG.finishName[$("sFinish").value]}</span></div>`;
+    if(ui.addon.sTile) sd += `<div class="r-line"><span class="k">Tile</span><span class="v">${c.sTileLF.toFixed(1)} LF</span></div>`;
+    if(ui.addon.sCope) sd += `<div class="r-line"><span class="k">Coping</span><span class="v">${c.sCopeLF.toFixed(1)} LF</span></div>`;
+    $("rSpaDetail").innerHTML = sd;
   }
 
-  function updateSpaUI() {
-    const t = $("spaType").value;
-    $("spaRect").style.display = (t === "rect") ? "block" : "none";
-    $("spaCustom").style.display = (t === "custom") ? "block" : "none";
+  // JOB block — tags
+  const tags=[];
+  if(ui.addon.demo)   tags.push("Demo");
+  if(ui.addon.permit) tags.push("Permit");
+  c.lightLines.forEach(l=>tags.push(l));
+  $("rJobTags").innerHTML = tags.length ? tags.map(t=>`<span class="r-tag">${t}</span>`).join("") : `<span class="r-tag">No extras</span>`;
+
+  const notes=$("jobNotes").value.trim();
+  $("rNotesLine").innerHTML = notes ? `<div class="r-line" style="margin-top:8px"><span class="k">Notes</span><span class="v word" style="max-width:60%">${notes.replace(/</g,"&lt;")}</span></div>` : "";
+
+  // numbers
+  $("peek").textContent = "• • • •";
+  $("peek").dataset.actual = usd(c.actual);
+  updateHeadline();      // sets the big green number (Quote or Total)
+  renderBreakdown(c);    // fills the collapsible Advanced panel
+
+  $("out").classList.add("show");
+  $("out").scrollIntoView({behavior:"smooth",block:"start"});
+  save();
+}
+
+/* ════════════ HEADLINE: Quote vs Total ════════════ */
+function updateHeadline(){
+  if(!LAST) return;
+  const t = num($("agreed").value);
+  if(t>0){
+    $("rQuote").textContent = usd(t);
+    $("qLabel").firstChild.textContent = "TOTAL";
+    $("qSub").textContent = "final price";
+  } else {
+    $("rQuote").textContent = usd(LAST.quote);
+    $("qLabel").firstChild.textContent = "QUOTE";
+    $("qSub").textContent = "";
   }
+}
 
-  function updateSpaCustomMode() {
-    const mode = document.querySelector('input[name="spaCustomMode"]:checked')?.value || "dims";
-    $("spaDims").style.display = (mode === "dims") ? "block" : "none";
-    $("spaCustomManual").style.display = (mode === "manual") ? "block" : "none";
+/* ════════════ ADVANCED BREAKDOWN (quote-level, sums to quote) ════════════ */
+const M = CFG.QUOTE_MULT;
+function renderBreakdown(c){
+  const rows=[];
+  const row=(k,v,sub,cls)=> rows.push(
+    `<div class="adv-row${cls?" "+cls:""}"><span class="k">${k}${sub?`<small>${sub}</small>`:""}</span><span class="v">${v}</span></div>`);
+
+  // finishes
+  if(c.pFinishCost>0) row(`Pool — ${c.pFinName}`, usd(c.pFinishCost*M), `${c.p.toFixed(1)} LF`);
+  if(c.sFinishCost>0) row(`Spa — ${c.sFinName}`, usd(c.sFinishCost*M), `${c.s.toFixed(1)} LF`);
+
+  // demo
+  if(c.demoCost>0) row("Demo / plaster removal", usd(c.demoCost*M), `${c.t.toFixed(1)} LF`);
+
+  // pool tile (split base + extra)
+  if(ui.addon.pTile){
+    const baseLF=c.p, base=baseLF*CFG.tile*M;
+    row("Pool tile", usd(base), `${baseLF.toFixed(1)} LF`);
+    if(c.pTileExtraLF>0) row(`＋ Added tile`, usd(c.pTileExtraLF*CFG.tile*M), `${c.pTileExtraLF} LF (spillway / extra)`, "sub");
   }
-
-  function computePoolLF() {
-    const t = $("poolType").value;
-
-    if (t === "rect") {
-      const Lp = num($("Lp").value);
-      const Wp = num($("Wp").value);
-      return 2 * Lp + 2 * Wp;
-    }
-
-    if (t === "freeform") return num($("poolManualLF").value);
-
-    const mode = document.querySelector('input[name="poolCustomMode"]:checked')?.value || "dims";
-    if (mode === "manual") return num($("poolCustomLF").value);
-
-    return num($("pL1").value) + num($("pL2").value) + num($("pW1").value) + num($("pW2").value);
+  // pool coping
+  if(ui.addon.pCope){
+    const baseLF=c.p, base=baseLF*CFG.coping*M;
+    row("Pool coping", usd(base), `${baseLF.toFixed(1)} LF`);
+    if(c.pCopeExtraLF>0) row(`＋ Added coping`, usd(c.pCopeExtraLF*CFG.coping*M), `${c.pCopeExtraLF} LF extra`, "sub");
   }
-
-  function computeSpaLF() {
-    const t = $("spaType").value;
-    if (t === "none") return 0;
-
-    if (t === "rect") {
-      const Ls = num($("Ls").value);
-      const Ws = num($("Ws").value);
-      return 2 * Ls + 2 * Ws;
-    }
-
-    const mode = document.querySelector('input[name="spaCustomMode"]:checked')?.value || "dims";
-    if (mode === "manual") return num($("spaCustomLF").value);
-
-    return num($("sL1").value) + num($("sL2").value) + num($("sW1").value) + num($("sW2").value);
+  // spa tile
+  if(ui.addon.sTile){
+    const baseLF=c.s, base=baseLF*CFG.tile*M;
+    row("Spa tile", usd(base), `${baseLF.toFixed(1)} LF`);
+    if(c.sTileExtraLF>0) row(`＋ Added tile`, usd(c.sTileExtraLF*CFG.tile*M), `${c.sTileExtraLF} LF (spillway / extra)`, "sub");
   }
-
-  function selectedAddonsLabel() {
-    const addons = [];
-    if ($("addTile").checked) addons.push("Tile Replacement");
-    if ($("addCoping").checked) addons.push("Coping");
-    if ($("permit").checked) addons.push("Permit");
-    return addons.length ? addons.join(", ") : "None";
+  // spa coping
+  if(ui.addon.sCope){
+    const baseLF=c.s, base=baseLF*CFG.coping*M;
+    row("Spa coping", usd(base), `${baseLF.toFixed(1)} LF`);
+    if(c.sCopeExtraLF>0) row(`＋ Added coping`, usd(c.sCopeExtraLF*CFG.coping*M), `${c.sCopeExtraLF} LF extra`, "sub");
   }
+  // lights — one line per type
+  c.lightItems.forEach(li=> row(`${li.name} light ×${li.qty}`, usd(li.cost*M)) );
+  // permit
+  if(c.permitCost>0) row("Permit", usd(c.permitCost*M));
 
-  function computeNumbers() {
-    const poolLF = computePoolLF();
-    const spaLF = computeSpaLF();
-    const totalLF = poolLF + spaLF;
+  // total = quote (exact)
+  row("Total", usd(c.quote), "", "tot");
 
-    const finishRate = num($("finishRate").value);
-    const base = totalLF * (RATES.demo_per_lf + finishRate);
+  $("advLines").innerHTML = rows.join("");
+}
+function toggleAdv(){
+  const open = $("advPanel").classList.toggle("open");
+  $("advToggle").classList.toggle("open", open);
+}
 
-    const tileCost = $("addTile").checked ? totalLF * RATES.tile_per_lf : 0;
-    const copingCost = $("addCoping").checked ? totalLF * RATES.coping_per_lf : 0;
-    const permitCost = $("permit").checked ? RATES.permit_flat : 0;
+/* ════════════ PRESS-AND-HOLD REVEAL (actual cost) ════════════ */
+(function(){
+  const lock=$("lock"), peek=$("peek");
+  const showA = e => { if(e) e.preventDefault(); if(peek.dataset.actual){ peek.textContent=peek.dataset.actual; } lock.classList.add("held"); };
+  const hideA = () => { peek.textContent="• • • •"; lock.classList.remove("held"); };
+  lock.addEventListener("pointerdown", showA);
+  lock.addEventListener("pointerup", hideA);
+  lock.addEventListener("pointerleave", hideA);
+  lock.addEventListener("pointercancel", hideA);
+  lock.addEventListener("contextmenu", e=>e.preventDefault());
+})();
 
-    const actual = base + tileCost + copingCost + permitCost;
-    const bufferAmt = actual * RATES.buffer_pct;
-
-    return {
-      poolLF,
-      spaLF,
-      totalLF,
-      finishLabel: $("finishRate").selectedOptions[0]?.textContent || "",
-      addonsLabel: selectedAddonsLabel(),
-      estimateLow: actual,
-      estimateHigh: actual + bufferAmt
-    };
+/* ════════════ COPY / SAVE ════════════ */
+function summaryText(){
+  if(!LAST) return "";
+  const c=LAST;
+  const L=[];
+  L.push("3M POOLS — FIELD ESTIMATE");
+  L.push(`Job: ${$("jobName").value.trim()||"—"}    ${new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}`);
+  L.push("");
+  L.push(`POOL  (${c.p.toFixed(1)} LF)`);
+  L.push(`  ${describe("pool")}`);
+  L.push(`  Finish: ${CFG.finishName[$("pFinish").value]}`);
+  if(ui.addon.pTile) L.push(`  Tile: ${c.pTileLF.toFixed(1)} LF`);
+  if(ui.addon.pCope) L.push(`  Coping: ${c.pCopeLF.toFixed(1)} LF`);
+  if(ui.spaShape!=="none"){
+    L.push("");
+    L.push(`SPA  (${c.s.toFixed(1)} LF)`);
+    L.push(`  ${describe("spa")}`);
+    L.push(`  Finish: ${CFG.finishName[$("sFinish").value]}`);
+    if(ui.addon.sTile) L.push(`  Tile: ${c.sTileLF.toFixed(1)} LF`);
+    if(ui.addon.sCope) L.push(`  Coping: ${c.sCopeLF.toFixed(1)} LF`);
   }
-
-  function calculate() {
-    const x = computeNumbers();
-
-    $("out").textContent =
-`Pool LF: ${x.poolLF.toFixed(1)}
-Spa LF: ${x.spaLF.toFixed(1)}
-Total LF: ${x.totalLF.toFixed(1)}
-Finish: ${x.finishLabel}
-Add-ons: ${x.addonsLabel}
-ESTIMATE: ${money(x.estimateLow)} - ${money(x.estimateHigh)}`;
+  const extras=[];
+  if(ui.addon.demo) extras.push("Demo");
+  if(ui.addon.permit) extras.push("Permit");
+  c.lightLines.forEach(l=>extras.push(l));
+  L.push("");
+  L.push(`JOB: ${extras.join(", ")||"No extras"}`);
+  const notes=$("jobNotes").value.trim();
+  if(notes) L.push(`Notes: ${notes}`);
+  const ag=num($("agreed").value);
+  L.push("");
+  if(ag>0){
+    L.push(`TOTAL:  ${usd(ag)}`);
+    L.push(`(quote ${usd(c.quote)} · cost ${usd(c.actual)} — internal)`);
+  } else {
+    L.push(`QUOTE:  ${usd(c.quote)}`);
+    L.push(`(cost ${usd(c.actual)} — internal)`);
   }
+  L.push("");
+  L.push("Subject to accounting approval.");
+  return L.join("\n");
+}
+function copyEst(){
+  if(!LAST){ alert("Calculate first."); return; }
+  navigator.clipboard.writeText(summaryText()).then(()=>alert("Copied.")).catch(()=>alert("Copy blocked — use Save File."));
+}
+function saveEst(){
+  if(!LAST){ alert("Calculate first."); return; }
+  const name=($("jobName").value.trim()||"estimate").replace(/[^\w\- ]/g,"").replace(/\s+/g,"-")||"estimate";
+  const blob=new Blob([summaryText()],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download=`${name}-${new Date().toISOString().slice(0,10)}.txt`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
 
-  function getEstimateSummary() {
-    const x = computeNumbers();
+/* ════════════ PERSISTENCE (localStorage, safe) ════════════ */
+const INPUT_IDS = ["pLen","pWid","pManLF","pExtra","pFinish","pTileExtra","pCopeExtra",
+  "sLen","sWid","sDiam","sExtra","sFinish","sTileExtra","sCopeExtra",
+  "jobName","jobNotes","agreed"];
 
-    const jobName = ($("jobName")?.value || "").trim();
-    const notes = ($("jobNotes")?.value || "").trim();
-
-    const lines = [
-      `Job: ${jobName || "—"}`,
-      `Date: ${new Date().toLocaleString()}`,
-      ``,
-      `Pool LF: ${x.poolLF.toFixed(1)}`,
-      `Spa LF: ${x.spaLF.toFixed(1)}`,
-      `Total LF: ${x.totalLF.toFixed(1)}`,
-      `Finish: ${x.finishLabel}`,
-      `Add-ons: ${x.addonsLabel}`,
-      ``,
-      `ESTIMATE: ${money(x.estimateLow)} - ${money(x.estimateHigh)}`
-    ];
-
-    if (notes) lines.push(``, `Notes:`, notes);
-
-    return lines.join("\n");
+function save(){
+  try{
+    syncSides("pool"); syncSides("spa");
+    const data = { ui, fields:{} };
+    INPUT_IDS.forEach(id=>{ const el=$(id); if(el) data.fields[id]=el.value; });
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }catch(e){/* storage blocked — tool still works for this session */}
+}
+function load(){
+  let data=null;
+  try{ const raw=localStorage.getItem(STORE_KEY); if(raw) data=JSON.parse(raw); }catch(e){}
+  if(!data) return;
+  // restore ui state
+  Object.assign(ui, data.ui||{});
+  ui.pSides = (data.ui&&data.ui.pSides)||["","","",""];
+  ui.sSides = (data.ui&&data.ui.sSides)||["","","",""];
+  // shapes
+  setShapeQuiet("pool", ui.poolShape);
+  setShapeQuiet("spa", ui.spaShape);
+  // fields
+  if(data.fields) INPUT_IDS.forEach(id=>{ const el=$(id); if(el && data.fields[id]!==undefined) el.value=data.fields[id]; });
+  // add-ons
+  ["pTile","pCope","sTile","sCope","demo","permit"].forEach(k=>{
+    const on=!!(ui.addon&&ui.addon[k]);
+    const map={pTile:"pTileTog",pCope:"pCopeTog",sTile:"sTileTog",sCope:"sCopeTog",demo:"demoTog",permit:"permitTog"};
+    $(map[k]).classList.toggle("on", on);
+    const adder={pTile:"pTileAdder",pCope:"pCopeAdder",sTile:"sTileAdder",sCope:"sCopeAdder"}[k];
+    if(adder) $(adder).classList.toggle("open", on);
+  });
+  // lights
+  CFG.lights.forEach(l=>{ const q=(ui.lights&&ui.lights[l.id])||0; $(l.id).textContent=q;
+    $(l.id+"_stp").querySelector(".stepper").classList.toggle("hot", q>0); });
+}
+function setShapeQuiet(which, shape){
+  ui[which+"Shape"]=shape;
+  const pills=$(which+"Pills").children;
+  for(const b of pills) b.classList.toggle("on", b.dataset.shape===shape);
+  if(which==="pool"){
+    ["rect","freeform","custom"].forEach(s=>$("pool_"+s).classList.toggle("hidden", s!==shape));
+    if(shape==="custom") renderSides("pool");
+  } else {
+    $("spa_body").classList.toggle("hidden", shape==="none");
+    ["rect","round","custom"].forEach(s=>$("spa_"+s).classList.toggle("hidden", s!==shape));
+    if(shape==="custom") renderSides("spa");
   }
+}
 
-  function sendToEmail() {
-    calculate();
-    const to = ($("toEmail")?.value || "").trim();
-    const jobName = ($("jobName")?.value || "").trim();
-    const subject = `Estimate - ${jobName || "Pool/Spa"}`;
-    const body = getEstimateSummary();
+function resetAll(){
+  if(!confirm("Clear everything and start fresh?")) return;
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  location.reload();
+}
 
-    const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-  }
-
-  function saveToDevice() {
-    calculate();
-
-    const safeName = ($("jobName")?.value || "estimate")
-      .trim()
-      .replace(/[^\w\- ]+/g, "")
-      .replace(/\s+/g, " ");
-
-    const filename = `${safeName || "estimate"} - ${new Date().toISOString().slice(0,10)}.txt`;
-
-    const text = getEstimateSummary();
-    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    URL.revokeObjectURL(url);
-  }
-
-  function resetAll() { location.reload(); }
-
-  $("poolType").addEventListener("change", () => { updatePoolUI(); updatePoolCustomMode(); });
-  document.querySelectorAll('input[name="poolCustomMode"]').forEach(r => r.addEventListener("change", updatePoolCustomMode));
-
-  $("spaType").addEventListener("change", () => { updateSpaUI(); updateSpaCustomMode(); });
-  document.querySelectorAll('input[name="spaCustomMode"]').forEach(r => r.addEventListener("change", updateSpaCustomMode));
-
-  $("calcBtn").addEventListener("click", calculate);
-  $("resetBtn").addEventListener("click", resetAll);
-
-  $("emailBtn").addEventListener("click", sendToEmail);
-  $("saveBtn").addEventListener("click", saveToDevice);
-
-  updatePoolUI(); updatePoolCustomMode(); updateSpaUI(); updateSpaCustomMode();
+/* ════════════ WIRE UP + INIT ════════════ */
+function init(){
+  load();
+  // attach live listeners to all inputs
+  INPUT_IDS.forEach(id=>{ const el=$(id); if(el) el.addEventListener("input", ()=>{ recalc(); save(); }); });
+  $("pFinish").addEventListener("change", save);
+  $("sFinish").addEventListener("change", save);
+  // Total field re-skins the headline live (Quote ↔ Total)
+  $("agreed").addEventListener("input", ()=>{ if(LAST) updateHeadline(); });
+  recalc();
+}
+document.addEventListener("DOMContentLoaded", init);
 </script>
+</body>
+</html>
