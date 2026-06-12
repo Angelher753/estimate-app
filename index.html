@@ -52,7 +52,7 @@ body{
 
 /* ════════════════════ HEADER ════════════════════ */
 .hd{
-  position:sticky;top:0;z-index:40;
+  position:relative;z-index:40;
   background:linear-gradient(180deg,var(--navy),#0c2440);
   padding:calc(env(safe-area-inset-top) + 13px) 18px 13px;
   display:flex;align-items:center;gap:12px;
@@ -331,6 +331,54 @@ select.inp{
   font-size:13.5px;font-weight:700;color:#42536a;cursor:pointer;transition:.12s;font-family:var(--sans);
 }
 .r-acts button:active{border-color:var(--navy)}
+
+/* ════════════════════ EXTRAS (custom items + discount) ════════════════════ */
+.x-list{display:flex;flex-direction:column;gap:10px}
+.x-item{background:var(--field);border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.x-row1{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.x-row1 .inp{margin:0;flex:1;font-weight:700}
+.x-rm{width:38px;height:38px;flex-shrink:0;border:none;border-radius:9px;background:#fde8e8;color:#b42318;
+  font-size:19px;font-weight:800;cursor:pointer;line-height:1}
+.x-desc{margin-bottom:8px}
+.x-row2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.x-seg{display:flex;border:1.5px solid var(--line);border-radius:9px;overflow:hidden;flex-shrink:0}
+.x-seg button{padding:9px 11px;border:none;background:#fff;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--sans)}
+.x-seg button.on{background:var(--navy);color:#fff}
+.x-amt{flex:1;min-width:110px}
+.x-qty{width:74px}
+.x-rate{flex:1;min-width:96px}
+.x-unitsel{padding:11px 8px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-size:13px;font-weight:700;font-family:var(--sans);color:var(--ink)}
+.x-tot{margin-left:auto;font-size:13px;font-weight:800;color:var(--navy);white-space:nowrap}
+.x-add{width:100%;margin-top:10px;padding:13px;border:1.5px dashed var(--navy);border-radius:11px;
+  background:#f0f6ff;color:var(--navy);font-size:14px;font-weight:800;cursor:pointer;font-family:var(--sans)}
+.x-disc{margin-top:14px;border-top:1.5px solid var(--line);padding-top:13px}
+.x-disc-h{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:800;
+  letter-spacing:1.2px;color:#047857;margin-bottom:9px}
+.x-disc-h .chip{font-size:13px;font-weight:800;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;
+  border-radius:99px;padding:3px 11px;letter-spacing:0}
+.x-disc-row{display:flex;gap:8px;align-items:center}
+.x-empty{font-size:12.5px;color:var(--muted-2);text-align:center;padding:4px 0 2px}
+
+/* peek floor panel (behind the lock) */
+.peek{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.peek .pk{font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.3px;text-align:left}
+.peek .pk b{display:block;font-size:13.5px;color:#b45309;font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+.peek .pk.neg b{color:#b42318}
+
+/* breakdown discount + add-on rows */
+.adv-row.xrow .v{color:var(--navy)}
+.adv-row.disc .k{color:#047857;font-weight:800}
+.adv-row.disc .v{color:#047857;font-weight:800}
+
+/* receipt add-ons block */
+#rXBlock .r-line .v.money{font-variant-numeric:tabular-nums}
+#rXBlock .r-line.disc .k,#rXBlock .r-line.disc .v{color:#047857;font-weight:800}
+
+/* PDF discount row */
+.q-items tr.q-disc td{background:#ecfdf5;color:#047857;font-weight:800}
+.q-items tr.q-disc td .sub{color:#059669;font-weight:600}
+.q-items tr.q-disc td:first-child{border-radius:6px 0 0 6px;padding-left:8px}
+.q-items tr.q-disc td:last-child{border-radius:0 6px 6px 0;padding-right:8px}
 
 /* ════════════════════ UNITS / FT-IN ════════════════════ */
 .unit-wrap{position:relative}
@@ -683,6 +731,27 @@ html.q-open body{overflow:hidden}
     </div>
   </section>
 
+  <!-- ══════════════ ADDITIONAL ITEMS & DISCOUNT ══════════════ -->
+  <div class="card">
+    <div class="card-hd"><div class="ttl"><span class="dot"></span>ADDITIONAL ITEMS &amp; DISCOUNT</div></div>
+    <div class="card-bd">
+      <div class="x-list" id="xList"></div>
+      <button type="button" class="x-add" onclick="addExtraItem()">＋ Add Item</button>
+
+      <div class="x-disc">
+        <div class="x-disc-h"><span>DISCOUNT</span><span class="chip" id="discChip">—</span></div>
+        <div class="fld" style="margin-bottom:9px"><input id="discName" class="inp" type="text" placeholder='Name shown to client (e.g. "Replaster Bundle Discount")'></div>
+        <div class="x-disc-row">
+          <div class="x-seg" id="discSeg">
+            <button type="button" data-dt="flat" class="on">$ Flat</button>
+            <button type="button" data-dt="pct">% Percent</button>
+          </div>
+          <div class="unit-wrap" style="flex:1"><input id="discVal" class="inp" type="number" inputmode="decimal" min="0" placeholder="0"><span class="unit" id="discUnit">$</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ══════════════ JOB INFO ══════════════ -->
   <section class="card">
     <div class="card-hd"><div class="ttl"><span class="dot"></span>JOB INFO</div></div>
@@ -719,6 +788,10 @@ html.q-open body{overflow:hidden}
           <div class="h">JOB</div>
           <div class="r-tags" id="rJobTags"></div>
           <div id="rNotesLine"></div>
+        </div>
+        <div class="r-block" id="rXBlock" style="display:none">
+          <div class="h">ADD-ONS &amp; DISCOUNT</div>
+          <div id="rXDetail"></div>
         </div>
       </div>
 
@@ -1218,9 +1291,103 @@ const ui = {
   sSides: ["","","",""],
   addon: { pTile:false, pCope:false, sTile:false, sCope:false, demo:false, permit:false },
   lights: { lHVC:0, lHVW:0, lLVC:0 },
-  quoteNum: null
+  quoteNum: null,
+  // Generic add-on line items + discount — the seed of the universal quoter.
+  // Each item: {id, label, desc, mode:"flat"|"rate", amt, qty, rate, unit}
+  extras: { items: [], disc: { name:"", type:"flat", val:"" } }
 };
 const SEQ_KEY = "mmm_pools_quote_seq";
+
+/* ════════════ EXTRAS MODULE (custom items + discount) ════════════
+   Items are CUSTOMER-FACING prices — no buffer is applied to them.   */
+const UNITS = ["LF","SF","EA"];
+let _xid = 1;
+function newExtraId(){ return "x" + (_xid++) + "_" + Date.now().toString(36); }
+
+function itemTotal(it){
+  return it.mode==="rate" ? num(it.qty)*num(it.rate) : num(it.amt);
+}
+function extrasTotal(){
+  return ui.extras.items.reduce((a,it)=>a+itemTotal(it),0);
+}
+function discountAmt(gross){
+  const d=ui.extras.disc, v=num(d.val);
+  if(v<=0||gross<=0) return 0;
+  const amt = d.type==="pct" ? gross*Math.min(v,100)/100 : v;
+  return Math.min(Math.round(amt), gross);   // a discount can never exceed the job
+}
+
+function addExtraItem(){
+  ui.extras.items.push({id:newExtraId(), label:"", desc:"", mode:"flat", amt:"", qty:"", rate:"", unit:"LF"});
+  renderExtras(); save();
+  // focus the new label for fast entry
+  const last=ui.extras.items[ui.extras.items.length-1];
+  const el=$("xl_"+last.id); if(el) el.focus();
+}
+function removeExtraItem(id){
+  ui.extras.items = ui.extras.items.filter(it=>it.id!==id);
+  renderExtras(); extrasChanged();
+}
+function setExtraMode(id, mode){
+  const it=ui.extras.items.find(i=>i.id===id); if(!it) return;
+  it.mode=mode; renderExtras(); extrasChanged();
+}
+/* Rebuilds structure (add/remove/mode only — typing never re-renders, so focus is kept) */
+function renderExtras(){
+  const list=$("xList");
+  if(!ui.extras.items.length){
+    list.innerHTML = `<div class="x-empty">Third-party work, concrete, tile cleaning… anything extra. Price is what the customer pays.</div>`;
+  } else {
+    list.innerHTML = ui.extras.items.map(it=>`
+      <div class="x-item" data-id="${it.id}">
+        <div class="x-row1">
+          <input class="inp" id="xl_${it.id}" type="text" placeholder="Item name (e.g. Tile Cleaning)" value="${esc(it.label)}">
+          <button type="button" class="x-rm" onclick="removeExtraItem('${it.id}')" aria-label="Remove item">×</button>
+        </div>
+        <div class="fld x-desc" style="margin-bottom:8px">
+          <input class="inp" id="xd_${it.id}" type="text" placeholder="Description (optional — prints on quote)" value="${esc(it.desc)}">
+        </div>
+        <div class="x-row2">
+          <div class="x-seg">
+            <button type="button" class="${it.mode==="flat"?"on":""}" onclick="setExtraMode('${it.id}','flat')">Flat $</button>
+            <button type="button" class="${it.mode==="rate"?"on":""}" onclick="setExtraMode('${it.id}','rate')">Qty × Rate</button>
+          </div>
+          ${it.mode==="flat" ? `
+            <div class="unit-wrap x-amt"><input class="inp" id="xa_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.amt)}"><span class="unit">$</span></div>
+          ` : `
+            <div class="unit-wrap x-qty"><input class="inp" id="xq_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.qty)}"><span class="unit">qty</span></div>
+            <select class="x-unitsel" id="xu_${it.id}">${UNITS.map(u=>`<option ${it.unit===u?"selected":""}>${u}</option>`).join("")}</select>
+            <div class="unit-wrap x-rate"><input class="inp" id="xr_${it.id}" type="number" inputmode="decimal" min="0" placeholder="$ / unit" value="${esc(it.rate)}"><span class="unit">$</span></div>
+          `}
+          <span class="x-tot" id="xt_${it.id}">${usd(itemTotal(it))}</span>
+        </div>
+      </div>`).join("");
+    // bind typing → state (no re-render, focus preserved)
+    ui.extras.items.forEach(it=>{
+      const bind=(pfx,key)=>{ const el=$(pfx+it.id); if(el) el.addEventListener("input",()=>{ it[key]=el.value; extrasChanged(it); }); };
+      bind("xl_","label"); bind("xd_","desc"); bind("xa_","amt"); bind("xq_","qty"); bind("xr_","rate");
+      const us=$("xu_"+it.id); if(us) us.addEventListener("change",()=>{ it.unit=us.value; extrasChanged(it); });
+    });
+  }
+  // discount controls reflect state
+  $("discName").value = ui.extras.disc.name||"";
+  $("discVal").value  = ui.extras.disc.val||"";
+  $("discUnit").textContent = ui.extras.disc.type==="pct" ? "%" : "$";
+  [...$("discSeg").children].forEach(b=>b.classList.toggle("on", b.dataset.dt===ui.extras.disc.type));
+  updateDiscChip();
+}
+function updateDiscChip(){
+  const gross = (LAST ? Math.round(LAST.actual*CFG.QUOTE_MULT) : 0) + extrasTotal();
+  const a = discountAmt(gross);
+  $("discChip").textContent = a>0 ? "−"+usd(a) : "—";
+}
+/* any extras/discount change → refresh chips, receipt numbers, save */
+function extrasChanged(it){
+  if(it){ const t=$("xt_"+it.id); if(t) t.textContent=usd(itemTotal(it)); }
+  updateDiscChip();
+  if(LAST){ LAST=compute(); updateHeadline(); renderBreakdown(LAST); renderXBlock(LAST); }
+  save();
+}
 
 /* ════════════ SHAPE PILLS ════════════ */
 function setShape(which, shape){
@@ -1358,6 +1525,16 @@ function compute(){
   const actual = pFinishCost+sFinishCost+demoCost+pTileCost+sTileCost+pCopeCost+sCopeCost+permitCost+lightCost;
   const quote  = actual*CFG.QUOTE_MULT;
 
+  // ── extras + discount (customer-facing; no buffer on extras) ──
+  const xItems      = ui.extras.items.filter(it=> itemTotal(it)>0 || (it.label&&it.label.trim()));
+  const customTotal = Math.round(extrasTotal());
+  const replQuote   = Math.round(quote);
+  const gross       = replQuote + customTotal;
+  const discAmt     = discountAmt(gross);
+  const discName    = (ui.extras.disc.name||"").trim();
+  const customerTotal = gross - discAmt;
+  const floor       = Math.round(actual) + customTotal;   // lowest sellable: my cost + pass-through extras
+
   // raw extras (for breakdown split of base vs added)
   const pTileExtraLF=num($("pTileExtra").value), sTileExtraLF=num($("sTileExtra").value);
   const pCopeExtraLF=num($("pCopeExtra").value), sCopeExtraLF=num($("sCopeExtra").value);
@@ -1369,7 +1546,8 @@ function compute(){
     pTileExtraLF,sTileExtraLF,pCopeExtraLF,sCopeExtraLF,
     pFinishCost,sFinishCost,demoCost,
     pTileCost,sTileCost,pCopeCost,sCopeCost,permitCost,
-    lightLines, lightItems, actual, quote
+    lightLines, lightItems, actual, quote,
+    xItems, customTotal, replQuote, discAmt, discName, customerTotal, floor
   };
 }
 
@@ -1444,9 +1622,11 @@ function calculate(){
   const notes=$("jobNotes").value.trim();
   $("rNotesLine").innerHTML = notes ? `<div class="r-line" style="margin-top:8px"><span class="k">Notes</span><span class="v word" style="max-width:60%">${notes.replace(/</g,"&lt;")}</span></div>` : "";
 
+  // add-ons & discount block
+  renderXBlock(c);
+
   // numbers
   $("peek").textContent = "• • • •";
-  $("peek").dataset.actual = usd(c.actual);
   updateHeadline();      // sets the big green number (Quote or Total)
   renderBreakdown(c);    // fills the collapsible Advanced panel
 
@@ -1464,10 +1644,28 @@ function updateHeadline(){
     $("qLabel").firstChild.textContent = "TOTAL";
     $("qSub").textContent = "final price";
   } else {
-    $("rQuote").textContent = usd(LAST.quote);
+    $("rQuote").textContent = usd(LAST.customerTotal);
     $("qLabel").firstChild.textContent = "QUOTE";
-    $("qSub").textContent = "";
+    const bits=[];
+    if(LAST.customTotal>0) bits.push("add-ons in");
+    if(LAST.discAmt>0)     bits.push("discount applied");
+    $("qSub").textContent = bits.join(" · ");
   }
+}
+
+/* receipt ADD-ONS & DISCOUNT block */
+function renderXBlock(c){
+  const blk=$("rXBlock");
+  if(!c.xItems.length && c.discAmt<=0){ blk.style.display="none"; return; }
+  blk.style.display="block";
+  let h="";
+  c.xItems.forEach(it=>{
+    const sub = it.mode==="rate" ? ` <small style="color:var(--muted-2)">(${num(it.qty)} ${it.unit} × ${usd(num(it.rate))})</small>` : "";
+    h += `<div class="r-line"><span class="k word">${esc(it.label||"Item")}${sub}</span><span class="v money">${usd(itemTotal(it))}</span></div>`;
+  });
+  if(c.discAmt>0)
+    h += `<div class="r-line disc"><span class="k word">${esc(c.discName||"Discount")}</span><span class="v money">−${usd(c.discAmt)}</span></div>`;
+  $("rXDetail").innerHTML=h;
 }
 
 /* ════════════ ADVANCED BREAKDOWN (quote-level, sums to quote) ════════════ */
@@ -1513,8 +1711,17 @@ function renderBreakdown(c){
   // permit
   if(c.permitCost>0) row("Permit", usd(c.permitCost*M));
 
-  // total = quote (exact)
-  row("Total", usd(c.quote), "", "tot");
+  // add-on items (face value — no buffer)
+  c.xItems.forEach(it=>{
+    const sub = it.mode==="rate" ? `${num(it.qty)} ${it.unit} × ${usd(num(it.rate))}` : "add-on";
+    row(esc(it.label||"Item"), usd(itemTotal(it)), sub, "xrow");
+  });
+  // discount (standout)
+  if(c.discAmt>0) row(esc(c.discName||"Discount"), "−"+usd(c.discAmt), ui.extras.disc.type==="pct"?num(ui.extras.disc.val)+"% off":"", "disc");
+
+  // total = customer total (or the agreed Total if filled)
+  const ag=num($("agreed").value);
+  row("Total", usd(ag>0?ag:c.customerTotal), "", "tot");
 
   $("advLines").innerHTML = rows.join("");
 }
@@ -1526,7 +1733,19 @@ function toggleAdv(){
 /* ════════════ PRESS-AND-HOLD REVEAL (actual cost) ════════════ */
 (function(){
   const lock=$("lock"), peek=$("peek");
-  const showA = e => { if(e) e.preventDefault(); if(peek.dataset.actual){ peek.textContent=peek.dataset.actual; } lock.classList.add("held"); };
+  const showA = e => {
+    if(e) e.preventDefault();
+    if(LAST){
+      const ag=num($("agreed").value);
+      const F = ag>0 ? ag : LAST.customerTotal;
+      const room = F - LAST.floor;
+      peek.innerHTML =
+        `<span class="pk">WORK COST<b>${usd(LAST.actual)}</b></span>`+
+        `<span class="pk">MY FLOOR<b>${usd(LAST.floor)}</b></span>`+
+        `<span class="pk${room<0?" neg":""}">ROOM LEFT<b>${room<0?"−":""}${usd(Math.abs(room))}</b></span>`;
+    }
+    lock.classList.add("held");
+  };
   const hideA = () => { peek.textContent="• • • •"; lock.classList.remove("held"); };
   lock.addEventListener("pointerdown", showA);
   lock.addEventListener("pointerup", hideA);
@@ -1564,14 +1783,20 @@ function summaryText(){
   L.push(`JOB: ${extras.join(", ")||"No extras"}`);
   const notes=$("jobNotes").value.trim();
   if(notes) L.push(`Notes: ${notes}`);
+  if(c.xItems.length){
+    L.push("");
+    L.push("ADD-ONS:");
+    c.xItems.forEach(it=> L.push(`  ${it.label||"Item"}: ${usd(itemTotal(it))}`));
+  }
+  if(c.discAmt>0) L.push(`DISCOUNT (${c.discName||"Discount"}): −${usd(c.discAmt)}`);
   const ag=num($("agreed").value);
   L.push("");
   if(ag>0){
     L.push(`TOTAL:  ${usd(ag)}`);
-    L.push(`(quote ${usd(c.quote)} · cost ${usd(c.actual)} — internal)`);
+    L.push(`(quote ${usd(c.customerTotal)} · cost ${usd(c.actual)} · floor ${usd(c.floor)} — internal)`);
   } else {
-    L.push(`QUOTE:  ${usd(c.quote)}`);
-    L.push(`(cost ${usd(c.actual)} — internal)`);
+    L.push(`QUOTE:  ${usd(c.customerTotal)}`);
+    L.push(`(cost ${usd(c.actual)} · floor ${usd(c.floor)} — internal)`);
   }
   L.push("");
   L.push("Subject to accounting approval.");
@@ -1612,6 +1837,10 @@ function load(){
   Object.assign(ui, data.ui||{});
   ui.pSides = (data.ui&&data.ui.pSides)||["","","",""];
   ui.sSides = (data.ui&&data.ui.sSides)||["","","",""];
+  // extras defaults for older saves
+  if(!ui.extras) ui.extras={items:[],disc:{name:"",type:"flat",val:""}};
+  if(!ui.extras.items) ui.extras.items=[];
+  if(!ui.extras.disc)  ui.extras.disc={name:"",type:"flat",val:""};
   // shapes
   setShapeQuiet("pool", ui.poolShape);
   setShapeQuiet("spa", ui.spaShape);
@@ -1677,11 +1906,13 @@ function mintQuoteNum(){
 
 function getFinalPrice(c){
   const ag = num($("agreed").value);
-  return Math.round(ag>0 ? ag : c.quote);
+  return Math.round(ag>0 ? ag : c.customerTotal);
 }
 
-/* Weighted line items — heavier cost = bigger share; always sums EXACTLY to final price */
-function weightedItems(c, F){
+/* Weighted REPLASTER line items — weighted to R (the replaster share of the final
+   price). Custom add-ons print at face value and the discount prints as its own
+   line, so: Σ(weighted) + Σ(add-ons) − discount = final price EXACTLY. */
+function weightedItems(c, R){
   const items = [];
   const pFinKey = $("pFinish").value, sFinKey = $("sFinish").value;
   if(c.pFinishCost>0) items.push({label:`Pool — ${c.pFinName} Interior Finish`, sub:`${c.p.toFixed(1)} LF`, cost:c.pFinishCost});
@@ -1696,9 +1927,9 @@ function weightedItems(c, F){
 
   const totCost = items.reduce((a,b)=>a+b.cost,0);
   if(totCost<=0) return items.map(it=>({...it, amt:0}));
-  const raw = items.map(it=> it.cost/totCost*F);
+  const raw = items.map(it=> it.cost/totCost*R);
   const fl  = raw.map(Math.floor);
-  let left  = F - fl.reduce((a,b)=>a+b,0);
+  let left  = R - fl.reduce((a,b)=>a+b,0);
   raw.map((r,i)=>({i, frac:r-Math.floor(r)}))
      .sort((a,b)=>b.frac-a.frac)
      .forEach(o=>{ if(left>0){ fl[o.i]+=1; left--; } });
@@ -1753,6 +1984,9 @@ function scopeHTML(c, plan){
         `Fill ${bl} after finish application.`]);
     }
   });
+  if(c.xItems.length){
+    it("Additional Work", c.xItems.map(x=> esc(x.label||"Additional item") + (x.desc&&x.desc.trim() ? " — "+esc(x.desc.trim()) : "")));
+  }
   if(plan.bodies.length){
     it("Startup", ["Provide standard startup instructions after fill."]);
   }
@@ -1860,8 +2094,11 @@ function termsHTML(c, plan, F){
 
 function buildQuoteDoc(c){
   const F = getFinalPrice(c);
+  // Replaster share absorbs any negotiation; add-ons stay at face value,
+  // discount prints as its own line: weighted + addons − discount = F.
+  const R = F + c.discAmt - c.customTotal;
   const plan = replasterPlan(c);
-  const items = weightedItems(c, F);
+  const items = weightedItems(c, R);
   const qn = mintQuoteNum();
   const d = new Date();
   const dateStr  = d.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
@@ -1879,8 +2116,20 @@ function buildQuoteDoc(c){
       </div>
     </div>`;
 
-  const rows = items.map(it=>
+  let rows = items.map(it=>
     `<tr><td>${it.label}${it.sub?`<div class="sub">${it.sub}</div>`:""}</td><td class="amt">${usd(it.amt)}</td></tr>`).join("");
+  // custom add-on items — exact customer price, optional description / qty
+  c.xItems.forEach(x=>{
+    const subBits=[];
+    if(x.desc&&x.desc.trim()) subBits.push(esc(x.desc.trim()));
+    if(x.mode==="rate" && num(x.qty)>0) subBits.push(`${num(x.qty)} ${x.unit}`);
+    rows += `<tr><td>${esc(x.label||"Additional item")}${subBits.length?`<div class="sub">${subBits.join(" · ")}</div>`:""}</td><td class="amt">${usd(Math.round(itemTotal(x)))}</td></tr>`;
+  });
+  // discount — standout line the customer SEES
+  if(c.discAmt>0){
+    const dsub = ui.extras.disc.type==="pct" ? `${num(ui.extras.disc.val)}% off this proposal` : "applied to this proposal";
+    rows += `<tr class="q-disc"><td>${esc(c.discName||"Discount")}<div class="sub">${dsub}</div></td><td class="amt">−${usd(c.discAmt)}</td></tr>`;
+  }
 
   $("qp1").innerHTML = brand + `
     <div class="q-meta">
@@ -1922,6 +2171,16 @@ function openQuote(){
   if(!LAST) return;
   const c = compute(); LAST = c;
   if(c.t<=0){ alert("Enter pool or spa measurements first."); return; }
+  const F = getFinalPrice(c);
+  const R = F + c.discAmt - c.customTotal;
+  if(c.actual>0 && R<1){
+    alert("Total is too low — after the discount it doesn't cover the add-on items. Raise the Total or reduce the discount/add-ons.");
+    return;
+  }
+  if(c.actual<=0 && Math.abs((c.customTotal-c.discAmt)-F)>0){
+    alert("This job has only add-on items. Clear the Total field so the quote matches the add-ons, or add replaster work.");
+    return;
+  }
   buildQuoteDoc(c);
   $("qOverlay").classList.remove("hidden");
   document.documentElement.classList.add("q-open");
@@ -2047,8 +2306,18 @@ function init(){
   INPUT_IDS.forEach(id=>{ const el=$(id); if(el) el.addEventListener("input", ()=>{ recalc(); save(); }); });
   $("pFinish").addEventListener("change", save);
   $("sFinish").addEventListener("change", save);
-  // Total field re-skins the headline live (Quote ↔ Total)
-  $("agreed").addEventListener("input", ()=>{ if(LAST) updateHeadline(); });
+  // Total field re-skins the headline + breakdown live (Quote ↔ Total)
+  $("agreed").addEventListener("input", ()=>{ if(LAST){ updateHeadline(); renderBreakdown(LAST); } });
+  // extras: render saved items + wire discount controls
+  renderExtras();
+  $("discName").addEventListener("input", ()=>{ ui.extras.disc.name=$("discName").value; extrasChanged(); });
+  $("discVal").addEventListener("input",  ()=>{ ui.extras.disc.val =$("discVal").value;  extrasChanged(); });
+  [...$("discSeg").children].forEach(b=> b.addEventListener("click", ()=>{
+    ui.extras.disc.type=b.dataset.dt;
+    [...$("discSeg").children].forEach(x=>x.classList.toggle("on",x===b));
+    $("discUnit").textContent = b.dataset.dt==="pct" ? "%" : "$";
+    extrasChanged();
+  }));
   recalc();
 }
 document.addEventListener("DOMContentLoaded", init);
