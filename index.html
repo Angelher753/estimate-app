@@ -369,6 +369,16 @@ select.inp{
 .adv-row.xrow .v{color:var(--navy)}
 .adv-row.disc .k{color:#047857;font-weight:800}
 .adv-row.disc .v{color:#047857;font-weight:800}
+.adv-hint{font-size:11px;color:var(--muted-2);font-weight:600;text-align:center;padding:0 0 9px;border-bottom:1px solid var(--line-soft);margin-bottom:4px}
+.adv-row.erow{align-items:center}
+.adv-row .ev{display:flex;align-items:center;gap:5px}
+.adv-row .ev .cur{font-family:var(--mono);font-weight:700;color:var(--muted-2);font-size:12.5px}
+.adv-row .ev input.lp{width:82px;text-align:right;padding:7px 9px;border:1.5px solid var(--line);border-radius:9px;
+  font-family:var(--mono);font-weight:700;font-size:13.5px;color:var(--ink);background:#fff;font-variant-numeric:tabular-nums}
+.adv-row .ev input.lp:focus{border-color:var(--navy);outline:none;box-shadow:0 0 0 3px rgba(30,58,95,.1)}
+.adv-row .ev input.lp.ovr{border-color:#f5b301;background:#fffdf5;color:#92660e}
+.adv-row .ev .lp-rst{width:28px;height:32px;border:none;background:transparent;color:var(--navy);font-size:15px;cursor:pointer;padding:0;line-height:1}
+.x-ta{resize:none;overflow:hidden;min-height:42px;line-height:1.45;font-family:var(--sans)}
 
 /* receipt add-ons block */
 #rXBlock .r-line .v.money{font-variant-numeric:tabular-nums}
@@ -806,11 +816,6 @@ html.q-open body{overflow:hidden}
           <div class="ql" id="qLabel">QUOTE<small id="qSub"></small></div>
           <div class="qn" id="rQuote">$0</div>
         </div>
-        <div class="agreed">
-          <label>Total</label>
-          <div class="ai"><span>$</span><input id="agreed" type="number" inputmode="decimal" min="0" placeholder=""></div>
-        </div>
-
         <button class="adv-toggle" id="advToggle" onclick="toggleAdv()">
           <span>Breakdown</span>
           <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1294,7 +1299,8 @@ const ui = {
   quoteNum: null,
   // Generic add-on line items + discount — the seed of the universal quoter.
   // Each item: {id, label, desc, mode:"flat"|"rate", amt, qty, rate, unit}
-  extras: { items: [], disc: { name:"", type:"flat", val:"" } }
+  extras: { items: [], disc: { name:"", type:"flat", val:"" } },
+  prices: {}   // per-line price overrides, keyed by line key (empty = use default)
 };
 const SEQ_KEY = "mmm_pools_quote_seq";
 
@@ -1345,7 +1351,7 @@ function renderExtras(){
           <button type="button" class="x-rm" onclick="removeExtraItem('${it.id}')" aria-label="Remove item">×</button>
         </div>
         <div class="fld x-desc" style="margin-bottom:8px">
-          <input class="inp" id="xd_${it.id}" type="text" placeholder="Description (optional — prints on quote)" value="${esc(it.desc)}">
+          <textarea class="inp x-ta" id="xd_${it.id}" rows="1" placeholder="Description (optional — prints on quote). Type as much as you need; this box grows.">${esc(it.desc)}</textarea>
         </div>
         <div class="x-row2">
           <div class="x-seg">
@@ -1366,6 +1372,8 @@ function renderExtras(){
     ui.extras.items.forEach(it=>{
       const bind=(pfx,key)=>{ const el=$(pfx+it.id); if(el) el.addEventListener("input",()=>{ it[key]=el.value; extrasChanged(it); }); };
       bind("xl_","label"); bind("xd_","desc"); bind("xa_","amt"); bind("xq_","qty"); bind("xr_","rate");
+      const ta=$("xd_"+it.id);
+      if(ta){ const grow=()=>{ ta.style.height="auto"; ta.style.height=ta.scrollHeight+"px"; }; ta.addEventListener("input",grow); requestAnimationFrame(grow); }
       const us=$("xu_"+it.id); if(us) us.addEventListener("change",()=>{ it.unit=us.value; extrasChanged(it); });
     });
   }
@@ -1502,6 +1510,30 @@ function recalc(){
 }
 
 /* ════════════ FULL CALCULATION ════════════ */
+/* ════════════ EDITABLE REPLASTER LINES ════════════
+   One canonical, ordered list feeds BOTH the breakdown editor and the PDF.
+   Default price = cost × buffer; per-line override in ui.prices takes over.   */
+function replasterLines(c){
+  const L=[]; const add=(key,label,sub,cost)=>{ if(cost>0) L.push({key,label,sub,cost,price:0}); };
+  add("pFin", `Pool — ${c.pFinName} Interior Finish`, c.p>0?`${c.p.toFixed(1)} LF`:"", c.pFinishCost);
+  add("sFin", `Spa — ${c.sFinName} Interior Finish`,  c.s>0?`${c.s.toFixed(1)} LF`:"", c.sFinishCost);
+  add("demo", "Demolition & Debris Haul-Away", `${c.t.toFixed(1)} LF`, c.demoCost);
+  add("pTile","Waterline Tile Replacement — Pool", `${c.pTileLF.toFixed(1)} LF`, c.pTileCost);
+  add("sTile","Waterline Tile Replacement — Spa",  `${c.sTileLF.toFixed(1)} LF`, c.sTileCost);
+  add("pCope","Coping — Pool", `${c.pCopeLF.toFixed(1)} LF`, c.pCopeCost);
+  add("sCope","Coping — Spa",  `${c.sCopeLF.toFixed(1)} LF`, c.sCopeCost);
+  c.lightItems.forEach(li=> L.push({key:"light_"+li.name.replace(/\s+/g,""), label:`${li.name.replace("HV","High-Voltage").replace("LV","Low-Voltage")} Pool Light`, sub:`Qty ${li.qty}`, cost:li.cost, price:0}));
+  add("permit","City Permit","",c.permitCost);
+  L.forEach(l=> l.price = linePrice(l));
+  return L;
+}
+function defaultLinePrice(line){ return Math.round(line.cost * CFG.QUOTE_MULT); }
+function linePrice(line){
+  const o = ui.prices ? ui.prices[line.key] : undefined;
+  if(o!==undefined && o!==null && o!==""){ const v=num(o); if(v>=0) return Math.round(v); }
+  return defaultLinePrice(line);
+}
+
 function compute(){
   const p = poolLF(), s = spaLF(), t = p+s;
   const pFin = CFG.finish[$("pFinish").value];
@@ -1525,10 +1557,19 @@ function compute(){
   const actual = pFinishCost+sFinishCost+demoCost+pTileCost+sTileCost+pCopeCost+sCopeCost+permitCost+lightCost;
   const quote  = actual*CFG.QUOTE_MULT;
 
+  // ── editable per-line replaster prices (default = cost × buffer) ──
+  const lines = replasterLines({
+    p, s, t,
+    pFinName:CFG.finishName[$("pFinish").value], sFinName:CFG.finishName[$("sFinish").value],
+    pFinishCost, sFinishCost, demoCost,
+    pTileLF, sTileLF, pCopeLF, sCopeLF,
+    pTileCost, sTileCost, pCopeCost, sCopeCost, permitCost, lightItems
+  });
+  const replQuote = lines.reduce((a,l)=>a+l.price,0);
+
   // ── extras + discount (customer-facing; no buffer on extras) ──
   const xItems      = ui.extras.items.filter(it=> itemTotal(it)>0 || (it.label&&it.label.trim()));
   const customTotal = Math.round(extrasTotal());
-  const replQuote   = Math.round(quote);
   const gross       = replQuote + customTotal;
   const discAmt     = discountAmt(gross);
   const discName    = (ui.extras.disc.name||"").trim();
@@ -1547,7 +1588,8 @@ function compute(){
     pFinishCost,sFinishCost,demoCost,
     pTileCost,sTileCost,pCopeCost,sCopeCost,permitCost,
     lightLines, lightItems, actual, quote,
-    xItems, customTotal, replQuote, discAmt, discName, customerTotal, floor
+    xItems, customTotal, replQuote, discAmt, discName, customerTotal, floor,
+    lines
   };
 }
 
@@ -1638,19 +1680,14 @@ function calculate(){
 /* ════════════ HEADLINE: Quote vs Total ════════════ */
 function updateHeadline(){
   if(!LAST) return;
-  const t = num($("agreed").value);
-  if(t>0){
-    $("rQuote").textContent = usd(t);
-    $("qLabel").firstChild.textContent = "TOTAL";
-    $("qSub").textContent = "final price";
-  } else {
-    $("rQuote").textContent = usd(LAST.customerTotal);
-    $("qLabel").firstChild.textContent = "QUOTE";
-    const bits=[];
-    if(LAST.customTotal>0) bits.push("add-ons in");
-    if(LAST.discAmt>0)     bits.push("discount applied");
-    $("qSub").textContent = bits.join(" · ");
-  }
+  $("rQuote").textContent = usd(LAST.customerTotal);
+  $("qLabel").firstChild.textContent = "QUOTE";
+  const bits=[];
+  const adjusted = ui.prices && Object.keys(ui.prices).some(k=> ui.prices[k]!==undefined && ui.prices[k]!=="" && ui.prices[k]!=null);
+  if(adjusted)           bits.push("prices adjusted");
+  if(LAST.customTotal>0) bits.push("add-ons in");
+  if(LAST.discAmt>0)     bits.push("discount applied");
+  $("qSub").textContent = bits.join(" · ");
 }
 
 /* receipt ADD-ONS & DISCOUNT block */
@@ -1668,62 +1705,56 @@ function renderXBlock(c){
   $("rXDetail").innerHTML=h;
 }
 
-/* ════════════ ADVANCED BREAKDOWN (quote-level, sums to quote) ════════════ */
-const M = CFG.QUOTE_MULT;
+/* ════════════ BREAKDOWN = LIVE PRICE EDITOR ════════════
+   Each replaster line shows an editable price (default = cost × buffer).
+   Add-ons are read-only here (edited in the card above); discount + total live.  */
 function renderBreakdown(c){
   const rows=[];
-  const row=(k,v,sub,cls)=> rows.push(
-    `<div class="adv-row${cls?" "+cls:""}"><span class="k">${k}${sub?`<small>${sub}</small>`:""}</span><span class="v">${v}</span></div>`);
+  rows.push(`<div class="adv-hint">Tap any price to charge your own · ↺ resets to default</div>`);
 
-  // finishes
-  if(c.pFinishCost>0) row(`Pool — ${c.pFinName}`, usd(c.pFinishCost*M), `${c.p.toFixed(1)} LF`);
-  if(c.sFinishCost>0) row(`Spa — ${c.sFinName}`, usd(c.sFinishCost*M), `${c.s.toFixed(1)} LF`);
+  c.lines.forEach(l=>{
+    const ovr = ui.prices && ui.prices[l.key]!==undefined && ui.prices[l.key]!=="";
+    rows.push(
+      `<div class="adv-row erow"><span class="k">${l.label}${l.sub?`<small>${l.sub}</small>`:""}</span>`+
+      `<span class="ev"><span class="cur">$</span>`+
+      `<input class="lp${ovr?" ovr":""}" id="lp_${l.key}" inputmode="decimal" value="${l.price}" oninput="onLinePrice('${l.key}',this)">`+
+      `<button class="lp-rst" style="visibility:${ovr?"visible":"hidden"}" onclick="resetLinePrice('${l.key}')" aria-label="Reset to default">↺</button>`+
+      `</span></div>`);
+  });
 
-  // demo
-  if(c.demoCost>0) row("Demo / plaster removal", usd(c.demoCost*M), `${c.t.toFixed(1)} LF`);
-
-  // pool tile (split base + extra)
-  if(ui.addon.pTile){
-    const baseLF=c.p, base=baseLF*CFG.tile*M;
-    row("Pool tile", usd(base), `${baseLF.toFixed(1)} LF`);
-    if(c.pTileExtraLF>0) row(`＋ Added tile`, usd(c.pTileExtraLF*CFG.tile*M), `${c.pTileExtraLF} LF (spillway / extra)`, "sub");
-  }
-  // pool coping
-  if(ui.addon.pCope){
-    const baseLF=c.p, base=baseLF*CFG.coping*M;
-    row("Pool coping", usd(base), `${baseLF.toFixed(1)} LF`);
-    if(c.pCopeExtraLF>0) row(`＋ Added coping`, usd(c.pCopeExtraLF*CFG.coping*M), `${c.pCopeExtraLF} LF extra`, "sub");
-  }
-  // spa tile
-  if(ui.addon.sTile){
-    const baseLF=c.s, base=baseLF*CFG.tile*M;
-    row("Spa tile", usd(base), `${baseLF.toFixed(1)} LF`);
-    if(c.sTileExtraLF>0) row(`＋ Added tile`, usd(c.sTileExtraLF*CFG.tile*M), `${c.sTileExtraLF} LF (spillway / extra)`, "sub");
-  }
-  // spa coping
-  if(ui.addon.sCope){
-    const baseLF=c.s, base=baseLF*CFG.coping*M;
-    row("Spa coping", usd(base), `${baseLF.toFixed(1)} LF`);
-    if(c.sCopeExtraLF>0) row(`＋ Added coping`, usd(c.sCopeExtraLF*CFG.coping*M), `${c.sCopeExtraLF} LF extra`, "sub");
-  }
-  // lights — one line per type
-  c.lightItems.forEach(li=> row(`${li.name} light ×${li.qty}`, usd(li.cost*M)) );
-  // permit
-  if(c.permitCost>0) row("Permit", usd(c.permitCost*M));
-
-  // add-on items (face value — no buffer)
+  // add-on items (read-only here — edit in the card above)
   c.xItems.forEach(it=>{
     const sub = it.mode==="rate" ? `${num(it.qty)} ${it.unit} × ${usd(num(it.rate))}` : "add-on";
-    row(esc(it.label||"Item"), usd(itemTotal(it)), sub, "xrow");
+    rows.push(`<div class="adv-row xrow"><span class="k">${esc(it.label||"Item")}<small>${sub}</small></span><span class="v">${usd(itemTotal(it))}</span></div>`);
   });
-  // discount (standout)
-  if(c.discAmt>0) row(esc(c.discName||"Discount"), "−"+usd(c.discAmt), ui.extras.disc.type==="pct"?num(ui.extras.disc.val)+"% off":"", "disc");
 
-  // total = customer total (or the agreed Total if filled)
-  const ag=num($("agreed").value);
-  row("Total", usd(ag>0?ag:c.customerTotal), "", "tot");
+  // discount (standout) — always present, hidden when zero so totals can update live
+  const dpct = ui.extras.disc.type==="pct" && num(ui.extras.disc.val)>0 ? `${num(ui.extras.disc.val)}% off` : "";
+  rows.push(`<div class="adv-row disc" id="bd_disc"${c.discAmt>0?"":' style="display:none"'}><span class="k">${esc(c.discName||"Discount")}${dpct?`<small>${dpct}</small>`:""}</span><span class="v">${c.discAmt>0?"−"+usd(c.discAmt):""}</span></div>`);
+
+  // total
+  rows.push(`<div class="adv-row tot" id="bd_tot"><span class="k">Total</span><span class="v">${usd(c.customerTotal)}</span></div>`);
 
   $("advLines").innerHTML = rows.join("");
+}
+/* live edits without re-rendering inputs (keeps focus while typing) */
+function onLinePrice(key, el){
+  const v = el.value.trim();
+  if(v==="") delete ui.prices[key]; else ui.prices[key]=v;
+  el.classList.toggle("ovr", v!=="");
+  const rst = el.parentElement.querySelector(".lp-rst"); if(rst) rst.style.visibility = v!=="" ? "visible" : "hidden";
+  if(LAST){ LAST=compute(); updateHeadline(); refreshBreakdownTotals(LAST); updateDiscChip(); }
+  save();
+}
+function resetLinePrice(key){
+  delete ui.prices[key];
+  if(LAST) LAST=compute();
+  renderBreakdown(LAST); updateHeadline(); updateDiscChip(); save();
+}
+function refreshBreakdownTotals(c){
+  const d=$("bd_disc");
+  if(d){ d.style.display = c.discAmt>0 ? "" : "none"; const dv=d.querySelector(".v"); if(dv) dv.textContent = c.discAmt>0 ? "−"+usd(c.discAmt) : ""; }
+  const t=$("bd_tot"); if(t){ const tv=t.querySelector(".v"); if(tv) tv.textContent = usd(c.customerTotal); }
 }
 function toggleAdv(){
   const open = $("advPanel").classList.toggle("open");
@@ -1736,8 +1767,7 @@ function toggleAdv(){
   const showA = e => {
     if(e) e.preventDefault();
     if(LAST){
-      const ag=num($("agreed").value);
-      const F = ag>0 ? ag : LAST.customerTotal;
+      const F = LAST.customerTotal;
       const room = F - LAST.floor;
       peek.innerHTML =
         `<span class="pk">WORK COST<b>${usd(LAST.actual)}</b></span>`+
@@ -1789,15 +1819,9 @@ function summaryText(){
     c.xItems.forEach(it=> L.push(`  ${it.label||"Item"}: ${usd(itemTotal(it))}`));
   }
   if(c.discAmt>0) L.push(`DISCOUNT (${c.discName||"Discount"}): −${usd(c.discAmt)}`);
-  const ag=num($("agreed").value);
   L.push("");
-  if(ag>0){
-    L.push(`TOTAL:  ${usd(ag)}`);
-    L.push(`(quote ${usd(c.customerTotal)} · cost ${usd(c.actual)} · floor ${usd(c.floor)} — internal)`);
-  } else {
-    L.push(`QUOTE:  ${usd(c.customerTotal)}`);
-    L.push(`(cost ${usd(c.actual)} · floor ${usd(c.floor)} — internal)`);
-  }
+  L.push(`QUOTE:  ${usd(c.customerTotal)}`);
+  L.push(`(cost ${usd(c.actual)} · floor ${usd(c.floor)} — internal)`);
   L.push("");
   L.push("Subject to accounting approval.");
   return L.join("\n");
@@ -1819,7 +1843,7 @@ function saveEst(){
 /* ════════════ PERSISTENCE (localStorage, safe) ════════════ */
 const INPUT_IDS = ["pLen","pLenIn","pWid","pWidIn","pManLF","pExtra","pFinish","pTileExtra","pCopeExtra",
   "sLen","sLenIn","sWid","sWidIn","sDiam","sDiamIn","sExtra","sFinish","sTileExtra","sCopeExtra",
-  "jobName","custName","jobAddr","specNotes","jobNotes","agreed"];
+  "jobName","custName","jobAddr","specNotes","jobNotes"];
 
 function save(){
   try{
@@ -1841,6 +1865,7 @@ function load(){
   if(!ui.extras) ui.extras={items:[],disc:{name:"",type:"flat",val:""}};
   if(!ui.extras.items) ui.extras.items=[];
   if(!ui.extras.disc)  ui.extras.disc={name:"",type:"flat",val:""};
+  if(!ui.prices) ui.prices={};
   // shapes
   setShapeQuiet("pool", ui.poolShape);
   setShapeQuiet("spa", ui.spaShape);
@@ -1905,35 +1930,7 @@ function mintQuoteNum(){
 }
 
 function getFinalPrice(c){
-  const ag = num($("agreed").value);
-  return Math.round(ag>0 ? ag : c.customerTotal);
-}
-
-/* Weighted REPLASTER line items — weighted to R (the replaster share of the final
-   price). Custom add-ons print at face value and the discount prints as its own
-   line, so: Σ(weighted) + Σ(add-ons) − discount = final price EXACTLY. */
-function weightedItems(c, R){
-  const items = [];
-  const pFinKey = $("pFinish").value, sFinKey = $("sFinish").value;
-  if(c.pFinishCost>0) items.push({label:`Pool — ${c.pFinName} Interior Finish`, sub:`${c.p.toFixed(1)} LF`, cost:c.pFinishCost});
-  if(c.sFinishCost>0) items.push({label:`Spa — ${c.sFinName} Interior Finish`, sub:`${c.s.toFixed(1)} LF`, cost:c.sFinishCost});
-  if(c.demoCost>0)    items.push({label:"Demolition & Debris Haul-Away", sub:`${c.t.toFixed(1)} LF`, cost:c.demoCost});
-  if(ui.addon.pTile)  items.push({label:"Waterline Tile Replacement — Pool", sub:`${c.pTileLF.toFixed(1)} LF`, cost:c.pTileCost});
-  if(ui.addon.sTile)  items.push({label:"Waterline Tile Replacement — Spa", sub:`${c.sTileLF.toFixed(1)} LF`, cost:c.sTileCost});
-  if(ui.addon.pCope)  items.push({label:"Coping — Pool", sub:`${c.pCopeLF.toFixed(1)} LF`, cost:c.pCopeCost});
-  if(ui.addon.sCope)  items.push({label:"Coping — Spa", sub:`${c.sCopeLF.toFixed(1)} LF`, cost:c.sCopeCost});
-  c.lightItems.forEach(li=> items.push({label:`${li.name.replace("HV","High-Voltage").replace("LV","Low-Voltage")} Pool Light`, sub:`Qty ${li.qty}`, cost:li.cost}));
-  if(c.permitCost>0)  items.push({label:"City Permit", sub:"", cost:c.permitCost});
-
-  const totCost = items.reduce((a,b)=>a+b.cost,0);
-  if(totCost<=0) return items.map(it=>({...it, amt:0}));
-  const raw = items.map(it=> it.cost/totCost*R);
-  const fl  = raw.map(Math.floor);
-  let left  = R - fl.reduce((a,b)=>a+b,0);
-  raw.map((r,i)=>({i, frac:r-Math.floor(r)}))
-     .sort((a,b)=>b.frac-a.frac)
-     .forEach(o=>{ if(left>0){ fl[o.i]+=1; left--; } });
-  return items.map((it,i)=>({...it, amt:fl[i]}));
+  return Math.round(c.customerTotal);
 }
 
 /* Which structures are being replastered, grouped by finish */
@@ -2093,12 +2090,8 @@ function termsHTML(c, plan, F){
 }
 
 function buildQuoteDoc(c){
-  const F = getFinalPrice(c);
-  // Replaster share absorbs any negotiation; add-ons stay at face value,
-  // discount prints as its own line: weighted + addons − discount = F.
-  const R = F + c.discAmt - c.customTotal;
+  const F = getFinalPrice(c);   // = c.customerTotal
   const plan = replasterPlan(c);
-  const items = weightedItems(c, R);
   const qn = mintQuoteNum();
   const d = new Date();
   const dateStr  = d.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
@@ -2116,8 +2109,9 @@ function buildQuoteDoc(c){
       </div>
     </div>`;
 
-  let rows = items.map(it=>
-    `<tr><td>${it.label}${it.sub?`<div class="sub">${it.sub}</div>`:""}</td><td class="amt">${usd(it.amt)}</td></tr>`).join("");
+  // each replaster line prints at its (editable) price
+  let rows = c.lines.map(l=>
+    `<tr><td>${l.label}${l.sub?`<div class="sub">${l.sub}</div>`:""}</td><td class="amt">${usd(l.price)}</td></tr>`).join("");
   // custom add-on items — exact customer price, optional description / qty
   c.xItems.forEach(x=>{
     const subBits=[];
@@ -2170,17 +2164,8 @@ function openQuote(){
   if(!LAST) calculate();
   if(!LAST) return;
   const c = compute(); LAST = c;
-  if(c.t<=0){ alert("Enter pool or spa measurements first."); return; }
-  const F = getFinalPrice(c);
-  const R = F + c.discAmt - c.customTotal;
-  if(c.actual>0 && R<1){
-    alert("Total is too low — after the discount it doesn't cover the add-on items. Raise the Total or reduce the discount/add-ons.");
-    return;
-  }
-  if(c.actual<=0 && Math.abs((c.customTotal-c.discAmt)-F)>0){
-    alert("This job has only add-on items. Clear the Total field so the quote matches the add-ons, or add replaster work.");
-    return;
-  }
+  if(c.t<=0 && c.xItems.length===0){ alert("Enter pool or spa measurements, or add an item first."); return; }
+  if(c.customerTotal<0){ alert("This quote is below zero — reduce the discount or raise a price."); return; }
   buildQuoteDoc(c);
   $("qOverlay").classList.remove("hidden");
   document.documentElement.classList.add("q-open");
@@ -2306,8 +2291,6 @@ function init(){
   INPUT_IDS.forEach(id=>{ const el=$(id); if(el) el.addEventListener("input", ()=>{ recalc(); save(); }); });
   $("pFinish").addEventListener("change", save);
   $("sFinish").addEventListener("change", save);
-  // Total field re-skins the headline + breakdown live (Quote ↔ Total)
-  $("agreed").addEventListener("input", ()=>{ if(LAST){ updateHeadline(); renderBreakdown(LAST); } });
   // extras: render saved items + wire discount controls
   renderExtras();
   $("discName").addEventListener("input", ()=>{ ui.extras.disc.name=$("discName").value; extrasChanged(); });
