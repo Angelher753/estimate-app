@@ -344,6 +344,24 @@ select.inp{
 .x-seg{display:flex;border:1.5px solid var(--line);border-radius:9px;overflow:hidden;flex-shrink:0}
 .x-seg button{padding:9px 11px;border:none;background:#fff;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--sans)}
 .x-seg button.on{background:var(--navy);color:#fff}
+.x-modes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px}
+.x-modes button{padding:9px 8px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--sans)}
+.x-modes button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.x-per{font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0}
+.x-uword{flex:1;min-width:60px;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:16px;font-family:var(--sans);color:var(--ink);background:#fff;-webkit-appearance:none;appearance:none}
+.x-mode-note{font-size:11px;color:var(--muted-2);line-height:1.4;margin-top:8px;background:#f7fafd;border-radius:8px;padding:8px 10px}
+.x-tot.show{color:#2563eb;font-weight:800}
+.pay-prev{display:flex;justify-content:space-between;gap:12px;padding:8px 11px;background:var(--field);border:1px solid var(--line);border-radius:9px;margin-bottom:6px;font-size:13px}
+.pay-prev span{color:#42536a;font-weight:600}
+.pay-prev b{color:var(--navy);font-variant-numeric:tabular-nums}
+.pay-list{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.pay-row{display:flex;gap:7px;align-items:center}
+.pay-row .pay-lbl{flex:1;min-width:0;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:16px;font-family:var(--sans);color:var(--ink);background:#fff;-webkit-appearance:none;appearance:none}
+.pay-row .pay-amt{width:118px;flex-shrink:0}
+.pay-sum{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;font-weight:700;color:#42536a;padding:4px 2px 0}
+.pay-sum b{color:var(--navy)}
+.pay-sum .ok{color:#047857;font-weight:800}
+.pay-sum .warn{color:#b45309;font-weight:800}
 .x-amt{flex:1;min-width:110px}
 .x-qty{width:74px}
 .x-rate{flex:1;min-width:96px}
@@ -369,6 +387,7 @@ select.inp{
 .adv-row.xrow .v{color:var(--navy)}
 .adv-row.disc .k{color:#047857;font-weight:800}
 .adv-row.disc .v{color:#047857;font-weight:800}
+.adv-row.xrow.opt .k,.adv-row.xrow.opt .v{color:#2563eb}
 .adv-hint{font-size:11px;color:var(--muted-2);font-weight:600;text-align:center;padding:0 0 9px;border-bottom:1px solid var(--line-soft);margin-bottom:4px}
 .adv-row.erow{align-items:center}
 .adv-row .ev{display:flex;align-items:center;gap:5px}
@@ -387,6 +406,14 @@ select.inp{
 .seg-row .seg-lf{width:104px;flex-shrink:0}
 .seg-row .seg-rm{width:34px;height:38px;flex-shrink:0;border:none;border-radius:9px;background:#fde8e8;color:#b42318;font-size:18px;font-weight:800;cursor:pointer;line-height:1}
 .seg-add{width:100%;margin-top:8px;padding:11px;border:1.5px dashed var(--navy);border-radius:10px;background:#f0f6ff;color:var(--navy);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--sans);text-align:left}
+.tile-type{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.tile-type .tt-lbl{font-size:12px;font-weight:800;color:#42536a;letter-spacing:.3px}
+.tile-type .x-seg{flex:1}
+.tile-type .x-seg button{flex:1}
+.tile-hint{font-size:11px;color:var(--muted-2);margin-top:7px;line-height:1.4}
+.seg-row.tile .seg-lf{width:84px}
+.seg-row .seg-h{width:74px;flex-shrink:0}
+.seg-eff{font-size:11px;font-weight:800;color:var(--navy);white-space:nowrap;font-variant-numeric:tabular-nums;align-self:center;min-width:62px;text-align:right}
 .seg-add:active{transform:scale(.99)}
 
 /* spa-min underprice warning */
@@ -396,12 +423,23 @@ select.inp{
 /* receipt add-ons block */
 #rXBlock .r-line .v.money{font-variant-numeric:tabular-nums}
 #rXBlock .r-line.disc .k,#rXBlock .r-line.disc .v{color:#047857;font-weight:800}
+#rXBlock .r-line.opt .k,#rXBlock .r-line.opt .v{color:#2563eb;font-weight:700}
 
 /* PDF discount row */
 .q-items tr.q-disc td{background:#ecfdf5;color:#047857;font-weight:800}
 .q-items tr.q-disc td .sub{color:#059669;font-weight:600}
 .q-items tr.q-disc td:first-child{border-radius:6px 0 0 6px;padding-left:8px}
 .q-items tr.q-disc td:last-child{border-radius:0 6px 6px 0;padding-right:8px}
+.q-optional{margin-top:12px;border:1.5px dashed #93b4e6;border-radius:8px;padding:9px 12px;background:#f5f9ff}
+.q-opt-h{font-size:9px;font-weight:900;letter-spacing:1px;color:#2563eb;margin-bottom:6px}
+.q-opt-h span{font-weight:600;color:#6b7a8d;letter-spacing:0}
+.q-opt-row{display:flex;justify-content:space-between;gap:12px;padding:4px 0;border-top:1px solid #e0ebfa;font-size:11px}
+.q-opt-row:first-of-type{border-top:none}
+.q-opt-l{color:#1a2433;font-weight:700}
+.q-opt-l .q-opt-plus{color:#2563eb;font-weight:900}
+.q-opt-d{font-weight:500;color:#5a6b80;font-size:10px;margin-top:1px}
+.q-opt-r{text-align:right;color:#2563eb;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+.q-opt-r .q-fill{color:#6b7a8d;font-weight:600;font-size:10px}
 
 /* ════════════════════ UNITS / FT-IN ════════════════════ */
 .unit-wrap{position:relative}
@@ -608,8 +646,13 @@ html.q-open body{overflow:hidden}
         <div class="rt" id="pTileLF">—</div>
       </div>
       <div class="adder" id="pTileAdder">
+        <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pTileType">
+          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pTile','ceramic')">Ceramic · $35</button>
+          <button type="button" data-tt="glass" onclick="setTileType('pTile','glass')">Glass · $55</button>
+        </div></div>
         <div class="segs" id="pTileSegs"></div>
         <button type="button" class="seg-add" onclick="addSeg('pTile')">＋ Add measurement (waterline, spillway, raised wall…)</button>
+        <div class="tile-hint">Priced per 6&quot; band. Set height per run — a 12&quot; spillway counts double.</div>
       </div>
 
       <!-- pool coping -->
@@ -712,8 +755,13 @@ html.q-open body{overflow:hidden}
           <div class="rt" id="sTileLF">—</div>
         </div>
         <div class="adder" id="sTileAdder">
+          <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sTileType">
+            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sTile','ceramic')">Ceramic · $35</button>
+            <button type="button" data-tt="glass" onclick="setTileType('sTile','glass')">Glass · $55</button>
+          </div></div>
           <div class="segs" id="sTileSegs"></div>
           <button type="button" class="seg-add" onclick="addSeg('sTile')">＋ Add measurement (waterline, spillway…)</button>
+          <div class="tile-hint">Priced per 6&quot; band. Set height per run — a 12&quot; spillway counts double.</div>
         </div>
 
         <!-- spa coping -->
@@ -784,6 +832,23 @@ html.q-open body{overflow:hidden}
           </div>
           <div class="unit-wrap" style="flex:1"><input id="discVal" class="inp" type="number" inputmode="decimal" min="0" placeholder="0"><span class="unit" id="discUnit">$</span></div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PAYMENT SCHEDULE ══════════════ -->
+  <div class="card">
+    <div class="card-hd"><div class="ttl"><span class="dot"></span>PAYMENT SCHEDULE</div></div>
+    <div class="card-bd">
+      <div class="x-seg" id="paySeg" style="margin-bottom:11px">
+        <button type="button" data-pm="auto" class="on" onclick="setPayMode('auto')" style="flex:1">Automatic</button>
+        <button type="button" data-pm="custom" onclick="setPayMode('custom')" style="flex:1">Custom (edit / match old quote)</button>
+      </div>
+      <div id="payAuto"></div>
+      <div id="payCustom" class="hidden">
+        <div class="pay-list" id="payList"></div>
+        <button type="button" class="x-add" onclick="addPayment()">＋ Add payment line</button>
+        <div class="pay-sum" id="paySum"></div>
       </div>
     </div>
   </div>
@@ -1301,7 +1366,9 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
    ════════════════════════════════════════════════════════════ */
 const CFG = {
   demo:   25,    // $/LF — pool+spa perimeter only
-  tile:   35,    // $/LF — demo + reset included
+  tile:   35,    // legacy ceramic rate (kept for back-compat)
+  tileRates: { ceramic:35, glass:55 },   // $/LF per 6" band
+  tileName:  { ceramic:"Ceramic", glass:"Glass" },
   coping: 45,    // $/LF — demo + reset included
   permit: 900,   // flat
   QUOTE_MULT: 1.10,            // green number = actual cost × this (10% buffer)
@@ -1333,8 +1400,11 @@ const ui = {
   // Repeatable extra-LF segments per tile/coping section (waterline + spillway + …).
   // Each: {id, label, lf}. Summed into that section's LF.
   segs: { pTile:[], pCope:[], sTile:[], sCope:[] },
+  tileType: { pTile:"ceramic", sTile:"ceramic" },   // ceramic | glass, per structure
   lights: { lHVC:0, lHVW:0, lLVC:0 },
   quoteNum: null,
+  // editable payment schedule: mode "auto" uses the formula; "custom" uses items[]
+  payments: { mode:"auto", items:[] },
   // Generic add-on line items + discount — the seed of the universal quoter.
   // Each item: {id, label, desc, mode:"flat"|"rate", amt, qty, rate, unit}
   extras: { items: [], disc: { name:"", type:"flat", val:"" } },
@@ -1349,7 +1419,20 @@ let _xid = 1;
 function newExtraId(){ return "x" + (_xid++) + "_" + Date.now().toString(36); }
 
 function itemTotal(it){
-  return it.mode==="rate" ? num(it.qty)*num(it.rate) : num(it.amt);
+  if(it.mode==="rate")     return num(it.qty)*num(it.rate);
+  if(it.mode==="perunit")  return num(it.count)>0 ? num(it.each)*num(it.count) : 0; // blank count = $0 (fill-in)
+  if(it.mode==="optional") return 0;                                                // shown, never charged
+  return num(it.amt);                                                               // flat
+}
+// charged = adds to the quote total; showcase = appears on quote but $0
+function itemCharged(it){ return it.mode!=="optional" && itemTotal(it)>0; }
+function itemShowcase(it){
+  return it.mode==="optional" || (it.mode==="perunit" && !(num(it.count)>0));
+}
+function itemChipText(it){
+  if(it.mode==="optional") return "+ "+usd(num(it.amt))+" opt";
+  if(it.mode==="perunit" && !(num(it.count)>0)) return "fill-in";
+  return usd(itemTotal(it));
 }
 function extrasTotal(){
   return ui.extras.items.reduce((a,it)=>a+itemTotal(it),0);
@@ -1362,7 +1445,7 @@ function discountAmt(gross){
 }
 
 function addExtraItem(){
-  ui.extras.items.push({id:newExtraId(), label:"", desc:"", mode:"flat", amt:"", qty:"", rate:"", unit:"LF"});
+  ui.extras.items.push({id:newExtraId(), label:"", desc:"", mode:"flat", amt:"", qty:"", rate:"", unit:"LF", each:"", uword:"", count:""});
   renderExtras(); save();
   // focus the new label for fast entry
   const last=ui.extras.items[ui.extras.items.length-1];
@@ -1391,25 +1474,39 @@ function renderExtras(){
         <div class="fld x-desc" style="margin-bottom:8px">
           <textarea class="inp x-ta" id="xd_${it.id}" rows="1" placeholder="Description (optional — prints on quote). Type as much as you need; this box grows.">${esc(it.desc)}</textarea>
         </div>
-        <div class="x-row2">
-          <div class="x-seg">
-            <button type="button" class="${it.mode==="flat"?"on":""}" onclick="setExtraMode('${it.id}','flat')">Flat $</button>
-            <button type="button" class="${it.mode==="rate"?"on":""}" onclick="setExtraMode('${it.id}','rate')">Qty × Rate</button>
-          </div>
-          ${it.mode==="flat" ? `
-            <div class="unit-wrap x-amt"><input class="inp" id="xa_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.amt)}"><span class="unit">$</span></div>
-          ` : `
-            <div class="unit-wrap x-qty"><input class="inp" id="xq_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.qty)}"><span class="unit">qty</span></div>
-            <select class="x-unitsel" id="xu_${it.id}">${UNITS.map(u=>`<option ${it.unit===u?"selected":""}>${u}</option>`).join("")}</select>
-            <div class="unit-wrap x-rate"><input class="inp" id="xr_${it.id}" type="number" inputmode="decimal" min="0" placeholder="$ / unit" value="${esc(it.rate)}"><span class="unit">$</span></div>
-          `}
-          <span class="x-tot" id="xt_${it.id}">${usd(itemTotal(it))}</span>
+        <div class="x-modes">
+          <button type="button" class="${it.mode==="flat"?"on":""}" onclick="setExtraMode('${it.id}','flat')">Flat $</button>
+          <button type="button" class="${it.mode==="rate"?"on":""}" onclick="setExtraMode('${it.id}','rate')">Qty × Rate</button>
+          <button type="button" class="${it.mode==="perunit"?"on":""}" onclick="setExtraMode('${it.id}','perunit')">Per-Unit</button>
+          <button type="button" class="${it.mode==="optional"?"on":""}" onclick="setExtraMode('${it.id}','optional')">Optional +</button>
         </div>
+        <div class="x-row2">
+          ${
+            it.mode==="flat" ? `
+              <div class="unit-wrap x-amt"><input class="inp" id="xa_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.amt)}"><span class="unit">$</span></div>
+            ` : it.mode==="rate" ? `
+              <div class="unit-wrap x-qty"><input class="inp" id="xq_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.qty)}"><span class="unit">qty</span></div>
+              <select class="x-unitsel" id="xu_${it.id}">${UNITS.map(u=>`<option ${it.unit===u?"selected":""}>${u}</option>`).join("")}</select>
+              <div class="unit-wrap x-rate"><input class="inp" id="xr_${it.id}" type="number" inputmode="decimal" min="0" placeholder="$ / unit" value="${esc(it.rate)}"><span class="unit">$</span></div>
+            ` : it.mode==="perunit" ? `
+              <div class="unit-wrap x-rate"><input class="inp" id="xe_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.each)}"><span class="unit">$</span></div>
+              <span class="x-per">per</span>
+              <input class="inp x-uword" id="xw_${it.id}" type="text" placeholder="tile" value="${esc(it.uword)}">
+              <div class="unit-wrap x-qty"><input class="inp" id="xc_${it.id}" type="number" inputmode="decimal" min="0" placeholder="count" value="${esc(it.count)}"><span class="unit">×</span></div>
+            ` : `
+              <div class="unit-wrap x-amt"><input class="inp" id="xa_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.amt)}"><span class="unit">$</span></div>
+            `
+          }
+          <span class="x-tot${it.mode==="optional"||(it.mode==="perunit"&&!(num(it.count)>0))?" show":""}" id="xt_${it.id}">${itemChipText(it)}</span>
+        </div>
+        ${ it.mode==="perunit" ? `<div class="x-mode-note">Leave <b>count</b> blank to print a fill-in line (Count: ____ · Total: ____) the customer or you complete on-site. Enter a count to charge it.</div>` : "" }
+        ${ it.mode==="optional" ? `<div class="x-mode-note">Shows on the quote as an available add-on with a “+”. Not added to the total.</div>` : "" }
       </div>`).join("");
     // bind typing → state (no re-render, focus preserved)
     ui.extras.items.forEach(it=>{
       const bind=(pfx,key)=>{ const el=$(pfx+it.id); if(el) el.addEventListener("input",()=>{ it[key]=el.value; extrasChanged(it); }); };
       bind("xl_","label"); bind("xd_","desc"); bind("xa_","amt"); bind("xq_","qty"); bind("xr_","rate");
+      bind("xe_","each"); bind("xw_","uword"); bind("xc_","count");
       const ta=$("xd_"+it.id);
       if(ta){ const grow=()=>{ ta.style.height="auto"; ta.style.height=ta.scrollHeight+"px"; }; ta.addEventListener("input",grow); requestAnimationFrame(grow); }
       const us=$("xu_"+it.id); if(us) us.addEventListener("change",()=>{ it.unit=us.value; extrasChanged(it); });
@@ -1429,7 +1526,7 @@ function updateDiscChip(){
 }
 /* any extras/discount change → refresh chips, receipt numbers, save */
 function extrasChanged(it){
-  if(it){ const t=$("xt_"+it.id); if(t) t.textContent=usd(itemTotal(it)); }
+  if(it){ const t=$("xt_"+it.id); if(t){ t.textContent=itemChipText(it); t.classList.toggle("show", itemShowcase(it)); } }
   updateDiscChip();
   if(LAST){ LAST=compute(); updateHeadline(); renderBreakdown(LAST); renderXBlock(LAST); }
   save();
@@ -1514,7 +1611,20 @@ function spaLF(){
 }
 
 /* ════════════ EXTRA-LF SEGMENTS (repeatable adders) ════════════ */
-function segSum(key){ return (ui.segs[key]||[]).reduce((a,seg)=>a+num(seg.lf),0); }
+// Tile is priced per 6" band: a run that is taller multiplies the LF.
+// 5 LF @ 12" = 5 × (12/6) = 10 effective LF. Odd heights (8") math correctly.
+function isTileKey(key){ return key==="pTile" || key==="sTile"; }
+function segEff(seg, key){
+  const lf = num(seg.lf);
+  if(isTileKey(key)){ const h = num(seg.h)||6; return lf * (h/6); }
+  return lf;
+}
+function segSum(key){ return (ui.segs[key]||[]).reduce((a,seg)=>a+segEff(seg,key),0); }
+function setTileType(key, type){ ui.tileType[key]=type; renderTileType(key); segsChanged(); }
+function renderTileType(key){
+  const seg=$(key+"Type"); if(!seg) return;
+  [...seg.children].forEach(b=> b.classList.toggle("on", b.dataset.tt===ui.tileType[key]));
+}
 let _segId = 1;
 function newSegId(){ return "sg"+(_segId++)+"_"+Date.now().toString(36); }
 function segsChanged(){
@@ -1525,20 +1635,28 @@ function segsChanged(){
 function renderSegs(key){
   const host=$(key+"Segs"); if(!host) return;
   const arr=ui.segs[key]||[];
-  host.innerHTML = arr.map(seg=>
-    `<div class="seg-row" data-id="${seg.id}">`+
+  const tile=isTileKey(key);
+  host.innerHTML = arr.map(seg=>{
+    const eff = tile ? segEff(seg,key) : 0;
+    const effChip = (tile && num(seg.lf)>0 && (num(seg.h)||6)!==6) ? `<span class="seg-eff" id="sge_${seg.id}">= ${eff.toFixed(1)} LF</span>` : `<span class="seg-eff" id="sge_${seg.id}" style="visibility:${tile&&num(seg.lf)>0&&(num(seg.h)||6)!==6?"visible":"hidden"}">= ${eff.toFixed(1)} LF</span>`;
+    return `<div class="seg-row${tile?" tile":""}" data-id="${seg.id}">`+
       `<input class="seg-lbl" id="sgl_${seg.id}" type="text" placeholder="label (optional)" value="${esc(seg.label||"")}">`+
       `<div class="unit-wrap seg-lf"><input class="inp" id="sgv_${seg.id}" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0" value="${esc(seg.lf||"")}"><span class="unit">LF</span></div>`+
+      (tile ? `<div class="unit-wrap seg-h"><input class="inp" id="sgh_${seg.id}" type="number" inputmode="decimal" min="0" step="1" placeholder="6" value="${esc(seg.h||"")}"><span class="unit">in</span></div>` : "")+
       `<button type="button" class="seg-rm" onclick="removeSeg('${key}','${seg.id}')" aria-label="remove">×</button>`+
-    `</div>`).join("");
+      (tile ? effChip : "")+
+    `</div>`;
+  }).join("");
   arr.forEach(seg=>{
     const lbl=$("sgl_"+seg.id); if(lbl) lbl.addEventListener("input",()=>{ seg.label=lbl.value; save(); });
-    const v=$("sgv_"+seg.id);   if(v)   v.addEventListener("input",  ()=>{ seg.lf=v.value; segsChanged(); });
+    const refreshEff=()=>{ const el=$("sge_"+seg.id); if(el){ const eff=segEff(seg,key); el.textContent="= "+eff.toFixed(1)+" LF"; el.style.visibility=(num(seg.lf)>0 && (num(seg.h)||6)!==6)?"visible":"hidden"; } };
+    const v=$("sgv_"+seg.id);   if(v)   v.addEventListener("input",  ()=>{ seg.lf=v.value; refreshEff(); segsChanged(); });
+    const h=$("sgh_"+seg.id);   if(h)   h.addEventListener("input",  ()=>{ seg.h=h.value; refreshEff(); segsChanged(); });
   });
 }
 function addSeg(key){
   if(!ui.segs[key]) ui.segs[key]=[];
-  ui.segs[key].push({id:newSegId(), label:"", lf:""});
+  ui.segs[key].push({id:newSegId(), label:"", lf:"", h:""});
   renderSegs(key); save();
   const last=ui.segs[key][ui.segs[key].length-1]; const el=$("sgv_"+last.id); if(el) el.focus();
 }
@@ -1550,6 +1668,78 @@ function removeSeg(key,id){
 /* ════════════ QUOTE NUMBER COUNTER ════════════ */
 function getSeq(){ let n=32; try{ n=parseInt(localStorage.getItem(SEQ_KEY))||32; }catch(e){} return n; }
 function setSeq(n){ n=parseInt(n); if(Number.isFinite(n)&&n>0){ try{ localStorage.setItem(SEQ_KEY,n); }catch(e){} } }
+
+/* ════════════ PAYMENT SCHEDULE (auto formula OR custom editable) ════════════ */
+let _payId=1; function newPayId(){ return "py"+(_payId++)+"_"+Date.now().toString(36); }
+function computeAutoPayments(F){
+  const dep = Math.min(Math.round(F*0.10), 1000);
+  const holdRaw = num($("finalHold").value);
+  const holdDefault = Math.max(1500, Math.min(2000, Math.round(F*0.15)));
+  const fin = holdRaw>0 ? Math.round(Math.min(holdRaw, F-dep)) : Math.min(holdDefault, F-dep);
+  const prog = F - dep - fin;
+  return [
+    {label:"Deposit — due upon signing", amount:dep},
+    {label:"Progress payment — due upon completion of demolition and surface preparation", amount:prog},
+    {label:"Final payment — due upon completion and owner walkthrough", amount:fin}
+  ];
+}
+function getPaymentLines(F){
+  if(ui.payments.mode==="custom" && (ui.payments.items||[]).length){
+    return ui.payments.items.map(it=>({label:it.label||"Payment", amount:Math.round(num(it.amount))}));
+  }
+  return computeAutoPayments(F);
+}
+function setPayMode(m){
+  ui.payments.mode=m;
+  [...$("paySeg").children].forEach(b=>b.classList.toggle("on", b.dataset.pm===m));
+  $("payAuto").classList.toggle("hidden", m!=="auto");
+  $("payCustom").classList.toggle("hidden", m!=="custom");
+  if(m==="custom" && (ui.payments.items||[]).length===0){
+    const F = LAST ? LAST.customerTotal : 0;
+    ui.payments.items = computeAutoPayments(F).map(p=>({id:newPayId(), label:p.label, amount:String(p.amount)}));
+  }
+  renderPayments(); save();
+}
+function addPayment(){
+  if(!ui.payments.items) ui.payments.items=[];
+  ui.payments.items.push({id:newPayId(), label:"", amount:""});
+  renderPayments(); save();
+  const last=ui.payments.items[ui.payments.items.length-1]; const el=$("pyl_"+last.id); if(el) el.focus();
+}
+function removePayment(id){
+  ui.payments.items=(ui.payments.items||[]).filter(p=>p.id!==id);
+  renderPayments(); save();
+}
+function refreshPaySum(){
+  const el=$("paySum"); if(!el) return;
+  const sum=(ui.payments.items||[]).reduce((a,it)=>a+num(it.amount),0);
+  const F = LAST ? LAST.customerTotal : 0;
+  const diff = Math.round(F - sum);
+  el.innerHTML = `<span>Scheduled: <b>${usd(Math.round(sum))}</b></span>` +
+    (F>0 ? `<span class="${Math.abs(diff)<1?"ok":"warn"}">${Math.abs(diff)<1?"✓ matches contract":(diff>0?usd(diff)+" unallocated":usd(-diff)+" over contract")}</span>` : "");
+}
+function renderPayments(){
+  const F = LAST ? LAST.customerTotal : 0;
+  const av=$("payAuto");
+  if(av){
+    av.innerHTML = F>0 ? computeAutoPayments(F).map(p=>`<div class="pay-prev"><span>${esc(p.label.split(" — ")[0])}</span><b>${usd(p.amount)}</b></div>`).join("")
+                       : `<div class="x-empty">Calculate a quote to preview the schedule.</div>`;
+  }
+  const host=$("payList");
+  if(host){
+    host.innerHTML = (ui.payments.items||[]).map(it=>
+      `<div class="pay-row" data-id="${it.id}">`+
+        `<input class="inp pay-lbl" id="pyl_${it.id}" type="text" placeholder="Payment label (e.g. At plaster)" value="${esc(it.label)}">`+
+        `<div class="unit-wrap pay-amt"><span class="unit" style="left:10px;right:auto;font-family:var(--mono)">$</span><input class="inp" id="pya_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.amount)}" style="padding-left:26px"></div>`+
+        `<button type="button" class="seg-rm" onclick="removePayment('${it.id}')" aria-label="remove">×</button>`+
+      `</div>`).join("");
+    (ui.payments.items||[]).forEach(it=>{
+      const l=$("pyl_"+it.id); if(l) l.addEventListener("input",()=>{ it.label=l.value; save(); });
+      const a=$("pya_"+it.id); if(a) a.addEventListener("input",()=>{ it.amount=a.value; refreshPaySum(); save(); });
+    });
+  }
+  refreshPaySum();
+}
 
 /* ════════════ ADD-ONS ════════════ */
 function toggleAddon(key){
@@ -1596,8 +1786,8 @@ function replasterLines(c){
   const sFloor = (c.spaOnly && CFG.spaOnlyMin[c.sFinKey]) ? CFG.spaOnlyMin[c.sFinKey] : 0;
   add("sFin", `Spa — ${c.sFinName} Interior Finish`,  c.s>0?`${c.s.toFixed(1)} LF`:"", c.sFinishCost, sFloor);
   add("demo", "Demolition & Debris Haul-Away", `${c.t.toFixed(1)} LF`, c.demoCost);
-  add("pTile","Waterline Tile Replacement — Pool", `${c.pTileLF.toFixed(1)} LF`, c.pTileCost);
-  add("sTile","Waterline Tile Replacement — Spa",  `${c.sTileLF.toFixed(1)} LF`, c.sTileCost);
+  add("pTile",`${c.pTileName||"Ceramic"} Tile Replacement — Pool`, `${c.pTileLF.toFixed(1)} LF`, c.pTileCost);
+  add("sTile",`${c.sTileName||"Ceramic"} Tile Replacement — Spa`,  `${c.sTileLF.toFixed(1)} LF`, c.sTileCost);
   add("pCope","Coping — Pool", `${c.pCopeLF.toFixed(1)} LF`, c.pCopeCost);
   add("sCope","Coping — Spa",  `${c.sCopeLF.toFixed(1)} LF`, c.sCopeCost);
   c.lightItems.forEach(li=> L.push({key:"light_"+li.name.replace(/\s+/g,""), label:`${li.name.replace("HV","High-Voltage").replace("LV","Low-Voltage")} Pool Light`, sub:`Qty ${li.qty}`, cost:li.cost, price:0}));
@@ -1623,8 +1813,10 @@ function compute(){
 
   const pTileLF = p+segSum("pTile"), sTileLF = s+segSum("sTile");
   const pCopeLF = p+segSum("pCope"), sCopeLF = s+segSum("sCope");
-  const pTileCost = ui.addon.pTile ? pTileLF*CFG.tile   : 0;
-  const sTileCost = ui.addon.sTile ? sTileLF*CFG.tile   : 0;
+  const pTileRate = CFG.tileRates[ui.tileType.pTile] || CFG.tileRates.ceramic;
+  const sTileRate = CFG.tileRates[ui.tileType.sTile] || CFG.tileRates.ceramic;
+  const pTileCost = ui.addon.pTile ? pTileLF*pTileRate : 0;
+  const sTileCost = ui.addon.sTile ? sTileLF*sTileRate : 0;
   const pCopeCost = ui.addon.pCope ? pCopeLF*CFG.coping : 0;
   const sCopeCost = ui.addon.sCope ? sCopeLF*CFG.coping : 0;
   const permitCost = ui.addon.permit ? CFG.permit : 0;
@@ -1645,6 +1837,7 @@ function compute(){
     pFinName:CFG.finishName[$("pFinish").value], sFinName:CFG.finishName[$("sFinish").value],
     pFinishCost, sFinishCost, demoCost,
     pTileLF, sTileLF, pCopeLF, sCopeLF,
+    pTileName:CFG.tileName[ui.tileType.pTile], sTileName:CFG.tileName[ui.tileType.sTile],
     pTileCost, sTileCost, pCopeCost, sCopeCost, permitCost, lightItems
   });
   const replQuote = lines.reduce((a,l)=>a+l.price,0);
@@ -1749,6 +1942,8 @@ function calculate(){
 
   // add-ons & discount block
   renderXBlock(c);
+  // payment schedule preview / sum
+  renderPayments();
 
   // numbers
   $("peek").textContent = "• • • •";
@@ -1780,8 +1975,15 @@ function renderXBlock(c){
   blk.style.display="block";
   let h="";
   c.xItems.forEach(it=>{
-    const sub = it.mode==="rate" ? ` <small style="color:var(--muted-2)">(${num(it.qty)} ${it.unit} × ${usd(num(it.rate))})</small>` : "";
-    h += `<div class="r-line"><span class="k word">${esc(it.label||"Item")}${sub}</span><span class="v money">${usd(itemTotal(it))}</span></div>`;
+    let sub="";
+    if(it.mode==="rate")    sub=` <small style="color:var(--muted-2)">(${num(it.qty)} ${it.unit} × ${usd(num(it.rate))})</small>`;
+    if(it.mode==="perunit") sub=` <small style="color:var(--muted-2)">(${num(it.count)||"?"} ${esc(it.uword||"unit")} × ${usd(num(it.each))})</small>`;
+    if(itemShowcase(it)){
+      const r = it.mode==="optional" ? "+ "+usd(num(it.amt))+" opt" : "fill-in";
+      h += `<div class="r-line opt"><span class="k word">+ ${esc(it.label||"Item")}${sub}</span><span class="v money">${r}</span></div>`;
+    } else {
+      h += `<div class="r-line"><span class="k word">${esc(it.label||"Item")}${sub}</span><span class="v money">${usd(itemTotal(it))}</span></div>`;
+    }
   });
   if(c.discAmt>0)
     h += `<div class="r-line disc"><span class="k word">${esc(c.discName||"Discount")}</span><span class="v money">−${usd(c.discAmt)}</span></div>`;
@@ -1809,8 +2011,14 @@ function renderBreakdown(c){
 
   // add-on items (read-only here — edit in the card above)
   c.xItems.forEach(it=>{
-    const sub = it.mode==="rate" ? `${num(it.qty)} ${it.unit} × ${usd(num(it.rate))}` : "add-on";
-    rows.push(`<div class="adv-row xrow"><span class="k">${esc(it.label||"Item")}<small>${sub}</small></span><span class="v">${usd(itemTotal(it))}</span></div>`);
+    if(itemShowcase(it)){
+      const r = it.mode==="optional" ? "+ "+usd(num(it.amt)) : "fill-in";
+      rows.push(`<div class="adv-row xrow opt"><span class="k">+ ${esc(it.label||"Item")}<small>optional · not in total</small></span><span class="v">${r}</span></div>`);
+    } else {
+      let sub = it.mode==="rate" ? `${num(it.qty)} ${it.unit} × ${usd(num(it.rate))}`
+              : it.mode==="perunit" ? `${num(it.count)} ${esc(it.uword||"unit")} × ${usd(num(it.each))}` : "add-on";
+      rows.push(`<div class="adv-row xrow"><span class="k">${esc(it.label||"Item")}<small>${sub}</small></span><span class="v">${usd(itemTotal(it))}</span></div>`);
+    }
   });
 
   // discount (standout) — always present, hidden when zero so totals can update live
@@ -1953,6 +2161,12 @@ function load(){
   if(!ui.prices) ui.prices={};
   if(!ui.segs) ui.segs={pTile:[],pCope:[],sTile:[],sCope:[]};
   ["pTile","pCope","sTile","sCope"].forEach(k=>{ if(!Array.isArray(ui.segs[k])) ui.segs[k]=[]; });
+  if(!ui.tileType) ui.tileType={pTile:"ceramic",sTile:"ceramic"};
+  if(!ui.tileType.pTile) ui.tileType.pTile="ceramic";
+  if(!ui.tileType.sTile) ui.tileType.sTile="ceramic";
+  if(!ui.payments) ui.payments={mode:"auto",items:[]};
+  if(!ui.payments.mode) ui.payments.mode="auto";
+  if(!Array.isArray(ui.payments.items)) ui.payments.items=[];
   // migrate legacy single Extra-LF values into a segment (one-time)
   if(data.fields){
     const mig={pTile:"pTileExtra",pCope:"pCopeExtra",sTile:"sTileExtra",sCope:"sCopeExtra"};
@@ -1977,8 +2191,15 @@ function load(){
   // lights
   CFG.lights.forEach(l=>{ const q=(ui.lights&&ui.lights[l.id])||0; $(l.id).textContent=q;
     $(l.id+"_stp").querySelector(".stepper").classList.toggle("hot", q>0); });
-  // segments
+  // segments + tile types
   ["pTile","pCope","sTile","sCope"].forEach(renderSegs);
+  ["pTile","sTile"].forEach(renderTileType);
+  // payment schedule
+  const psg=$("paySeg");
+  if(psg){ [...psg.children].forEach(b=>b.classList.toggle("on", b.dataset.pm===(ui.payments.mode||"auto"))); }
+  if($("payAuto"))   $("payAuto").classList.toggle("hidden", ui.payments.mode!=="auto");
+  if($("payCustom")) $("payCustom").classList.toggle("hidden", ui.payments.mode!=="custom");
+  renderPayments();
   // quote number field
   const ns=$("nextSeq"); if(ns) ns.value=getSeq();
 }
@@ -2091,15 +2312,8 @@ function scopeHTML(c, plan){
 }
 
 function termsHTML(c, plan, F){
-  // ── Payment schedule ──────────────────────────────────────────────────
-  // Deposit: CA legal max — lesser of 10% or $1,000
-  const dep = Math.min(Math.round(F * 0.10), 1000);
-  // Final holdback: editable field overrides; default = max($1,500, min($2,000, 15%))
-  const holdRaw = num($("finalHold").value);
-  const holdDefault = Math.max(1500, Math.min(2000, Math.round(F * 0.15)));
-  const fin  = holdRaw > 0 ? Math.round(Math.min(holdRaw, F - dep)) : Math.min(holdDefault, F - dep);
-  // Progress: everything in between — collected at demo/prep completion
-  const prog = F - dep - fin;
+  // ── Payment schedule (auto formula OR custom editable lines) ──
+  const payLines = getPaymentLines(F);
 
   // ── Warranty block ────────────────────────────────────────────────────
   const wMap = {
@@ -2141,11 +2355,9 @@ function termsHTML(c, plan, F){
 
       <div class="t-h">2. Payment Schedule</div>
       <ul>
-        <li>Deposit — due upon signing: <b>${usd(dep)}</b></li>
-        <li>Progress payment — due upon completion of demolition and surface preparation: <b>${usd(prog)}</b></li>
-        <li>Final payment — due upon completion and owner walkthrough: <b>${usd(fin)}</b></li>
+        ${payLines.map(p=>`<li>${esc(p.label)}: <b>${usd(p.amount)}</b></li>`).join("")}
       </ul>
-      <p style="font-size:10px;color:#6b7a8d;margin-top:2px">Deposit does not exceed the lesser of 10% or $1,000 per California Business &amp; Professions Code §7159. Progress payment reflects the value of work performed through the demolition and preparation phase.</p>
+      ${ui.payments.mode!=="custom" ? `<p style="font-size:10px;color:#6b7a8d;margin-top:2px">Deposit does not exceed the lesser of 10% or $1,000 per California Business &amp; Professions Code §7159. Progress payment reflects the value of work performed through the demolition and preparation phase.</p>` : ""}
 
       <div class="t-h">3. Property Access</div>
       <p>Owner grants Contractor the right to access the work site — including the backyard and pool/spa area — during normal construction hours permitted by local ordinance, from the date of contract signing through receipt of final payment. Contractor may enter for work, inspections, material delivery, and project management without prior notice during those hours. Contractor will exercise this right professionally and will minimize disruption to the property.</p>
@@ -2228,11 +2440,14 @@ function buildQuoteDoc(c){
   // each replaster line prints at its (editable) price
   let rows = c.lines.map(l=>
     `<tr><td>${l.label}${l.sub?`<div class="sub">${l.sub}</div>`:""}</td><td class="amt">${usd(l.price)}</td></tr>`).join("");
-  // custom add-on items — exact customer price, optional description / qty
-  c.xItems.forEach(x=>{
+  // charged add-on items only (showcase items go in their own section below the total)
+  const chargedItems = c.xItems.filter(itemCharged);
+  const showItems    = c.xItems.filter(itemShowcase);
+  chargedItems.forEach(x=>{
     const subBits=[];
     if(x.desc&&x.desc.trim()) subBits.push(esc(x.desc.trim()));
     if(x.mode==="rate" && num(x.qty)>0) subBits.push(`${num(x.qty)} ${x.unit}`);
+    if(x.mode==="perunit") subBits.push(`${num(x.count)} ${esc(x.uword||"unit")} × ${usd(num(x.each))}`);
     rows += `<tr><td>${esc(x.label||"Additional item")}${subBits.length?`<div class="sub">${subBits.join(" · ")}</div>`:""}</td><td class="amt">${usd(Math.round(itemTotal(x)))}</td></tr>`;
   });
   // discount — standout line the customer SEES
@@ -2240,6 +2455,21 @@ function buildQuoteDoc(c){
     const dsub = ui.extras.disc.type==="pct" ? `${num(ui.extras.disc.val)}% off this proposal` : "applied to this proposal";
     rows += `<tr class="q-disc"><td>${esc(c.discName||"Discount")}<div class="sub">${dsub}</div></td><td class="amt">−${usd(c.discAmt)}</td></tr>`;
   }
+  // optional / fill-in showcase block (printed AFTER the total — never affects it)
+  const optionalBlock = showItems.length ? `
+    <div class="q-optional">
+      <div class="q-opt-h">OPTIONAL · AVAILABLE ADD-ONS <span>(not included in total above)</span></div>
+      ${showItems.map(x=>{
+        const desc = x.desc&&x.desc.trim() ? `<div class="q-opt-d">${esc(x.desc.trim())}</div>` : "";
+        let right;
+        if(x.mode==="optional"){
+          right = usd(num(x.amt));
+        } else { // per-unit fill-in
+          right = `${usd(num(x.each))} / ${esc(x.uword||"unit")}<br><span class="q-fill">Count: __________ &nbsp; Total: $__________</span>`;
+        }
+        return `<div class="q-opt-row"><div class="q-opt-l"><span class="q-opt-plus">+</span> ${esc(x.label||"Optional item")}${desc}</div><div class="q-opt-r">${right}</div></div>`;
+      }).join("")}
+    </div>` : "";
 
   $("qp1").innerHTML = brand + `
     <div class="q-meta">
@@ -2270,6 +2500,7 @@ function buildQuoteDoc(c){
       ${rows}
       <tr class="q-tot"><td>TOTAL</td><td class="amt">${usd(F)}</td></tr>
     </table>
+    ${optionalBlock}
     <div class="q-foot"><span>${CO.name} · ${CO.lic}</span><span>Page 1 of 2</span></div>`;
 
   $("qp2").innerHTML = brand + termsHTML(c, plan, F) +
