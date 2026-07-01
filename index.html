@@ -658,10 +658,14 @@ html.q-open body{overflow:hidden}
       <!-- pool coping -->
       <div class="tog" id="pCopeTog" onclick="toggleAddon('pCope')" style="margin-top:8px">
         <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="nm">Coping<small>cap around the edge</small></div>
+        <div class="nm">Coping<small>remove old · install new</small></div>
         <div class="rt" id="pCopeLF">—</div>
       </div>
       <div class="adder" id="pCopeAdder">
+        <div class="tile-type"><span class="tt-lbl">Type</span><div class="x-seg" id="pCopeType">
+          <button type="button" data-ct="pour" class="on" onclick="setCopingType('pCope','pour')">Pour-in-Place · $45</button>
+          <button type="button" data-ct="stone" onclick="setCopingType('pCope','stone')">Stone · $65</button>
+        </div></div>
         <div class="segs" id="pCopeSegs"></div>
         <button type="button" class="seg-add" onclick="addSeg('pCope')">＋ Add measurement</button>
       </div>
@@ -767,10 +771,14 @@ html.q-open body{overflow:hidden}
         <!-- spa coping -->
         <div class="tog" id="sCopeTog" onclick="toggleAddon('sCope')" style="margin-top:8px">
           <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="nm">Coping<small>add or trim LF for partial</small></div>
+          <div class="nm">Coping<small>remove old · install new</small></div>
           <div class="rt" id="sCopeLF">—</div>
         </div>
         <div class="adder" id="sCopeAdder">
+          <div class="tile-type"><span class="tt-lbl">Type</span><div class="x-seg" id="sCopeType">
+            <button type="button" data-ct="pour" class="on" onclick="setCopingType('sCope','pour')">Pour-in-Place · $45</button>
+            <button type="button" data-ct="stone" onclick="setCopingType('sCope','stone')">Stone · $65</button>
+          </div></div>
           <div class="segs" id="sCopeSegs"></div>
           <button type="button" class="seg-add" onclick="addSeg('sCope')">＋ Add measurement</button>
         </div>
@@ -1369,7 +1377,9 @@ const CFG = {
   tile:   35,    // legacy ceramic rate (kept for back-compat)
   tileRates: { ceramic:35, glass:55 },   // $/LF per 6" band
   tileName:  { ceramic:"Ceramic", glass:"Glass" },
-  coping: 45,    // $/LF — demo + reset included
+  coping: 45,    // legacy rate (kept for back-compat)
+  copingRates: { pour:45, stone:65 },
+  copingName:  { pour:"Pour-in-Place", stone:"Stone" },
   permit: 900,   // flat
   QUOTE_MULT: 1.10,            // green number = actual cost × this (10% buffer)
   finish: { none:0, plaster:60, mini:80, micro:115, hydrazzo:155, glass:155 },
@@ -1400,7 +1410,8 @@ const ui = {
   // Repeatable extra-LF segments per tile/coping section (waterline + spillway + …).
   // Each: {id, label, lf}. Summed into that section's LF.
   segs: { pTile:[], pCope:[], sTile:[], sCope:[] },
-  tileType: { pTile:"ceramic", sTile:"ceramic" },   // ceramic | glass, per structure
+  tileType:   { pTile:"ceramic", sTile:"ceramic" },   // ceramic | glass
+  copingType: { pCope:"pour",    sCope:"pour"    },   // pour | stone
   lights: { lHVC:0, lHVW:0, lLVC:0 },
   quoteNum: null,
   // editable payment schedule: mode "auto" uses the formula; "custom" uses items[]
@@ -1625,6 +1636,11 @@ function renderTileType(key){
   const seg=$(key+"Type"); if(!seg) return;
   [...seg.children].forEach(b=> b.classList.toggle("on", b.dataset.tt===ui.tileType[key]));
 }
+function setCopingType(key, type){ ui.copingType[key]=type; renderCopingType(key); segsChanged(); }
+function renderCopingType(key){
+  const seg=$(key+"Type"); if(!seg) return;
+  [...seg.children].forEach(b=> b.classList.toggle("on", b.dataset.ct===ui.copingType[key]));
+}
 let _segId = 1;
 function newSegId(){ return "sg"+(_segId++)+"_"+Date.now().toString(36); }
 function segsChanged(){
@@ -1788,8 +1804,8 @@ function replasterLines(c){
   add("demo", "Demolition & Debris Haul-Away", `${c.t.toFixed(1)} LF`, c.demoCost);
   add("pTile",`${c.pTileName||"Ceramic"} Tile Replacement — Pool`, `${c.pTileLF.toFixed(1)} LF`, c.pTileCost);
   add("sTile",`${c.sTileName||"Ceramic"} Tile Replacement — Spa`,  `${c.sTileLF.toFixed(1)} LF`, c.sTileCost);
-  add("pCope","Coping — Pool", `${c.pCopeLF.toFixed(1)} LF`, c.pCopeCost);
-  add("sCope","Coping — Spa",  `${c.sCopeLF.toFixed(1)} LF`, c.sCopeCost);
+  add("pCope",`${c.pCopeName||"Pour-in-Place"} Coping — Pool`, `${c.pCopeLF.toFixed(1)} LF`, c.pCopeCost);
+  add("sCope",`${c.sCopeName||"Pour-in-Place"} Coping — Spa`,  `${c.sCopeLF.toFixed(1)} LF`, c.sCopeCost);
   c.lightItems.forEach(li=> L.push({key:"light_"+li.name.replace(/\s+/g,""), label:`${li.name.replace("HV","High-Voltage").replace("LV","Low-Voltage")} Pool Light`, sub:`Qty ${li.qty}`, cost:li.cost, price:0}));
   add("permit","City Permit","",c.permitCost);
   L.forEach(l=> l.price = linePrice(l));
@@ -1817,8 +1833,10 @@ function compute(){
   const sTileRate = CFG.tileRates[ui.tileType.sTile] || CFG.tileRates.ceramic;
   const pTileCost = ui.addon.pTile ? pTileLF*pTileRate : 0;
   const sTileCost = ui.addon.sTile ? sTileLF*sTileRate : 0;
-  const pCopeCost = ui.addon.pCope ? pCopeLF*CFG.coping : 0;
-  const sCopeCost = ui.addon.sCope ? sCopeLF*CFG.coping : 0;
+  const pCopeRate = CFG.copingRates[ui.copingType.pCope] || CFG.copingRates.pour;
+  const sCopeRate = CFG.copingRates[ui.copingType.sCope] || CFG.copingRates.pour;
+  const pCopeCost = ui.addon.pCope ? pCopeLF*pCopeRate : 0;
+  const sCopeCost = ui.addon.sCope ? sCopeLF*sCopeRate : 0;
   const permitCost = ui.addon.permit ? CFG.permit : 0;
 
   let lightCost=0; const lightLines=[]; const lightItems=[];
@@ -1837,7 +1855,8 @@ function compute(){
     pFinName:CFG.finishName[$("pFinish").value], sFinName:CFG.finishName[$("sFinish").value],
     pFinishCost, sFinishCost, demoCost,
     pTileLF, sTileLF, pCopeLF, sCopeLF,
-    pTileName:CFG.tileName[ui.tileType.pTile], sTileName:CFG.tileName[ui.tileType.sTile],
+    pTileName:CFG.tileName[ui.tileType.pTile],   sTileName:CFG.tileName[ui.tileType.sTile],
+    pCopeName:CFG.copingName[ui.copingType.pCope], sCopeName:CFG.copingName[ui.copingType.sCope],
     pTileCost, sTileCost, pCopeCost, sCopeCost, permitCost, lightItems
   });
   const replQuote = lines.reduce((a,l)=>a+l.price,0);
@@ -2164,6 +2183,9 @@ function load(){
   if(!ui.tileType) ui.tileType={pTile:"ceramic",sTile:"ceramic"};
   if(!ui.tileType.pTile) ui.tileType.pTile="ceramic";
   if(!ui.tileType.sTile) ui.tileType.sTile="ceramic";
+  if(!ui.copingType) ui.copingType={pCope:"pour",sCope:"pour"};
+  if(!ui.copingType.pCope) ui.copingType.pCope="pour";
+  if(!ui.copingType.sCope) ui.copingType.sCope="pour";
   if(!ui.payments) ui.payments={mode:"auto",items:[]};
   if(!ui.payments.mode) ui.payments.mode="auto";
   if(!Array.isArray(ui.payments.items)) ui.payments.items=[];
@@ -2194,6 +2216,7 @@ function load(){
   // segments + tile types
   ["pTile","pCope","sTile","sCope"].forEach(renderSegs);
   ["pTile","sTile"].forEach(renderTileType);
+  ["pCope","sCope"].forEach(renderCopingType);
   // payment schedule
   const psg=$("paySeg");
   if(psg){ [...psg.children].forEach(b=>b.classList.toggle("on", b.dataset.pm===(ui.payments.mode||"auto"))); }
@@ -2302,6 +2325,23 @@ function scopeHTML(c, plan){
         `Fill ${bl} after finish application.`]);
     }
   });
+  // coping scope — separate entry per structure/type combo
+  if(ui.addon.pCope || ui.addon.sCope){
+    const copeGroups = [];
+    if(ui.addon.pCope) copeGroups.push({which:"pool", name:CFG.copingName[ui.copingType.pCope]||"Pour-in-Place"});
+    if(ui.addon.sCope) copeGroups.push({which:"spa",  name:CFG.copingName[ui.copingType.sCope]||"Pour-in-Place"});
+    // group pool+spa together only if same type
+    const byType = {};
+    copeGroups.forEach(cg=>{ (byType[cg.name]=byType[cg.name]||{name:cg.name,whichs:[]}).whichs.push(cg.which); });
+    Object.values(byType).forEach(grp=>{
+      const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
+      it(`Coping Replacement — ${grp.name} (${bl})`, [
+        `Remove and haul away existing coping around ${bl} edge.`,
+        `Install new ${grp.name.toLowerCase()} coping.`,
+        "Reset bond and seal as needed."
+      ]);
+    });
+  }
   if(c.xItems.length){
     it("Additional Work", c.xItems.map(x=> esc(x.label||"Additional item") + (x.desc&&x.desc.trim() ? " — "+esc(x.desc.trim()) : "")));
   }
