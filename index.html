@@ -347,8 +347,11 @@ select.inp{
 .x-modes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:9px}
 .x-modes button{padding:9px 8px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--sans)}
 .x-modes button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-.x-per{font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0}
-.x-uword{flex:1;min-width:60px;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:16px;font-family:var(--sans);color:var(--ink);background:#fff;-webkit-appearance:none;appearance:none}
+.x-per{font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;letter-spacing:.3px}
+.x-uword{flex:1;min-width:70px;padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;font-size:16px;font-family:var(--sans);color:var(--ink);background:#fff;-webkit-appearance:none;appearance:none}
+.x-pu-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px}
+.x-pu-label{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.3px;margin-bottom:3px}
+.x-pu-count{font-size:16px}
 .x-mode-note{font-size:11px;color:var(--muted-2);line-height:1.4;margin-top:8px;background:#f7fafd;border-radius:8px;padding:8px 10px}
 .x-tot.show{color:#2563eb;font-weight:800}
 .pay-prev{display:flex;justify-content:space-between;gap:12px;padding:8px 11px;background:var(--field);border:1px solid var(--line);border-radius:9px;margin-bottom:6px;font-size:13px}
@@ -362,6 +365,8 @@ select.inp{
 .pay-sum b{color:var(--navy)}
 .pay-sum .ok{color:#047857;font-weight:800}
 .pay-sum .warn{color:#b45309;font-weight:800}
+.pay-split{padding:13px 16px;border:1.5px solid var(--navy);border-radius:11px;background:#fff;color:var(--navy);font-size:13.5px;font-weight:800;cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
+.pay-split:active{background:var(--navy);color:#fff}
 .x-amt{flex:1;min-width:110px}
 .x-qty{width:74px}
 .x-rate{flex:1;min-width:96px}
@@ -440,6 +445,12 @@ select.inp{
 .q-opt-d{font-weight:500;color:#5a6b80;font-size:10px;margin-top:1px}
 .q-opt-r{text-align:right;color:#2563eb;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
 .q-opt-r .q-fill{color:#6b7a8d;font-weight:600;font-size:10px}
+.q-payments{border:1px solid #dde5ee;border-radius:8px;overflow:hidden;margin:6px 0}
+.q-pay-row{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-bottom:1px solid #eef2f7;font-size:11px;color:#1a2433;line-height:1.45}
+.q-pay-row:last-child{border-bottom:none}
+.q-pay-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.q-pay-row b{color:var(--navy)}
+.q-pay-note{font-size:10px;color:#6b7a8d}
 
 /* ════════════════════ UNITS / FT-IN ════════════════════ */
 .unit-wrap{position:relative}
@@ -855,7 +866,10 @@ html.q-open body{overflow:hidden}
       <div id="payAuto"></div>
       <div id="payCustom" class="hidden">
         <div class="pay-list" id="payList"></div>
-        <button type="button" class="x-add" onclick="addPayment()">＋ Add payment line</button>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button type="button" class="x-add" onclick="addPayment()" style="flex:1;margin-top:0">＋ Add line</button>
+          <button type="button" class="pay-split" onclick="splitRemaining()" title="Divide remaining balance equally among blank lines">÷ Split remaining</button>
+        </div>
         <div class="pay-sum" id="paySum"></div>
       </div>
     </div>
@@ -863,7 +877,13 @@ html.q-open body{overflow:hidden}
 
   <!-- ══════════════ JOB INFO ══════════════ -->
   <section class="card">
-    <div class="card-hd"><div class="ttl"><span class="dot"></span>JOB INFO</div></div>
+    <div class="card-hd" style="display:flex;justify-content:space-between;align-items:center">
+      <div class="ttl"><span class="dot"></span>JOB INFO</div>
+      <div style="display:flex;gap:7px">
+        <button type="button" onclick="saveProject()" title="Save this quote as a file you can reopen later" style="padding:7px 13px;border:1.5px solid var(--navy);border-radius:9px;background:#fff;color:var(--navy);font-size:12px;font-weight:800;cursor:pointer;font-family:var(--sans)">💾 Save</button>
+        <label title="Open a previously saved quote file" style="padding:7px 13px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:#42536a;font-size:12px;font-weight:800;cursor:pointer;font-family:var(--sans)">📂 Open<input type="file" accept=".json,.3mq" onchange="loadProject(this)" style="display:none"></label>
+      </div>
+    </div>
     <div class="card-bd">
       <div class="fld"><label class="lbl">Next Quote # <span style="font-weight:500;color:var(--muted-2)">(set this if it ever resets)</span></label>
         <div class="unit-wrap"><span class="unit" style="left:12px;right:auto;font-family:var(--mono)">3M-</span><input id="nextSeq" class="inp" type="number" inputmode="numeric" min="1" step="1" placeholder="32" style="padding-left:44px"></div>
@@ -1500,10 +1520,20 @@ function renderExtras(){
               <select class="x-unitsel" id="xu_${it.id}">${UNITS.map(u=>`<option ${it.unit===u?"selected":""}>${u}</option>`).join("")}</select>
               <div class="unit-wrap x-rate"><input class="inp" id="xr_${it.id}" type="number" inputmode="decimal" min="0" placeholder="$ / unit" value="${esc(it.rate)}"><span class="unit">$</span></div>
             ` : it.mode==="perunit" ? `
-              <div class="unit-wrap x-rate"><input class="inp" id="xe_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.each)}"><span class="unit">$</span></div>
-              <span class="x-per">per</span>
-              <input class="inp x-uword" id="xw_${it.id}" type="text" placeholder="tile" value="${esc(it.uword)}">
-              <div class="unit-wrap x-qty"><input class="inp" id="xc_${it.id}" type="number" inputmode="decimal" min="0" placeholder="count" value="${esc(it.count)}"><span class="unit">×</span></div>
+              <div class="x-pu-grid" style="width:100%">
+                <div>
+                  <div class="x-pu-label">PRICE EACH</div>
+                  <div class="unit-wrap"><input class="inp" id="xe_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.each)}"><span class="unit">$</span></div>
+                </div>
+                <div>
+                  <div class="x-pu-label">UNIT NAME</div>
+                  <input class="inp x-uword" id="xw_${it.id}" type="text" placeholder="tile" value="${esc(it.uword)}">
+                </div>
+              </div>
+              <div style="width:100%;margin-top:4px">
+                <div class="x-pu-label">COUNT (leave blank to print a fill-in line on the quote)</div>
+                <input class="inp x-pu-count" id="xc_${it.id}" type="number" inputmode="decimal" min="0" placeholder="leave blank for fill-in — or enter count to charge" value="${esc(it.count)}" style="width:100%">
+              </div>
             ` : `
               <div class="unit-wrap x-amt"><input class="inp" id="xa_${it.id}" type="number" inputmode="decimal" min="0" placeholder="0" value="${esc(it.amt)}"><span class="unit">$</span></div>
             `
@@ -2346,7 +2376,10 @@ function scopeHTML(c, plan){
     it("Additional Work", c.xItems.map(x=> esc(x.label||"Additional item") + (x.desc&&x.desc.trim() ? " — "+esc(x.desc.trim()) : "")));
   }
   if(plan.bodies.length){
-    it("Startup", ["Provide standard startup instructions after fill."]);
+    it("Startup", [
+      "Provide owner with standard startup instructions and chemical balancing guidance.",
+      "Chemical startup, water fill, and ongoing maintenance are Owner\'s responsibility."
+    ]);
   }
   return `<ol class="q-scope">${items.join("")}</ol>`;
 }
@@ -2377,7 +2410,8 @@ function termsHTML(c, plan, F){
   let excl = ["tile replacement","coping replacement","plumbing repair","structural crack repair",
               "skimmer replacement","equipment repair or replacement","electrical work",
               "deck or hardscape repair","engineering or design fees",
-              "hidden repairs discovered after draining or demolition"];
+              "chemical startup or water balancing","water fill (Owner provides water at Owner\'s cost)",
+              "ongoing pool or spa maintenance","hidden repairs discovered after draining or demolition"];
   if(ui.addon.pTile||ui.addon.sTile) excl = excl.filter(e=>e!=="tile replacement");
   if(ui.addon.pCope||ui.addon.sCope) excl = excl.filter(e=>e!=="coping replacement");
   if(ui.addon.permit)                excl = excl.filter(e=>e!=="permits");
@@ -2399,30 +2433,38 @@ function termsHTML(c, plan, F){
       </ul>
       ${ui.payments.mode!=="custom" ? `<p style="font-size:10px;color:#6b7a8d;margin-top:2px">Deposit does not exceed the lesser of 10% or $1,000 per California Business &amp; Professions Code §7159. Progress payment reflects the value of work performed through the demolition and preparation phase.</p>` : ""}
 
-      <div class="t-h">3. Property Access</div>
+      <div class="t-h">3. Accepted Payment Methods</div>
+      <div class="q-payments">
+        <div class="q-pay-row"><span class="q-pay-icon">💵</span><div><b>Cash</b></div></div>
+        <div class="q-pay-row"><span class="q-pay-icon">⚡</span><div><b>Zelle</b> — Send to <b>(909) 630-4300</b><br><span class="q-pay-note">Please include project address and name in the payment description.</span></div></div>
+        <div class="q-pay-row"><span class="q-pay-icon">🏦</span><div><b>Wire Transfer</b> — Contact us for wire instructions.</div></div>
+        <div class="q-pay-row"><span class="q-pay-icon">📄</span><div><b>Check</b> — Make payable to <b>3M Pools Inc.</b></div></div>
+      </div>
+
+      <div class="t-h">4. Property Access</div>
       <p>Owner grants Contractor the right to access the work site — including the backyard and pool/spa area — during normal construction hours permitted by local ordinance, from the date of contract signing through receipt of final payment. Contractor may enter for work, inspections, material delivery, and project management without prior notice during those hours. Contractor will exercise this right professionally and will minimize disruption to the property.</p>
 
       ${warr}
 
-      <div class="t-h">${plan.groups.length ? (Object.keys(wMap).some(k=>plan.groups.some(g=>g.key===k)) ? String(plan.groups.length>0?4:4) : "4") : "4"}. Exclusions</div>
+      <div class="t-h">5. Exclusions</div>
       <p>Unless listed in this proposal, the following are excluded: ${excl.join("; ")}.</p>
 
-      <div class="t-h">5. Hidden &amp; Changed Conditions</div>
+      <div class="t-h">6. Hidden &amp; Changed Conditions</div>
       <p>If unforeseen conditions (structural damage, failing equipment, undisclosed prior repairs, etc.) are discovered after draining or demolition, Contractor will notify Owner in writing before proceeding. Any additional scope requires a signed change order and will be priced separately.</p>
 
-      <div class="t-h">6. Owner Responsibilities</div>
-      <p>Owner shall: (a) provide unobstructed access to the work site; (b) supply water for filling the ${plan.label||"pool"} at Owner's cost; (c) ensure working electrical power is available for startup; and (d) maintain proper water chemistry following startup.</p>
+      <div class="t-h">7. Owner Responsibilities</div>
+      <p>Owner shall: (a) provide unobstructed access to the work site; (b) supply water for filling the ${plan.label||"pool"} at Owner's cost; (c) ensure working electrical power is available for startup; and (d) maintain proper water chemistry following startup. Chemical balancing and ongoing pool maintenance are Owner's responsibility.</p>
 
-      <div class="t-h">7. Finish Color &amp; Appearance</div>
+      <div class="t-h">8. Finish Color &amp; Appearance</div>
       <p>Color samples are representative only. Mottling, shading, and tonal variation are inherent to cementitious finishes and are not workmanship defects.</p>
 
-      <div class="t-h">8. Dispute Resolution</div>
+      <div class="t-h">9. Dispute Resolution</div>
       <p>The parties agree to attempt in good faith to resolve any dispute through direct negotiation before pursuing formal legal action.</p>
 
-      <div class="t-h">9. Right to Cancel</div>
+      <div class="t-h">10. Right to Cancel</div>
       <p>Owner may cancel this contract without penalty before midnight of the third business day after signing by providing written notice to ${CO.name}.</p>
 
-      <div class="t-h">10. Proposal Validity</div>
+      <div class="t-h">11. Proposal Validity</div>
       <p>This proposal expires 30 days from the date on page 1. Material and labor pricing is subject to change after expiration.</p>
 
       ${specBlock}
@@ -2484,9 +2526,10 @@ function buildQuoteDoc(c){
   const chargedItems = c.xItems.filter(itemCharged);
   const showItems    = c.xItems.filter(itemShowcase);
   chargedItems.forEach(x=>{
+    // description is NOT shown on the investment table — scope of work already has it.
+    // Only show mechanistic qty/rate info so the line is clear but compact.
     const subBits=[];
-    if(x.desc&&x.desc.trim()) subBits.push(esc(x.desc.trim()));
-    if(x.mode==="rate" && num(x.qty)>0) subBits.push(`${num(x.qty)} ${x.unit}`);
+    if(x.mode==="rate" && num(x.qty)>0) subBits.push(`${num(x.qty)} ${x.unit} × ${usd(num(x.rate))}`);
     if(x.mode==="perunit") subBits.push(`${num(x.count)} ${esc(x.uword||"unit")} × ${usd(num(x.each))}`);
     rows += `<tr><td>${esc(x.label||"Additional item")}${subBits.length?`<div class="sub">${subBits.join(" · ")}</div>`:""}</td><td class="amt">${usd(Math.round(itemTotal(x)))}</td></tr>`;
   });
@@ -2680,6 +2723,89 @@ function printQuote(){
   window.addEventListener("afterprint", restore);
   setTimeout(()=>{ if(document.documentElement.classList.contains("q-printing")) restore(); }, 1500);
   window.print();
+}
+
+/* ════════════ SAVE / LOAD PROJECT FILE ════════════ */
+function saveProject(){
+  const fields={};
+  INPUT_IDS.forEach(id=>{ const el=$(id); if(el) fields[id]=el.value; });
+  document.querySelectorAll("textarea[id]").forEach(el=>{ fields[el.id]=el.value; });
+  const proj={
+    version:2, savedAt:new Date().toISOString(),
+    ui: JSON.parse(JSON.stringify(ui)), fields
+  };
+  const name=($("jobName").value||$("custName").value||"Quote").replace(/[^a-z0-9 _-]/gi,"_").trim()||"Quote";
+  const qn=ui.quoteNum||("3M-"+String(getSeq()).padStart(3,"0"));
+  const fname=`${qn}-${name}.json`;
+  const blob=new Blob([JSON.stringify(proj,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download=fname;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),8000);
+}
+function loadProject(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const proj=JSON.parse(ev.target.result);
+      if(!proj.version||!proj.ui) throw new Error("Not a valid 3M Pools project file.");
+      Object.assign(ui, proj.ui);
+      if(!ui.extras)     ui.extras={items:[],disc:{name:"",type:"flat",val:""}};
+      if(!ui.prices)     ui.prices={};
+      if(!ui.segs)       ui.segs={pTile:[],pCope:[],sTile:[],sCope:[]};
+      if(!ui.tileType)   ui.tileType={pTile:"ceramic",sTile:"ceramic"};
+      if(!ui.copingType) ui.copingType={pCope:"pour",sCope:"pour"};
+      if(!ui.payments)   ui.payments={mode:"auto",items:[]};
+      setShapeQuiet("pool",ui.poolShape||"rect");
+      setShapeQuiet("spa", ui.spaShape||"none");
+      renderSides("pool"); renderSides("spa");
+      if(proj.fields){
+        INPUT_IDS.forEach(id=>{ const el=$(id); if(el&&proj.fields[id]!==undefined) el.value=proj.fields[id]; });
+        document.querySelectorAll("textarea[id]").forEach(el=>{ if(proj.fields[el.id]!==undefined) el.value=proj.fields[el.id]; });
+      }
+      ["pTile","pCope","sTile","sCope"].forEach(k=>{
+        renderSegs(k);
+        const adder={pTile:"pTileAdder",pCope:"pCopeAdder",sTile:"sTileAdder",sCope:"sCopeAdder"}[k];
+        if(adder) $(adder).classList.toggle("open",!!(ui.addon&&ui.addon[k]));
+        const tog={pTile:"pTileTog",pCope:"pCopeTog",sTile:"sTileTog",sCope:"sCopeTog"}[k];
+        if(tog) $(tog).classList.toggle("on",!!(ui.addon&&ui.addon[k]));
+      });
+      ["pTile","sTile"].forEach(renderTileType);
+      ["pCope","sCope"].forEach(renderCopingType);
+      CFG.lights.forEach(l=>{ const q=(ui.lights&&ui.lights[l.id])||0; $(l.id).textContent=q; $(l.id+"_stp").querySelector(".stepper").classList.toggle("hot",q>0); });
+      ["demo","permit"].forEach(k=>{ const tog={demo:"demoTog",permit:"permitTog"}[k]; if(tog) $(tog).classList.toggle("on",!!(ui.addon&&ui.addon[k])); });
+      renderExtras();
+      const psg=$("paySeg"); if(psg) [...psg.children].forEach(b=>b.classList.toggle("on",b.dataset.pm===(ui.payments.mode||"auto")));
+      if($("payAuto"))   $("payAuto").classList.toggle("hidden",ui.payments.mode!=="auto");
+      if($("payCustom")) $("payCustom").classList.toggle("hidden",ui.payments.mode!=="custom");
+      renderPayments();
+      const ns=$("nextSeq"); if(ns) ns.value=getSeq();
+      $("discName").value=ui.extras.disc.name||"";
+      $("discVal").value=ui.extras.disc.val||"";
+      $("discUnit").textContent=ui.extras.disc.type==="pct"?"%":"$";
+      [...$("discSeg").children].forEach(b=>b.classList.toggle("on",b.dataset.dt===ui.extras.disc.type));
+      save(); recalc();
+      alert("✓ Loaded: "+file.name);
+    }catch(err){ alert("Couldn't load that file: "+err.message); }
+  };
+  reader.readAsText(file);
+  input.value="";
+}
+
+/* ════════════ SPLIT REMAINING ════════════ */
+function splitRemaining(){
+  const F=LAST?LAST.customerTotal:0;
+  if(!F){ alert("Calculate an estimate first so the total is known."); return; }
+  const blanks=(ui.payments.items||[]).filter(it=>!(num(it.amount)>0));
+  if(!blanks.length){ alert("All lines already have amounts — clear at least one to split into it."); return; }
+  const filled=(ui.payments.items||[]).reduce((a,it)=>a+num(it.amount),0);
+  const remaining=Math.round(F-filled);
+  if(remaining<=0){ alert("Nothing left to split — filled lines already cover the total."); return; }
+  const share=Math.floor(remaining/blanks.length);
+  const leftover=remaining-share*blanks.length;
+  blanks.forEach((it,i)=>{ it.amount=String(i===0?share+leftover:share); });
+  renderPayments(); save();
 }
 
 /* ════════════ WIRE UP + INIT ════════════ */
