@@ -445,12 +445,9 @@ select.inp{
 .q-opt-d{font-weight:500;color:#5a6b80;font-size:10px;margin-top:1px}
 .q-opt-r{text-align:right;color:#2563eb;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
 .q-opt-r .q-fill{color:#6b7a8d;font-weight:600;font-size:10px}
-.q-payments{border:1px solid #dde5ee;border-radius:8px;overflow:hidden;margin:6px 0}
-.q-pay-row{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-bottom:1px solid #eef2f7;font-size:11px;color:#1a2433;line-height:1.45}
-.q-pay-row:last-child{border-bottom:none}
-.q-pay-icon{font-size:14px;flex-shrink:0;margin-top:1px}
-.q-pay-row b{color:var(--navy)}
-.q-pay-note{font-size:10px;color:#6b7a8d}
+.q-pay-line{font-size:10.5px;color:#34445a;line-height:1.5;margin:0 0 4px}
+.q-pay-line b{color:var(--navy)}
+.q-pay-note{color:#6b7a8d}
 
 /* ════════════════════ UNITS / FT-IN ════════════════════ */
 .unit-wrap{position:relative}
@@ -1721,13 +1718,46 @@ function computeAutoPayments(F){
   const dep = Math.min(Math.round(F*0.10), 1000);
   const holdRaw = num($("finalHold").value);
   const holdDefault = Math.max(1500, Math.min(2000, Math.round(F*0.15)));
+  // Final Payment stays small — just the holdback. Nothing else rides on it, so
+  // there\'s never a big balance exposed at the very end.
   const fin = holdRaw>0 ? Math.round(Math.min(holdRaw, F-dep)) : Math.min(holdDefault, F-dep);
-  const prog = F - dep - fin;
-  return [
-    {label:"Deposit — due upon signing", amount:dep},
-    {label:"Progress payment — due upon completion of demolition and surface preparation", amount:prog},
-    {label:"Final payment — due upon completion and owner walkthrough", amount:fin}
-  ];
+  const remaining = F - dep - fin;   // demo + interior finish + tile/coping + permit/lights/extras
+
+  const hasTileOrCope = ui.addon.pTile||ui.addon.sTile||ui.addon.pCope||ui.addon.sCope;
+  const schedule = [{label:"Deposit — due upon signing", amount:dep}];
+
+  if(LAST && LAST.lines){
+    // Progress Payment 1 always carries the FULL demolition/chip-out cost — that\'s
+    // collected in full up front. Everything else left over (interior finish, and
+    // tile/coping if selected) is split evenly across the two progress payments, so
+    // no single payment — especially not the final one — carries most of the money.
+    const demoBucketRaw = LAST.lines.filter(l=>l.key==="demo").reduce((a,l)=>a+l.price,0);
+    const demoInPP1 = Math.min(demoBucketRaw, remaining);   // safety clamp, always exact
+    const splitBucket = remaining - demoInPP1;
+    const share1 = Math.ceil(splitBucket/2);
+    const share2 = splitBucket - share1;
+    const pp1 = demoInPP1 + share1;
+    const pp2 = share2;
+
+    if(pp2 < 200){
+      // negligible second stage — collapse to a single progress payment
+      const label = hasTileOrCope
+        ? "Progress Payment — due upon chip-out and installation of new tile and coping"
+        : "Progress Payment — due upon completion of demolition and surface preparation";
+      schedule.push({label, amount:pp1+pp2});
+    } else if(hasTileOrCope){
+      schedule.push({label:"Progress Payment 1 — due upon chip-out and removal of existing finish, tile, and coping", amount:pp1});
+      schedule.push({label:"Progress Payment 2 — due upon installation of new tile and coping", amount:pp2});
+    } else {
+      schedule.push({label:"Progress Payment 1 — due upon completion of demolition and surface preparation", amount:pp1});
+      schedule.push({label:"Progress Payment 2 — due upon application of new interior finish (before fill)", amount:pp2});
+    }
+  } else {
+    schedule.push({label:"Progress Payment — due upon completion of demolition and surface preparation", amount:remaining});
+  }
+
+  schedule.push({label:"Final Payment — due upon completion of the work", amount:fin});
+  return schedule;
 }
 function getPaymentLines(F){
   if(ui.payments.mode==="custom" && (ui.payments.items||[]).length){
@@ -1748,9 +1778,14 @@ function setPayMode(m){
 }
 function addPayment(){
   if(!ui.payments.items) ui.payments.items=[];
-  ui.payments.items.push({id:newPayId(), label:"", amount:""});
+  // insert a new progress line just above the final line (if a final line exists)
+  const arr=ui.payments.items;
+  const finalIdx = arr.findIndex(p=>/final/i.test(p.label||""));
+  const progCount = arr.filter(p=>/progress/i.test(p.label||"")).length;
+  const newItem = {id:newPayId(), label:`Progress Payment ${progCount+1} — `, amount:""};
+  if(finalIdx>=0) arr.splice(finalIdx,0,newItem); else arr.push(newItem);
   renderPayments(); save();
-  const last=ui.payments.items[ui.payments.items.length-1]; const el=$("pyl_"+last.id); if(el) el.focus();
+  const el=$("pyl_"+newItem.id); if(el){ el.focus(); }
 }
 function removePayment(id){
   ui.payments.items=(ui.payments.items||[]).filter(p=>p.id!==id);
@@ -2288,7 +2323,8 @@ const CO = {
   email:"Office@3mpools.com",
   site: "3mpoolsinc.com",
   rep:  "Mario Machaen",
-  prep: "Angel Hernandez"
+  prep: "Angel Hernandez",
+  directLine: "(626) 560-0137"
 };
 
 const esc = s => String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -2355,6 +2391,23 @@ function scopeHTML(c, plan){
         `Fill ${bl} after finish application.`]);
     }
   });
+  // tile scope — remove old, install new; note group range on ceramic
+  if(ui.addon.pTile || ui.addon.sTile){
+    const tileGroups = [];
+    if(ui.addon.pTile) tileGroups.push({which:"pool", name:CFG.tileName[ui.tileType.pTile]||"Ceramic", type:ui.tileType.pTile});
+    if(ui.addon.sTile) tileGroups.push({which:"spa",  name:CFG.tileName[ui.tileType.sTile]||"Ceramic", type:ui.tileType.sTile});
+    const byType = {};
+    tileGroups.forEach(tg=>{ (byType[tg.name]=byType[tg.name]||{name:tg.name,type:tg.type,whichs:[]}).whichs.push(tg.which); });
+    Object.values(byType).forEach(grp=>{
+      const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
+      const subs = [
+        `Remove and haul away existing waterline tile around ${bl}.`,
+        `Install new ${grp.name.toLowerCase()} waterline tile and set to finish.`
+      ];
+      if(grp.type==="ceramic") subs.push("Owner selects tile from standard ceramic selection (Groups 1–4).");
+      it(`Waterline Tile Replacement — ${grp.name} (${bl})`, subs);
+    });
+  }
   // coping scope — separate entry per structure/type combo
   if(ui.addon.pCope || ui.addon.sCope){
     const copeGroups = [];
@@ -2371,6 +2424,15 @@ function scopeHTML(c, plan){
         "Reset bond and seal as needed."
       ]);
     });
+  }
+  // lighting scope — remove old, install chosen fixtures
+  if(c.lightItems && c.lightItems.length){
+    const lsubs = c.lightItems.map(li=>{
+      const nm = li.name.replace("HV","High-Voltage").replace("LV","Low-Voltage");
+      return `Remove existing fixture and install ${li.qty} × ${nm} pool light${li.qty>1?"s":""}.`;
+    });
+    lsubs.push("Test and confirm operation.");
+    it("Pool Light Replacement", lsubs);
   }
   if(c.xItems.length){
     it("Additional Work", c.xItems.map(x=> esc(x.label||"Additional item") + (x.desc&&x.desc.trim() ? " — "+esc(x.desc.trim()) : "")));
@@ -2391,9 +2453,9 @@ function termsHTML(c, plan, F){
   // ── Warranty block ────────────────────────────────────────────────────
   const wMap = {
     plaster: ["Standard Plaster — 1-Year Workmanship",
-              "One (1) year from completion date on workmanship defects in the applied plaster finish."],
+              "One (1) year from the completion date against cracking or failure of the newly applied plaster finish caused by a workmanship defect in installation."],
     mini:    ["Mini Pebble — 5-Year Workmanship",
-              "Five (5) years from completion date on workmanship defects in the applied mini pebble finish."]
+              "Five (5) years from the completion date against cracking or failure of the newly applied mini pebble finish caused by a workmanship defect in installation."]
   };
   let warr = "";
   const seen = new Set();
@@ -2403,7 +2465,7 @@ function termsHTML(c, plan, F){
     else warr += `<div class="t-h">Warranty — ${g.name}</div><p>Workmanship warranty per manufacturer specifications from completion date.</p>`;
   });
   if(plan.groups.length){
-    warr += `<p style="color:#6b7a8d;font-size:10px;margin-top:2px">Warranties exclude: color variation, mottling, staining, chemical damage, improper water chemistry, lack of maintenance, structural movement, existing cracks, or damage by others.</p>`;
+    warr += `<p style="color:#6b7a8d;font-size:10px;margin-top:2px">This warranty covers only cracking or failure caused by a workmanship defect in the finish installation. It does not cover: color variation, mottling, or staining; damage from improper water chemistry, chemical imbalance, or lack of maintenance; structural or shell movement; pre-existing cracks or conditions; or damage caused by the owner or others. Warranty service requires the contract to be paid in full.</p>`;
   }
 
   // ── Dynamic exclusions ────────────────────────────────────────────────
@@ -2432,14 +2494,8 @@ function termsHTML(c, plan, F){
         ${payLines.map(p=>`<li>${esc(p.label)}: <b>${usd(p.amount)}</b></li>`).join("")}
       </ul>
       ${ui.payments.mode!=="custom" ? `<p style="font-size:10px;color:#6b7a8d;margin-top:2px">Deposit does not exceed the lesser of 10% or $1,000 per California Business &amp; Professions Code §7159. Progress payment reflects the value of work performed through the demolition and preparation phase.</p>` : ""}
-
       <div class="t-h">3. Accepted Payment Methods</div>
-      <div class="q-payments">
-        <div class="q-pay-row"><span class="q-pay-icon">💵</span><div><b>Cash</b></div></div>
-        <div class="q-pay-row"><span class="q-pay-icon">⚡</span><div><b>Zelle</b> — Send to <b>(909) 630-4300</b><br><span class="q-pay-note">Please include project address and name in the payment description.</span></div></div>
-        <div class="q-pay-row"><span class="q-pay-icon">🏦</span><div><b>Wire Transfer</b> — Contact us for wire instructions.</div></div>
-        <div class="q-pay-row"><span class="q-pay-icon">📄</span><div><b>Check</b> — Make payable to <b>3M Pools Inc.</b></div></div>
-      </div>
+      <p class="q-pay-line"><b>Cash</b> · <b>Check</b> payable to 3M Pools Inc. · <b>Wire</b> (instructions on request) · <b>Zelle</b> to (909) 630-4300 <span class="q-pay-note">— include project address &amp; name in the memo</span>.</p>
 
       <div class="t-h">4. Property Access</div>
       <p>Owner grants Contractor the right to access the work site — including the backyard and pool/spa area — during normal construction hours permitted by local ordinance, from the date of contract signing through receipt of final payment. Contractor may enter for work, inspections, material delivery, and project management without prior notice during those hours. Contractor will exercise this right professionally and will minimize disruption to the property.</p>
@@ -2450,7 +2506,7 @@ function termsHTML(c, plan, F){
       <p>Unless listed in this proposal, the following are excluded: ${excl.join("; ")}.</p>
 
       <div class="t-h">6. Hidden &amp; Changed Conditions</div>
-      <p>If unforeseen conditions (structural damage, failing equipment, undisclosed prior repairs, etc.) are discovered after draining or demolition, Contractor will notify Owner in writing before proceeding. Any additional scope requires a signed change order and will be priced separately.</p>
+      <p>Pre-existing and hidden conditions are the Owner's responsibility. If unforeseen conditions (structural or shell damage, failing plumbing or equipment, undisclosed prior repairs, rebar or gunite defects, etc.) are discovered after draining or demolition, Contractor will notify Owner and a written change order may be issued for the additional repair. Additional work is priced separately and must be approved in writing before it proceeds. Contractor is not responsible for pre-existing conditions not created by Contractor.</p>
 
       <div class="t-h">7. Owner Responsibilities</div>
       <p>Owner shall: (a) provide unobstructed access to the work site; (b) supply water for filling the ${plan.label||"pool"} at Owner's cost; (c) ensure working electrical power is available for startup; and (d) maintain proper water chemistry following startup. Chemical balancing and ongoing pool maintenance are Owner's responsibility.</p>
@@ -2458,13 +2514,16 @@ function termsHTML(c, plan, F){
       <div class="t-h">8. Finish Color &amp; Appearance</div>
       <p>Color samples are representative only. Mottling, shading, and tonal variation are inherent to cementitious finishes and are not workmanship defects.</p>
 
-      <div class="t-h">9. Dispute Resolution</div>
-      <p>The parties agree to attempt in good faith to resolve any dispute through direct negotiation before pursuing formal legal action.</p>
+      <div class="t-h">9. Progress Payments and Suspension of Work</div>
+      <p>Each progress payment is due upon completion of the corresponding stage of work and delivery of the invoice. If a payment is not received when due, Contractor will make a reasonable good-faith effort to contact Owner and provide written notice of the past-due amount. Contractor may suspend work, deliveries, and scheduling until the payment is received in cleared funds. Any suspension will extend the project schedule by the period of nonpayment and any reasonable time required to remobilize and reschedule the work. Contractor's decision to continue working, delay collection, accept a late payment, or grant a courtesy extension will not waive the amount owed or Contractor's right to enforce future payment requirements unless Contractor agrees otherwise in writing.</p>
 
-      <div class="t-h">10. Right to Cancel</div>
-      <p>Owner may cancel this contract without penalty before midnight of the third business day after signing by providing written notice to ${CO.name}.</p>
+      <div class="t-h">10. Continued Nonpayment</div>
+      <p>If an undisputed progress payment or final payment remains unpaid for ten calendar days after Contractor provides written past-due notice, the unpaid balance will accrue simple interest at the lesser of ten percent per year or the maximum rate permitted by law, beginning on the eleventh day after notice. Contractor may thereafter pursue the remedies available under this Agreement and California law, including suspension or termination of the remaining work, collection proceedings, and applicable mechanics lien remedies. Before initiating legal proceedings, Contractor will make a reasonable good-faith effort to resolve the nonpayment directly with Owner. In any legal proceeding arising from nonpayment, the prevailing party may recover reasonable attorney fees and costs to the extent permitted by law.</p>
 
-      <div class="t-h">11. Proposal Validity</div>
+      <div class="t-h">11. Right to Cancel</div>
+      <p>Owner may cancel this contract before midnight of the third business day after signing by delivering written notice of cancellation to ${CO.name}. Because work often begins the next day at Owner's request, if Contractor has already performed work or furnished materials at the time of cancellation, Owner shall pay Contractor for all work performed and materials furnished through the date of cancellation, to the extent permitted by law.</p>
+
+      <div class="t-h">12. Proposal Validity</div>
       <p>This proposal expires 30 days from the date on page 1. Material and labor pricing is subject to change after expiration.</p>
 
       ${specBlock}
@@ -2572,7 +2631,7 @@ function buildQuoteDoc(c){
       <div class="q-party">
         <div class="h">PREPARED BY</div>
         <div class="b">${CO.prep}</div>
-        <div class="s">${CO.name} · ${CO.phone}<br>${CO.email}</div>
+        <div class="s">Direct line: ${CO.directLine}<br>${CO.email}</div>
       </div>
     </div>
     <div class="q-sec">SCOPE OF WORK</div>
