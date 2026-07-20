@@ -97,6 +97,12 @@ body{
 .card-hd .lf-chip.live{color:var(--navy);background:var(--aqua-soft)}
 .card-bd{padding:0 16px 16px}
 
+.rc-cardtoggle{width:100%;background:none;border:none;cursor:pointer;text-align:left;font-family:var(--sans)}
+.rc-cardtoggle .chev{width:11px;height:7px;flex-shrink:0;color:var(--muted-2);transition:transform .2s}
+.rc-cardtoggle.open .chev{transform:rotate(180deg);color:var(--navy)}
+.rc-collapse{max-height:0;overflow:hidden;transition:max-height .28s ease}
+.rc-collapse.open{max-height:2400px}
+
 /* ════════════════════ PILLS ════════════════════ */
 .pills{display:flex;gap:6px;margin-bottom:14px}
 .pill{
@@ -367,6 +373,50 @@ select.inp{
 .pay-sum .warn{color:#b45309;font-weight:800}
 .pay-split{padding:13px 16px;border:1.5px solid var(--navy);border-radius:11px;background:#fff;color:var(--navy);font-size:13.5px;font-weight:800;cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
 .pay-split:active{background:var(--navy);color:#fff}
+
+/* receipt builder card */
+.rc-hint{font-size:12px;color:var(--muted-2);line-height:1.45;margin-bottom:12px}
+.rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rc-methods{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+.rc-methods button{padding:11px 6px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--sans)}
+.rc-methods button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.rc-btn{width:100%;margin-top:12px;padding:15px;border:none;border-radius:12px;background:var(--navy);color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--sans);letter-spacing:.2px}
+.rc-btn:active{transform:scale(.99)}
+
+/* receipt document */
+.rc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:14px;border-bottom:2.5px solid var(--navy);margin-bottom:18px}
+.rc-head img{width:118px;height:auto}
+.rc-co{text-align:right;font-size:10.5px;line-height:1.5;color:#3a4a5e}
+.rc-co .nm{font-size:14px;font-weight:800;color:var(--navy);letter-spacing:.2px}
+.rc-title{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.rc-title .word{font-size:21px;font-weight:900;color:var(--navy);letter-spacing:2px}
+.rc-title table{font-size:11px;border-collapse:collapse}
+.rc-title td{padding:1.5px 0 1.5px 14px;text-align:right}
+.rc-title td.k{color:#7e8da0;font-weight:700}
+.rc-title td.v{font-weight:800;color:#1a2433;font-variant-numeric:tabular-nums}
+.rc-parties{display:flex;gap:14px;margin-bottom:16px}
+.rc-party{flex:1;background:#f5f8fb;border:1px solid #e3eaf2;border-radius:8px;padding:10px 13px;font-size:11.5px}
+.rc-party .h{font-size:9px;font-weight:800;letter-spacing:1px;color:#7e8da0;margin-bottom:4px}
+.rc-party .b{font-weight:700;color:#1a2433;line-height:1.45}
+.rc-amtbox{border:2.5px solid var(--navy);border-radius:10px;padding:16px 18px;margin-bottom:16px;background:#f7fbff}
+.rc-amtbox .h{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#7e8da0;margin-bottom:5px}
+.rc-amtbox .big{font-size:34px;font-weight:900;color:var(--navy);letter-spacing:-.5px;font-variant-numeric:tabular-nums;line-height:1.05}
+.rc-amtbox .words{font-size:11.5px;font-weight:700;color:#42536a;margin-top:6px;font-style:italic}
+.rc-sec{font-size:10px;font-weight:900;letter-spacing:1.4px;color:var(--navy);border-bottom:1.5px solid #dde5ee;padding-bottom:4px;margin:16px 0 9px}
+.rc-rows{width:100%;border-collapse:collapse;font-size:11.5px}
+.rc-rows td{padding:6px 0;border-bottom:1px solid #eef2f7;color:#1a2433;vertical-align:top}
+.rc-rows td.k{color:#7e8da0;font-weight:700;width:38%}
+.rc-rows td.v{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.rc-rows tr:last-child td{border-bottom:none}
+.rc-note{background:#fffbeb;border:1.5px solid #f5d989;border-radius:7px;padding:9px 12px;margin:12px 0;font-size:11px;color:#6b4e0c;line-height:1.45}
+.rc-note .h{font-weight:900;letter-spacing:.8px;font-size:9px;margin-bottom:3px;color:#92660e}
+.rc-sign{display:flex;gap:22px;margin-top:26px}
+.rc-sign .col{flex:1}
+.rc-sign .ln{border-bottom:1.2px solid #9aa8b8;height:24px;margin-bottom:4px}
+.rc-sign .cap{font-size:9px;color:#7e8da0;font-weight:700;letter-spacing:.5px}
+.rc-sign .pre{font-size:11px;font-weight:800;color:#1a2433;margin-bottom:2px}
+.rc-foot{margin-top:20px;padding-top:9px;border-top:1px solid #e3eaf2;display:flex;justify-content:space-between;font-size:9px;color:#8b99ab;font-weight:600;letter-spacing:.4px}
+.rc-thanks{text-align:center;font-size:11px;color:#42536a;font-weight:700;margin-top:18px;padding:10px;background:#f5f8fb;border-radius:8px}
 .x-amt{flex:1;min-width:110px}
 .x-qty{width:74px}
 .x-rate{flex:1;min-width:96px}
@@ -872,6 +922,63 @@ html.q-open body{overflow:hidden}
     </div>
   </div>
 
+  <!-- ══════════════ PAYMENT RECEIPT (collapsible — field speed) ══════════════ -->
+  <div class="card">
+    <button type="button" class="card-hd rc-cardtoggle" id="rcCardToggle" onclick="toggleReceiptCard()">
+      <div class="ttl"><span class="dot"></span>PAYMENT RECEIPT</div>
+      <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="rc-collapse" id="rcCollapse"><div class="card-bd">
+      <div class="rc-hint">Client paid you? Make a receipt and send it right away — proof the payment is in hand.</div>
+
+      <div class="fld"><label class="lbl">Applies To</label>
+        <select id="rcPay" class="inp" onchange="onReceiptPaySelect()"></select>
+      </div>
+
+      <div class="rc-grid">
+        <div class="fld"><label class="lbl">Amount Received</label>
+          <div class="unit-wrap"><span class="unit" style="left:12px;right:auto;font-family:var(--mono)">$</span><input id="rcAmt" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="0" style="padding-left:30px"></div>
+        </div>
+        <div class="fld"><label class="lbl">Date Received</label>
+          <input id="rcDate" class="inp" type="date">
+        </div>
+      </div>
+
+      <div class="fld"><label class="lbl">Payment Method</label>
+        <div class="rc-methods" id="rcMethodSeg">
+          <button type="button" data-mth="Cash"  onclick="setReceiptMethod('Cash')">Cash</button>
+          <button type="button" data-mth="Check" class="on" onclick="setReceiptMethod('Check')">Check</button>
+          <button type="button" data-mth="Zelle" onclick="setReceiptMethod('Zelle')">Zelle</button>
+          <button type="button" data-mth="Wire"  onclick="setReceiptMethod('Wire')">Wire</button>
+        </div>
+      </div>
+
+      <div class="fld" id="rcRefWrap"><label class="lbl" id="rcRefLbl">Check Number</label>
+        <input id="rcRef" class="inp" type="text" placeholder="e.g. 1042">
+      </div>
+
+      <div class="fld"><label class="lbl">Received From <span style="font-weight:500;color:var(--muted-2)">(defaults to customer name)</span></label>
+        <input id="rcFrom" class="inp" type="text" placeholder="Full name">
+      </div>
+      <div class="fld"><label class="lbl">Property Address</label>
+        <input id="rcAddr" class="inp" type="text" placeholder="Job address">
+      </div>
+      <div class="rc-grid">
+        <div class="fld"><label class="lbl">Balance Remaining <span style="font-weight:500;color:var(--muted-2)">(blank = hide)</span></label>
+          <div class="unit-wrap"><span class="unit" style="left:12px;right:auto;font-family:var(--mono)">$</span><input id="rcBal" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="auto" style="padding-left:30px"></div>
+        </div>
+        <div class="fld"><label class="lbl">Receipt #</label>
+          <div class="unit-wrap"><span class="unit" style="left:12px;right:auto;font-family:var(--mono)">R-</span><input id="rcSeq" class="inp" type="number" inputmode="numeric" min="1" step="1" placeholder="1" style="padding-left:40px"></div>
+        </div>
+      </div>
+      <div class="fld"><label class="lbl">Note <span style="font-weight:500;color:var(--muted-2)">(optional, prints on receipt)</span></label>
+        <textarea id="rcNote" class="inp" rows="2" placeholder="e.g. Check held pending deposit"></textarea>
+      </div>
+
+      <button type="button" class="rc-btn" onclick="openReceipt()">Create Receipt PDF</button>
+    </div></div>
+  </div>
+
   <!-- ══════════════ JOB INFO ══════════════ -->
   <section class="card">
     <div class="card-hd" style="display:flex;justify-content:space-between;align-items:center">
@@ -972,6 +1079,19 @@ html.q-open body{overflow:hidden}
     <div class="q-hint">Creates a letter-size PDF. On iPhone it opens the Share sheet; on computer it saves to your Files / Downloads.</div>
     <div class="pg" id="qp1"></div>
     <div class="pg" id="qp2"></div>
+  </div>
+</div>
+
+<!-- ══════════════ RECEIPT OVERLAY ══════════════ -->
+<div class="q-ov hidden" id="rOverlay">
+  <div class="q-top">
+    <span class="q-ttl">Receipt Preview</span>
+    <button class="q-close" onclick="closeReceipt()">Close</button>
+    <button class="q-print" id="rShareBtn" onclick="shareReceiptPdf()">Save / Share PDF</button>
+  </div>
+  <div class="q-scroll">
+    <div class="q-hint">Creates a letter-size PDF. On iPhone it opens the Share sheet; on computer it saves to your Files / Downloads.</div>
+    <div class="pg" id="rcp1"></div>
   </div>
 </div>
 
@@ -1433,6 +1553,8 @@ const ui = {
   quoteNum: null,
   // editable payment schedule: mode "auto" uses the formula; "custom" uses items[]
   payments: { mode:"auto", items:[] },
+  // payment receipt builder
+  receipt: { payIdx:"0", method:"Check" },
   // Generic add-on line items + discount — the seed of the universal quoter.
   // Each item: {id, label, desc, mode:"flat"|"rate", amt, qty, rate, unit}
   extras: { items: [], disc: { name:"", type:"flat", val:"" } },
@@ -1714,23 +1836,31 @@ function setSeq(n){ n=parseInt(n); if(Number.isFinite(n)&&n>0){ try{ localStorag
 
 /* ════════════ PAYMENT SCHEDULE (auto formula OR custom editable) ════════════ */
 let _payId=1; function newPayId(){ return "py"+(_payId++)+"_"+Date.now().toString(36); }
+// Final-payment holdback scales with job size. Small jobs keep a tight $1,000 so
+// nothing is left dangling; larger jobs leave more at the end so the customer
+// doesn't feel the middle payment is carrying everything.
+function defaultHoldback(F){
+  if(F < 5000)  return 1000;
+  if(F < 8000)  return 1500;
+  if(F < 15000) return 2000;
+  return 2500;
+}
 function computeAutoPayments(F){
   const dep = Math.min(Math.round(F*0.10), 1000);
   const holdRaw = num($("finalHold").value);
-  const holdDefault = Math.max(1500, Math.min(2000, Math.round(F*0.15)));
-  // Final Payment stays small — just the holdback. Nothing else rides on it, so
-  // there\'s never a big balance exposed at the very end.
+  // Final Payment always stays small — a $1,000\u2013$1,500 holdback, nothing more.
+  const holdDefault = defaultHoldback(F);
   const fin = holdRaw>0 ? Math.round(Math.min(holdRaw, F-dep)) : Math.min(holdDefault, F-dep);
   const remaining = F - dep - fin;   // demo + interior finish + tile/coping + permit/lights/extras
 
   const hasTileOrCope = ui.addon.pTile||ui.addon.sTile||ui.addon.pCope||ui.addon.sCope;
   const schedule = [{label:"Deposit — due upon signing", amount:dep}];
 
-  if(LAST && LAST.lines){
-    // Progress Payment 1 always carries the FULL demolition/chip-out cost — that\'s
-    // collected in full up front. Everything else left over (interior finish, and
-    // tile/coping if selected) is split evenly across the two progress payments, so
-    // no single payment — especially not the final one — carries most of the money.
+  if(hasTileOrCope && LAST && LAST.lines){
+    // Tile/coping jobs run longer with a real gap between phases, so this still gets
+    // two progress stages. Progress Payment 1 carries the FULL demolition/chip-out
+    // cost plus half of everything else (interior finish, tile, coping); Progress
+    // Payment 2 collects the other half once the new tile/coping is installed.
     const demoBucketRaw = LAST.lines.filter(l=>l.key==="demo").reduce((a,l)=>a+l.price,0);
     const demoInPP1 = Math.min(demoBucketRaw, remaining);   // safety clamp, always exact
     const splitBucket = remaining - demoInPP1;
@@ -1738,21 +1868,16 @@ function computeAutoPayments(F){
     const share2 = splitBucket - share1;
     const pp1 = demoInPP1 + share1;
     const pp2 = share2;
-
     if(pp2 < 200){
-      // negligible second stage — collapse to a single progress payment
-      const label = hasTileOrCope
-        ? "Progress Payment — due upon chip-out and installation of new tile and coping"
-        : "Progress Payment — due upon completion of demolition and surface preparation";
-      schedule.push({label, amount:pp1+pp2});
-    } else if(hasTileOrCope){
+      schedule.push({label:"Progress Payment — due upon chip-out and installation of new tile and coping", amount:pp1+pp2});
+    } else {
       schedule.push({label:"Progress Payment 1 — due upon chip-out and removal of existing finish, tile, and coping", amount:pp1});
       schedule.push({label:"Progress Payment 2 — due upon installation of new tile and coping", amount:pp2});
-    } else {
-      schedule.push({label:"Progress Payment 1 — due upon completion of demolition and surface preparation", amount:pp1});
-      schedule.push({label:"Progress Payment 2 — due upon application of new interior finish (before fill)", amount:pp2});
     }
   } else {
+    // Plaster / mini pebble alone: chip-out and finish application happen the same
+    // visit, so there\'s no real gap to split on. One progress payment covers both,
+    // collected once that work is done; Final Payment stays the small holdback.
     schedule.push({label:"Progress Payment — due upon completion of demolition and surface preparation", amount:remaining});
   }
 
@@ -2028,6 +2153,7 @@ function calculate(){
   renderXBlock(c);
   // payment schedule preview / sum
   renderPayments();
+  renderReceiptForm();
 
   // numbers
   $("peek").textContent = "• • • •";
@@ -2137,6 +2263,10 @@ function toggleAdv(){
   const open = $("advPanel").classList.toggle("open");
   $("advToggle").classList.toggle("open", open);
 }
+function toggleReceiptCard(){
+  const open = $("rcCollapse").classList.toggle("open");
+  $("rcCardToggle").classList.toggle("open", open);
+}
 
 /* ════════════ PRESS-AND-HOLD REVEAL (actual cost) ════════════ */
 (function(){
@@ -2220,7 +2350,8 @@ function saveEst(){
 /* ════════════ PERSISTENCE (localStorage, safe) ════════════ */
 const INPUT_IDS = ["pLen","pLenIn","pWid","pWidIn","pManLF","pExtra","pFinish",
   "sLen","sLenIn","sWid","sWidIn","sDiam","sDiamIn","sManLF","sExtra","sFinish",
-  "jobName","custName","jobAddr","finalHold","specNotes","jobNotes"];
+  "jobName","custName","jobAddr","finalHold","specNotes","jobNotes",
+  "rcAmt","rcDate","rcRef","rcFrom","rcAddr","rcBal","rcSeq","rcNote"];
 
 function save(){
   try{
@@ -2254,6 +2385,8 @@ function load(){
   if(!ui.payments) ui.payments={mode:"auto",items:[]};
   if(!ui.payments.mode) ui.payments.mode="auto";
   if(!Array.isArray(ui.payments.items)) ui.payments.items=[];
+  if(!ui.receipt) ui.receipt={payIdx:"0",method:"Check"};
+  if(!ui.receipt.method) ui.receipt.method="Check";
   // migrate legacy single Extra-LF values into a segment (one-time)
   if(data.fields){
     const mig={pTile:"pTileExtra",pCope:"pCopeExtra",sTile:"sTileExtra",sCope:"sCopeExtra"};
@@ -2288,6 +2421,7 @@ function load(){
   if($("payAuto"))   $("payAuto").classList.toggle("hidden", ui.payments.mode!=="auto");
   if($("payCustom")) $("payCustom").classList.toggle("hidden", ui.payments.mode!=="custom");
   renderPayments();
+  renderReceiptForm();
   // quote number field
   const ns=$("nextSeq"); if(ns) ns.value=getSeq();
 }
@@ -2495,7 +2629,7 @@ function termsHTML(c, plan, F){
       </ul>
       ${ui.payments.mode!=="custom" ? `<p style="font-size:10px;color:#6b7a8d;margin-top:2px">Deposit does not exceed the lesser of 10% or $1,000 per California Business &amp; Professions Code §7159. Progress payment reflects the value of work performed through the demolition and preparation phase.</p>` : ""}
       <div class="t-h">3. Accepted Payment Methods</div>
-      <p class="q-pay-line"><b>Cash</b> · <b>Check</b> payable to 3M Pools Inc. · <b>Wire</b> (instructions on request) · <b>Zelle</b> to (909) 630-4300 <span class="q-pay-note">— include project address &amp; name in the memo</span>.</p>
+      <p class="q-pay-line"><b>Cash</b> · <b>Check</b> payable to &ldquo;3M Pools Inc.&rdquo; · <b>Wire</b> (instructions on request) · <b>Zelle</b> to (909) 630-4300 <span class="q-pay-note">— include project address &amp; name in the memo</span>.</p>
 
       <div class="t-h">4. Property Access</div>
       <p>Owner grants Contractor the right to access the work site — including the backyard and pool/spa area — during normal construction hours permitted by local ordinance, from the date of contract signing through receipt of final payment. Contractor may enter for work, inspections, material delivery, and project management without prior notice during those hours. Contractor will exercise this right professionally and will minimize disruption to the property.</p>
@@ -2545,8 +2679,8 @@ function termsHTML(c, plan, F){
 
       <div class="q-sign">
         <div class="col">
-          <div class="pre">${CO.rep}</div>
-          <div class="cap">CONTRACTOR REPRESENTATIVE · ${CO.lic.toUpperCase()}</div>
+          <div class="pre">${CO.prep}</div>
+          <div class="cap">CONTRACTOR AUTHORIZED REPRESENTATIVE · ${CO.lic.toUpperCase()}</div>
         </div>
         <div class="col">
           <div class="ln"></div><div class="cap">CONTRACTOR SIGNATURE</div>
@@ -2574,7 +2708,7 @@ function buildQuoteDoc(c){
       <img src="${logoSrc}" alt="3M Pools Inc.">
       <div class="q-co">
         <div class="nm">${CO.name}</div>
-        ${CO.lic}<br>${CO.phone} · ${CO.email}<br>${CO.site}
+        ${CO.lic}<br>Direct: ${CO.directLine} · ${CO.email}<br>${CO.site}
       </div>
     </div>`;
 
@@ -2784,6 +2918,272 @@ function printQuote(){
   window.print();
 }
 
+/* ════════════ PAYMENT RECEIPT ════════════ */
+const RCPT_KEY = "mmm_pools_receipt_seq";
+function getRcptSeq(){ let n=1; try{ n=parseInt(localStorage.getItem(RCPT_KEY))||1; }catch(e){} return n; }
+function setRcptSeq(n){ n=parseInt(n); if(Number.isFinite(n)&&n>0){ try{ localStorage.setItem(RCPT_KEY,n); }catch(e){} } }
+
+// Spelled-out dollar amount — standard on a real receipt, makes it look legitimate.
+function amountToWords(v){
+  let n = Math.round(num(v));
+  if(n<=0) return "Zero and 00/100";
+  const ones=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven",
+              "Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+  const tens=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+  const u1000=x=>{
+    let s="";
+    if(x>=100){ s+=ones[Math.floor(x/100)]+" Hundred"; x%=100; if(x) s+=" "; }
+    if(x>=20){ s+=tens[Math.floor(x/10)]; x%=10; if(x) s+="-"+ones[x]; }
+    else if(x>0) s+=ones[x];
+    return s;
+  };
+  let out="";
+  const mil=Math.floor(n/1000000); n%=1000000;
+  const tho=Math.floor(n/1000); const rest=n%1000;
+  if(mil){ out+=u1000(mil)+" Million"; if(tho||rest) out+=" "; }
+  if(tho){ out+=u1000(tho)+" Thousand"; if(rest) out+=" "; }
+  if(rest) out+=u1000(rest);
+  return out+" and 00/100";
+}
+function todayInputValue(){
+  const d=new Date(), p=n=>String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+}
+// Parse a yyyy-mm-dd value as a LOCAL date (avoids the UTC off-by-one-day bug).
+function fmtDateInput(v){
+  if(!v) return new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  const [y,m,d]=v.split("-").map(Number);
+  if(!y||!m||!d) return v;
+  return new Date(y,m-1,d).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+}
+// Payment schedule lines currently in effect (or [] if nothing calculated yet).
+function receiptScheduleLines(){
+  if(!LAST) return [];
+  try{ return getPaymentLines(LAST.customerTotal)||[]; }catch(err){ return []; }
+}
+function renderReceiptForm(){
+  const sel=$("rcPay"); if(!sel) return;
+  const lines=receiptScheduleLines();
+  const cur=(ui.receipt&&ui.receipt.payIdx)!==undefined ? String(ui.receipt.payIdx) : "0";
+  sel.innerHTML = lines.map((p,i)=>
+      `<option value="${i}">${esc(p.label.split(" — ")[0])} — ${usd(p.amount)}</option>`).join("")
+    + `<option value="custom">Other / custom amount</option>`;
+  sel.value = [...sel.options].some(o=>o.value===cur) ? cur : (lines.length?"0":"custom");
+  ui.receipt.payIdx = sel.value;
+  // method pills
+  const seg=$("rcMethodSeg");
+  if(seg) [...seg.children].forEach(b=>b.classList.toggle("on", b.dataset.mth===(ui.receipt.method||"Check")));
+  toggleReceiptRef();
+  // defaults for blank fields
+  if($("rcDate") && !$("rcDate").value) $("rcDate").value = todayInputValue();
+  if($("rcSeq") && !$("rcSeq").value)   $("rcSeq").value   = getRcptSeq();
+  if($("rcFrom") && !$("rcFrom").value) $("rcFrom").value  = $("custName").value;
+  if($("rcAddr") && !$("rcAddr").value) $("rcAddr").value  = $("jobAddr").value;
+  autoFillReceiptAmount();
+}
+function toggleReceiptRef(){
+  const m=(ui.receipt&&ui.receipt.method)||"Check";
+  const wrap=$("rcRefWrap"), lbl=$("rcRefLbl"), inp=$("rcRef");
+  if(!wrap) return;
+  if(m==="Cash"){ wrap.classList.add("hidden"); return; }
+  wrap.classList.remove("hidden");
+  if(m==="Check"){ lbl.textContent="Check Number";       inp.placeholder="e.g. 1042"; }
+  if(m==="Zelle"){ lbl.textContent="Zelle Confirmation";  inp.placeholder="confirmation / phone"; }
+  if(m==="Wire"){  lbl.textContent="Wire Reference";      inp.placeholder="reference number"; }
+}
+function setReceiptMethod(m){
+  ui.receipt.method=m;
+  const seg=$("rcMethodSeg");
+  if(seg) [...seg.children].forEach(b=>b.classList.toggle("on", b.dataset.mth===m));
+  toggleReceiptRef(); save();
+}
+// Fill amount + auto balance from the selected schedule line.
+function autoFillReceiptAmount(){
+  const sel=$("rcPay"); if(!sel) return;
+  const lines=receiptScheduleLines();
+  const v=sel.value;
+  if(v==="custom" || !lines.length) return;
+  const i=parseInt(v);
+  if(!Number.isFinite(i)||!lines[i]) return;
+  $("rcAmt").value = lines[i].amount;
+  // balance = contract total minus everything up to and including this payment
+  const paidThrough = lines.slice(0,i+1).reduce((a,p)=>a+p.amount,0);
+  const bal = Math.max(0, Math.round(LAST.customerTotal - paidThrough));
+  $("rcBal").value = bal;
+}
+function onReceiptPaySelect(){
+  ui.receipt.payIdx = $("rcPay").value;
+  autoFillReceiptAmount(); save();
+}
+
+function buildReceiptDoc(){
+  const logoSrc = document.querySelector(".hd-icon img").src;
+  const n   = parseInt($("rcSeq").value)||getRcptSeq();
+  const rno = "R-" + String(n).padStart(3,"0");
+  const amt = Math.round(num($("rcAmt").value));
+  const method = (ui.receipt&&ui.receipt.method)||"Check";
+  const ref = $("rcRef").value.trim();
+  const dateStr = fmtDateInput($("rcDate").value);
+  const from = esc($("rcFrom").value.trim() || $("custName").value.trim());
+  const addr = esc($("rcAddr").value.trim() || $("jobAddr").value.trim());
+  const note = $("rcNote").value.trim();
+  const balRaw = $("rcBal").value;
+  const hasBal = balRaw!=="" && Number.isFinite(parseFloat(balRaw));
+  const bal = hasBal ? Math.round(num(balRaw)) : 0;
+
+  // what this payment is applied to
+  const lines = receiptScheduleLines();
+  const sel = $("rcPay").value;
+  let appliedTo = "Payment on account";
+  if(sel!=="custom" && lines[parseInt(sel)]) appliedTo = lines[parseInt(sel)].label;
+
+  let methodLine = method;
+  if(ref){
+    if(method==="Check") methodLine = `Check No. ${esc(ref)}`;
+    else if(method==="Zelle") methodLine = `Zelle — ${esc(ref)}`;
+    else if(method==="Wire") methodLine = `Wire — Ref. ${esc(ref)}`;
+  }
+
+  const contractTotal = LAST ? LAST.customerTotal : 0;
+  const qn = ui.quoteNum || "";
+
+  $("rcp1").innerHTML = `
+    <div class="rc-head">
+      <img src="${logoSrc}" alt="3M Pools Inc.">
+      <div class="rc-co">
+        <div class="nm">${CO.name}</div>
+        ${CO.lic}<br>Direct: ${CO.directLine} · ${CO.email}<br>${CO.site}
+      </div>
+    </div>
+
+    <div class="rc-title">
+      <div class="word">PAYMENT RECEIPT</div>
+      <table>
+        <tr><td class="k">Receipt No.</td><td class="v">${rno}</td></tr>
+        <tr><td class="k">Date</td><td class="v">${dateStr}</td></tr>
+        ${qn?`<tr><td class="k">Proposal</td><td class="v">${esc(qn)}</td></tr>`:""}
+      </table>
+    </div>
+
+    <div class="rc-parties">
+      <div class="rc-party">
+        <div class="h">RECEIVED FROM</div>
+        <div class="b">${from||"—"}</div>
+      </div>
+      <div class="rc-party">
+        <div class="h">PROPERTY</div>
+        <div class="b">${addr||"—"}</div>
+      </div>
+    </div>
+
+    <div class="rc-amtbox">
+      <div class="h">AMOUNT RECEIVED</div>
+      <div class="big">${usd(amt)}</div>
+      <div class="words">${amountToWords(amt)} Dollars</div>
+    </div>
+
+    <div class="rc-sec">PAYMENT DETAILS</div>
+    <table class="rc-rows">
+      <tr><td class="k">Applied To</td><td class="v">${esc(appliedTo)}</td></tr>
+      <tr><td class="k">Payment Method</td><td class="v">${methodLine}</td></tr>
+      ${contractTotal>0?`<tr><td class="k">Contract Total</td><td class="v">${usd(contractTotal)}</td></tr>`:""}
+      ${hasBal?`<tr><td class="k">Balance Remaining</td><td class="v">${usd(bal)}</td></tr>`:""}
+    </table>
+
+    ${note?`<div class="rc-note"><div class="h">NOTE</div>${esc(note)}</div>`:""}
+
+    <div class="rc-thanks">Thank you for your payment. This receipt confirms the amount above was received by ${CO.name}.</div>
+
+    <div class="rc-sign">
+      <div class="col">
+        <div class="pre">${CO.prep}</div>
+        <div class="ln"></div>
+        <div class="cap">RECEIVED BY · ${CO.name}</div>
+      </div>
+      <div class="col">
+        <div class="pre">&nbsp;</div>
+        <div class="ln"></div>
+        <div class="cap">DATE</div>
+      </div>
+    </div>
+
+    <div class="rc-foot"><span>${CO.name} · ${CO.lic}</span><span>${rno}</span></div>`;
+  return rno;
+}
+
+function openReceipt(){
+  if(!$("rcAmt").value || num($("rcAmt").value)<=0){
+    alert("Enter the amount received first."); return;
+  }
+  if(!$("rcDate").value) $("rcDate").value = todayInputValue();
+  if(!$("rcSeq").value)  $("rcSeq").value  = getRcptSeq();
+  const rno = buildReceiptDoc();
+  // advance the receipt counter for next time
+  const n = parseInt($("rcSeq").value)||getRcptSeq();
+  setRcptSeq(n+1);
+  save();
+  $("rOverlay").classList.remove("hidden");
+  document.documentElement.classList.add("q-open");
+  $("rcp1").parentElement.scrollTop = 0;
+  ui._rcptBlob = null; ui._rcptName = "Receipt-" + rno + ".pdf";
+  const btn=$("rShareBtn"); if(btn) btn.textContent="Preparing PDF…";
+  buildReceiptPdfBlob().then(b=>{ ui._rcptBlob=b; if(btn) btn.textContent="Save / Share PDF"; })
+                       .catch(err=>{ console.error("receipt prebuild failed",err); if(btn) btn.textContent="Save / Share PDF"; });
+}
+function closeReceipt(){
+  $("rOverlay").classList.add("hidden");
+  document.documentElement.classList.remove("q-open");
+  // bump the visible receipt number to the next one
+  const s=$("rcSeq"); if(s) s.value=getRcptSeq();
+}
+async function buildReceiptPdfBlob(){
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({unit:"pt", format:"letter", compress:true});
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const canvas = await nodeToCanvas($("rcp1"));
+  const data = canvas.toDataURL("image/png");
+  let w = pageW, h = canvas.height * (pageW / canvas.width);
+  if(h > pageH){ const r = pageH/h; h = pageH; w = w*r; }
+  pdf.addImage(data, "PNG", (pageW-w)/2, 0, w, h, undefined, "FAST");
+  return pdf.output("blob");
+}
+async function shareReceiptPdf(){
+  const btn=$("rShareBtn");
+  const label="Save / Share PDF";
+  let promptRetry=false;
+  try{
+    btn.disabled=true;
+    if(!ui._rcptBlob){ btn.textContent="Preparing PDF…"; ui._rcptBlob=await buildReceiptPdfBlob(); }
+    const blob=ui._rcptBlob;
+    const fname=ui._rcptName||"Receipt.pdf";
+    if(isMobile() && navigator.share){
+      const file=new File([blob],fname,{type:"application/pdf"});
+      try{ await navigator.share({files:[file], title:fname}); }
+      catch(err){
+        if(err && err.name==="AbortError"){ /* dismissed */ }
+        else if(err && err.name==="NotAllowedError"){ promptRetry=true; return; }
+        else throw err;
+      }
+    } else {
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement("a"); a.href=url; a.download=fname;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),8000);
+    }
+  }catch(err){
+    console.error("receipt save failed:",err);
+    try{
+      const url=URL.createObjectURL(ui._rcptBlob);
+      window.open(url,"_blank");
+      setTimeout(()=>URL.revokeObjectURL(url),30000);
+    }catch(e2){ alert("Receipt couldn't be saved automatically."); }
+  }finally{
+    btn.disabled=false;
+    btn.textContent = promptRetry ? "Tap again to Share PDF" : label;
+  }
+}
+
 /* ════════════ SAVE / LOAD PROJECT FILE ════════════ */
 function saveProject(){
   const fields={};
@@ -2816,6 +3216,7 @@ function loadProject(input){
       if(!ui.tileType)   ui.tileType={pTile:"ceramic",sTile:"ceramic"};
       if(!ui.copingType) ui.copingType={pCope:"pour",sCope:"pour"};
       if(!ui.payments)   ui.payments={mode:"auto",items:[]};
+      if(!ui.receipt)    ui.receipt={payIdx:"0",method:"Check"};
       setShapeQuiet("pool",ui.poolShape||"rect");
       setShapeQuiet("spa", ui.spaShape||"none");
       renderSides("pool"); renderSides("spa");
@@ -2839,6 +3240,7 @@ function loadProject(input){
       if($("payAuto"))   $("payAuto").classList.toggle("hidden",ui.payments.mode!=="auto");
       if($("payCustom")) $("payCustom").classList.toggle("hidden",ui.payments.mode!=="custom");
       renderPayments();
+      renderReceiptForm();
       const ns=$("nextSeq"); if(ns) ns.value=getSeq();
       $("discName").value=ui.extras.disc.name||"";
       $("discVal").value=ui.extras.disc.val||"";
@@ -2887,6 +3289,11 @@ function init(){
   // editable quote counter (offline fix for resets after redeploy)
   const ns=$("nextSeq");
   if(ns){ ns.value=getSeq(); ns.addEventListener("input", ()=>{ setSeq(ns.value); }); }
+  // receipt defaults + counter
+  const rs=$("rcSeq");
+  if(rs){ if(!rs.value) rs.value=getRcptSeq(); rs.addEventListener("input", ()=>{ setRcptSeq(rs.value); }); }
+  if($("rcDate") && !$("rcDate").value) $("rcDate").value = todayInputValue();
+  renderReceiptForm();
   recalc();
 }
 document.addEventListener("DOMContentLoaded", init);
