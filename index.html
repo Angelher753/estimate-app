@@ -479,6 +479,8 @@ select.inp{
 .seg-row .seg-h{width:74px;flex-shrink:0}
 .seg-eff{font-size:11px;font-weight:800;color:var(--navy);white-space:nowrap;font-variant-numeric:tabular-nums;align-self:center;min-width:62px;text-align:right}
 .seg-add:active{transform:scale(.99)}
+.seg-add-auto{background:#f0f9f4;border-color:#1e8a53;color:#1e8a53;margin-top:6px}
+.seg-add-auto span{font-weight:600;opacity:.8}
 
 /* spa-min underprice warning */
 .adv-row .ev input.lp.below-floor{border-color:#dc2626;background:#fef2f2;color:#b42318}
@@ -767,18 +769,12 @@ html.q-open body{overflow:hidden}
       </div>
       <div class="adder" id="pStepAdder">
         <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pStepType">
-          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pStep','ceramic')">Group 1–4</button>
-          <button type="button" data-tt="glass" onclick="setTileType('pStep','glass')">Glass</button>
+          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pStep','ceramic')">Group 1–4 · $35</button>
+          <button type="button" data-tt="glass" onclick="setTileType('pStep','glass')">Glass · $55</button>
         </div></div>
-        <div class="two">
-          <div class="fld"><label class="lbl">Length</label>
-            <div class="unit-wrap"><input id="pStepLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
-          </div>
-          <div class="fld"><label class="lbl">Height</label>
-            <div class="unit-wrap"><input id="pStepH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
-          </div>
-        </div>
-        <div class="tile-hint rate-tbd">Rate not set yet — this stays off the printed quote until Angel/Mario confirm pricing.</div>
+        <div class="segs" id="pStepSegs"></div>
+        <button type="button" class="seg-add" onclick="addSeg('pStep')">＋ Add measurement (Step 1, Step 2…)</button>
+        <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
       </div>
 
       <!-- pool skimmer -->
@@ -931,18 +927,13 @@ html.q-open body{overflow:hidden}
         </div>
         <div class="adder" id="sStepAdder">
           <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sStepType">
-            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sStep','ceramic')">Group 1–4</button>
-            <button type="button" data-tt="glass" onclick="setTileType('sStep','glass')">Glass</button>
+            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sStep','ceramic')">Group 1–4 · $35</button>
+            <button type="button" data-tt="glass" onclick="setTileType('sStep','glass')">Glass · $55</button>
           </div></div>
-          <div class="two">
-            <div class="fld"><label class="lbl">Length</label>
-              <div class="unit-wrap"><input id="sStepLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
-            </div>
-            <div class="fld"><label class="lbl">Height</label>
-              <div class="unit-wrap"><input id="sStepH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
-            </div>
-          </div>
-          <div class="tile-hint rate-tbd">Rate not set yet — this stays off the printed quote until Angel/Mario confirm pricing.</div>
+          <div class="segs" id="sStepSegs"></div>
+          <button type="button" class="seg-add" onclick="addSeg('sStep')">＋ Add measurement (Step 1, Step 2…)</button>
+          <button type="button" class="seg-add seg-add-auto" onclick="addSpaStepAuto()">＋ Same as spa perimeter<span id="sStepAutoHint"></span></button>
+          <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
         </div>
 
         <!-- spa skimmer -->
@@ -1656,7 +1647,6 @@ const CFG = {
   // Spillway tile uses the SAME per-6"-band rates as waterline tile (real price).
   // Step/tile-strip rate is not decided yet — null means it contributes $0 and stays
   // OFF the printed quote until a real number is set here.
-  stepTileRates: { ceramic:30, glass:null },   // ceramic/Group 1–4 accent rate confirmed; glass still TBD
   skimmer: 2500   // flat, per structure — remove & replace existing skimmer
 };
 const STORE_KEY = "mmm_pools_estimator_v1";
@@ -1676,7 +1666,7 @@ const ui = {
             pSpill:false, sSpill:false, pStep:false, sStep:false, pSkim:false, sSkim:false },
   // Repeatable extra-LF segments per tile/coping section (waterline + spillway + …).
   // Each: {id, label, lf}. Summed into that section's LF.
-  segs: { pTile:[], pCope:[], sTile:[], sCope:[] },
+  segs: { pTile:[], pCope:[], sTile:[], sCope:[], pStep:[], sStep:[] },
   tileType:   { pTile:"ceramic", sTile:"ceramic", pSpill:"ceramic", sSpill:"ceramic", pStep:"ceramic", sStep:"ceramic" },   // ceramic | glass
   copingType: { pCope:"pour",    sCope:"pour"    },   // pour | stone
   lights: { lHVC:0, lHVW:0, lLVC:0 },
@@ -1903,7 +1893,7 @@ function spaLF(){
 /* ════════════ EXTRA-LF SEGMENTS (repeatable adders) ════════════ */
 // Tile is priced per 6" band: a run that is taller multiplies the LF.
 // 5 LF @ 12" = 5 × (12/6) = 10 effective LF. Odd heights (8") math correctly.
-function isTileKey(key){ return key==="pTile" || key==="sTile"; }
+function isTileKey(key){ return key==="pTile" || key==="sTile" || key==="pStep" || key==="sStep"; }
 function segEff(seg, key){
   const lf = num(seg.lf);
   if(isTileKey(key)){ const h = num(seg.h)||6; return lf * (h/6); }
@@ -1970,6 +1960,17 @@ function addSeg(key){
 function removeSeg(key,id){
   ui.segs[key]=(ui.segs[key]||[]).filter(s=>s.id!==id);
   renderSegs(key); segsChanged();
+}
+// Convenience for the common case: a spa's seat/bench trim tile runs the full spa
+// perimeter (e.g. an 8x8 spa's seat trim = the same 32 LF as the spa itself).
+// Adds a pre-filled segment so Angel doesn't have to re-measure and re-type it —
+// still fully editable afterward, nothing is hidden or auto-charged silently.
+function addSpaStepAuto(){
+  const lf = spaLF();
+  if(!(lf>0)){ alert("Enter the spa dimensions first — there\'s no perimeter to match yet."); return; }
+  if(!ui.segs.sStep) ui.segs.sStep=[];
+  ui.segs.sStep.push({id:newSegId(), label:"Seat Trim", lf:lf.toFixed(1), h:""});
+  renderSegs("sStep"); segsChanged();
 }
 
 /* ════════════ QUOTE NUMBER COUNTER ════════════ */
@@ -2145,8 +2146,11 @@ function recalc(){
   const effLF=(lfId,hId)=>{ const lf=num($(lfId).value), h=num($(hId).value)||6; return lf*(h/6); };
   if($("pSpillLFchip")) $("pSpillLFchip").textContent = ui.addon.pSpill ? effLF("pSpillLF","pSpillH").toFixed(1)+" LF" : "—";
   if($("sSpillLFchip")) $("sSpillLFchip").textContent = ui.addon.sSpill ? effLF("sSpillLF","sSpillH").toFixed(1)+" LF" : "—";
-  if($("pStepLFchip"))  $("pStepLFchip").textContent  = ui.addon.pStep  ? effLF("pStepLF","pStepH").toFixed(1)+" LF"  : "—";
-  if($("sStepLFchip"))  $("sStepLFchip").textContent  = ui.addon.sStep  ? effLF("sStepLF","sStepH").toFixed(1)+" LF"  : "—";
+  if($("pStepLFchip"))  $("pStepLFchip").textContent  = ui.addon.pStep  ? segSum("pStep").toFixed(1)+" LF" : "—";
+  if($("sStepLFchip"))  $("sStepLFchip").textContent  = ui.addon.sStep  ? segSum("sStep").toFixed(1)+" LF" : "—";
+  // live hint on the spa auto-fill button so Angel sees the number before tapping
+  const sAutoHint=$("sStepAutoHint");
+  if(sAutoHint){ const lf=spaLF(); sAutoHint.textContent = lf>0 ? ` (${lf.toFixed(1)} LF)` : ""; }
 }
 
 /* ════════════ FULL CALCULATION ════════════ */
@@ -2169,8 +2173,10 @@ function replasterLines(c){
   (c.sCopeNamed||[]).forEach(n=> add("sCope_"+n.id, `${c.sCopeName||"Pour-in-Place"} ${n.label} Coping Replacement — Spa`, `${n.lf.toFixed(1)} LF`, n.cost));
   add("pSpill",`${c.pSpillName||"Group 1–4"} Spillway Tile Replacement — Pool`, c.pSpillLF>0?`${c.pSpillLF.toFixed(1)} LF`:"", c.pSpillCost);
   add("sSpill",`${c.sSpillName||"Group 1–4"} Spillway Tile Replacement — Spa`,  c.sSpillLF>0?`${c.sSpillLF.toFixed(1)} LF`:"", c.sSpillCost);
-  add("pStep",`${c.pStepName||"Group 1–4"} Step Tile Replacement — Pool`, c.pStepLF>0?`${c.pStepLF.toFixed(1)} LF`:"", c.pStepCost);
-  add("sStep",`${c.sStepName||"Group 1–4"} Step Tile Replacement — Spa`,  c.sStepLF>0?`${c.sStepLF.toFixed(1)} LF`:"", c.sStepCost);
+  if(c.pStepBaseLF>0) add("pStep",`${c.pStepName||"Group 1–4"} Step Tile Replacement — Pool`, `${c.pStepBaseLF.toFixed(1)} LF`, c.pStepBaseCost);
+  (c.pStepNamed||[]).forEach(n=> add("pStep_"+n.id, `${c.pStepName||"Group 1–4"} ${n.label} Step Tile Replacement — Pool`, `${n.lf.toFixed(1)} LF`, n.cost));
+  if(c.sStepBaseLF>0) add("sStep",`${c.sStepName||"Group 1–4"} Step Tile Replacement — Spa`,  `${c.sStepBaseLF.toFixed(1)} LF`, c.sStepBaseCost);
+  (c.sStepNamed||[]).forEach(n=> add("sStep_"+n.id, `${c.sStepName||"Group 1–4"} ${n.label} Step Tile Replacement — Spa`, `${n.lf.toFixed(1)} LF`, n.cost));
   // Skimmer is a flat set PRICE ($2,500), not a cost to mark up — quote it exactly.
   add("pSkim","Skimmer Replacement — Pool","",c.pSkimCost,0,true);
   add("sSkim","Skimmer Replacement — Spa","",c.sSkimCost,0,true);
@@ -2234,16 +2240,21 @@ function compute(){
   const pSpillCost = ui.addon.pSpill ? pSpillLF*pSpillRate : 0;
   const sSpillCost = ui.addon.sSpill ? sSpillLF*sSpillRate : 0;
 
-  // Step tile (tile strip) — same structure, but rate is not set yet (null in CFG).
-  // Stays at $0 and off the printed quote until a real rate is configured.
-  const pStepLFraw = num($("pStepLF").value), pStepH = num($("pStepH").value)||6;
-  const sStepLFraw = num($("sStepLF").value), sStepH = num($("sStepH").value)||6;
-  const pStepLF = ui.addon.pStep ? pStepLFraw*(pStepH/6) : 0;
-  const sStepLF = ui.addon.sStep ? sStepLFraw*(sStepH/6) : 0;
-  const pStepRate = CFG.stepTileRates[ui.tileType.pStep];
-  const sStepRate = CFG.stepTileRates[ui.tileType.sStep];
-  const pStepCost = ui.addon.pStep && pStepRate ? pStepLF*pStepRate : 0;
-  const sStepCost = ui.addon.sStep && sStepRate ? sStepLF*sStepRate : 0;
+  // Step tile (tile strip) — priced the SAME as normal waterline tile, and supports
+  // multiple named measurements (many steps, different lengths) via the segment
+  // adder, same as the main Tile section. No automatic base — 100% manual runs.
+  const pStepLF = ui.addon.pStep ? segSum("pStep") : 0;
+  const sStepLF = ui.addon.sStep ? segSum("sStep") : 0;
+  const pStepRate = CFG.tileRates[ui.tileType.pStep] || CFG.tileRates.ceramic;
+  const sStepRate = CFG.tileRates[ui.tileType.sStep] || CFG.tileRates.ceramic;
+  const pStepCost = ui.addon.pStep ? pStepLF*pStepRate : 0;
+  const sStepCost = ui.addon.sStep ? sStepLF*sStepRate : 0;
+  const pStepNamed = ui.addon.pStep ? labeledSegs("pStep").map(n=>({...n, cost:n.lf*pStepRate})) : [];
+  const sStepNamed = ui.addon.sStep ? labeledSegs("sStep").map(n=>({...n, cost:n.lf*sStepRate})) : [];
+  const pStepBaseLF = ui.addon.pStep ? unlabeledSegSum("pStep") : 0;
+  const sStepBaseLF = ui.addon.sStep ? unlabeledSegSum("sStep") : 0;
+  const pStepBaseCost = pStepBaseLF*pStepRate;
+  const sStepBaseCost = sStepBaseLF*sStepRate;
 
   // Skimmer replacement — flat, per structure.
   const pSkimCost = ui.addon.pSkim ? CFG.skimmer : 0;
@@ -2275,6 +2286,7 @@ function compute(){
     pSpillLF, sSpillLF, pSpillCost, sSpillCost, pStepLF, sStepLF, pStepCost, sStepCost,
     pSpillName:CFG.tileName[ui.tileType.pSpill], sSpillName:CFG.tileName[ui.tileType.sSpill],
     pStepName:CFG.tileName[ui.tileType.pStep],   sStepName:CFG.tileName[ui.tileType.sStep],
+    pStepNamed, sStepNamed, pStepBaseLF, sStepBaseLF, pStepBaseCost, sStepBaseCost,
     pSkimCost, sSkimCost
   });
   const replQuote = lines.reduce((a,l)=>a+l.price,0);
@@ -2300,8 +2312,8 @@ function compute(){
     pFinishCost,sFinishCost,demoCost,
     pTileCost,sTileCost,pCopeCost,sCopeCost,permitCost,
     pSpillLF,sSpillLF,pSpillCost,sSpillCost,pStepLF,sStepLF,pStepCost,sStepCost,pSkimCost,sSkimCost,
-    pTileNamed,sTileNamed,pCopeNamed,sCopeNamed,
-    pTileBaseLF,sTileBaseLF,pCopeBaseLF,sCopeBaseLF,
+    pTileNamed,sTileNamed,pCopeNamed,sCopeNamed,pStepNamed,sStepNamed,
+    pTileBaseLF,sTileBaseLF,pCopeBaseLF,sCopeBaseLF,pStepBaseLF,sStepBaseLF,
     lightLines, lightItems, actual, quote,
     xItems, customTotal, replQuote, discAmt, discName, customerTotal, floor,
     spaOnly, lines
@@ -2619,7 +2631,7 @@ function load(){
   if(!ui.extras.disc)  ui.extras.disc={name:"",type:"flat",val:""};
   if(!ui.prices) ui.prices={};
   if(!ui.segs) ui.segs={pTile:[],pCope:[],sTile:[],sCope:[]};
-  ["pTile","pCope","sTile","sCope"].forEach(k=>{ if(!Array.isArray(ui.segs[k])) ui.segs[k]=[]; });
+  ["pTile","pCope","sTile","sCope","pStep","sStep"].forEach(k=>{ if(!Array.isArray(ui.segs[k])) ui.segs[k]=[]; });
   if(!ui.tileType) ui.tileType={pTile:"ceramic",sTile:"ceramic"};
   if(!ui.tileType.pTile) ui.tileType.pTile="ceramic";
   if(!ui.tileType.sTile) ui.tileType.sTile="ceramic";
@@ -2661,7 +2673,7 @@ function load(){
   CFG.lights.forEach(l=>{ const q=(ui.lights&&ui.lights[l.id])||0; $(l.id).textContent=q;
     $(l.id+"_stp").querySelector(".stepper").classList.toggle("hot", q>0); });
   // segments + tile types
-  ["pTile","pCope","sTile","sCope"].forEach(renderSegs);
+  ["pTile","pCope","sTile","sCope","pStep","sStep"].forEach(renderSegs);
   ["pTile","sTile","pSpill","sSpill","pStep","sStep"].forEach(renderTileType);
   ["pCope","sCope"].forEach(renderCopingType);
   // payment schedule
@@ -2816,11 +2828,11 @@ function scopeHTML(c, plan){
       it(`Spillway Tile Replacement — ${grp.name} (${bl})`, subs);
     });
   }
-  // step tile — own scope item, only appears once a real rate is set (cost > 0)
-  if((ui.addon.pStep && c.pStepCost>0) || (ui.addon.sStep && c.sStepCost>0)){
+  // step tile — own scope item(s); supports many steps with different measurements
+  if((ui.addon.pStep && c.pStepBaseLF>0) || (ui.addon.sStep && c.sStepBaseLF>0)){
     const stepGroups = [];
-    if(ui.addon.pStep && c.pStepCost>0) stepGroups.push({which:"pool", name:CFG.tileName[ui.tileType.pStep]||"Group 1–4", type:ui.tileType.pStep});
-    if(ui.addon.sStep && c.sStepCost>0) stepGroups.push({which:"spa",  name:CFG.tileName[ui.tileType.sStep]||"Group 1–4", type:ui.tileType.sStep});
+    if(ui.addon.pStep && c.pStepBaseLF>0) stepGroups.push({which:"pool", name:CFG.tileName[ui.tileType.pStep]||"Group 1–4", type:ui.tileType.pStep});
+    if(ui.addon.sStep && c.sStepBaseLF>0) stepGroups.push({which:"spa",  name:CFG.tileName[ui.tileType.sStep]||"Group 1–4", type:ui.tileType.sStep});
     const byType = {};
     stepGroups.forEach(g=>{ (byType[g.name]=byType[g.name]||{name:g.name,type:g.type,whichs:[]}).whichs.push(g.which); });
     Object.values(byType).forEach(grp=>{
@@ -2833,6 +2845,18 @@ function scopeHTML(c, plan){
       it(`Step Tile Replacement — ${grp.name} (${bl})`, subs);
     });
   }
+  // each NAMED step measurement becomes its own scope item (e.g. "Step 2 Tile Replacement")
+  [["pool",c.pStepNamed,CFG.tileName[ui.tileType.pStep],ui.tileType.pStep],
+   ["spa", c.sStepNamed,CFG.tileName[ui.tileType.sStep],ui.tileType.sStep]].forEach(([which,named,tname,ttype])=>{
+    (named||[]).forEach(n=>{
+      const subs=[
+        `Remove and haul away existing ${n.label.toLowerCase()} step tile on the ${which}.`,
+        `Install new ${(tname||"Group 1–4").toLowerCase()} tile at the ${n.label.toLowerCase()} and set to finish.`
+      ];
+      if(ttype==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
+      it(`${n.label} Step Tile Replacement — ${tname||"Group 1–4"} (${which})`, subs);
+    });
+  });
   // skimmer replacement
   if(ui.addon.pSkim || ui.addon.sSkim){
     const bl = (ui.addon.pSkim && ui.addon.sSkim) ? "pool and spa" : (ui.addon.pSkim ? "pool" : "spa");
@@ -3573,6 +3597,7 @@ function loadProject(input){
         const tog={pTile:"pTileTog",pCope:"pCopeTog",sTile:"sTileTog",sCope:"sCopeTog"}[k];
         if(tog) $(tog).classList.toggle("on",!!(ui.addon&&ui.addon[k]));
       });
+      ["pStep","sStep"].forEach(k=>{ renderSegs(k); });
       ["pSpill","sSpill","pStep","sStep"].forEach(k=>{
         const adder={pSpill:"pSpillAdder",sSpill:"sSpillAdder",pStep:"pStepAdder",sStep:"sStepAdder"}[k];
         if(adder) $(adder).classList.toggle("open",!!(ui.addon&&ui.addon[k]));
