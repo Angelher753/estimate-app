@@ -1656,7 +1656,7 @@ const CFG = {
   // Spillway tile uses the SAME per-6"-band rates as waterline tile (real price).
   // Step/tile-strip rate is not decided yet — null means it contributes $0 and stays
   // OFF the printed quote until a real number is set here.
-  stepTileRates: { ceramic:null, glass:null },
+  stepTileRates: { ceramic:30, glass:null },   // ceramic/Group 1–4 accent rate confirmed; glass still TBD
   skimmer: 2500   // flat, per structure — remove & replace existing skimmer
 };
 const STORE_KEY = "mmm_pools_estimator_v1";
@@ -2027,10 +2027,21 @@ function computeAutoPayments(F){
     // Plaster / mini pebble alone: chip-out and finish application happen the same
     // visit, so there\'s no real gap to split on. One progress payment covers both,
     // collected once that work is done; Final Payment stays the small holdback.
-    schedule.push({label:"Progress Payment — due upon completion of demolition and surface preparation", amount:remaining});
+    schedule.push({label:"Progress Payment — due upon completion of demolition", amount:remaining});
   }
 
-  schedule.push({label:"Final Payment — due upon completion of the work", amount:fin});
+  // Final Payment always names the actual finish being applied (plaster is
+  // literally the last physical step on every job). If other trade work is in
+  // the job too, say so — otherwise just the finish.
+  const pf=$("pFinish").value, sf=$("sFinish").value;
+  const finName = (pf&&pf!=="none") ? CFG.finishName[pf] : ((sf&&sf!=="none") ? CFG.finishName[sf] : "Plaster");
+  const hasOtherWork = hasTileOrCope || ui.addon.pSpill||ui.addon.sSpill||
+                        (ui.addon.pStep&&LAST&&LAST.pStepCost>0)||(ui.addon.sStep&&LAST&&LAST.sStepCost>0)||
+                        ui.addon.pSkim||ui.addon.sSkim;
+  const finalLabel = hasOtherWork
+    ? `Final Payment — due upon completion of new ${finName} and work`
+    : `Final Payment — due upon completion of new ${finName}`;
+  schedule.push({label:finalLabel, amount:fin});
   return schedule;
 }
 function getPaymentLines(F){
@@ -2749,17 +2760,14 @@ function scopeHTML(c, plan){
     const bl = g.whichs.length===2 ? "pool and spa" : g.whichs[0];
     if(g.key==="plaster"){
       it(`New Interior Finish — Standard Plaster (${bl})`, [
-        "Apply new standard plaster finish in homeowner-selected color.",
-        `Fill ${bl} after plaster application.`]);
+        "Apply new standard plaster finish in homeowner-selected color."]);
     } else if(g.key==="mini"){
       it(`New Interior Finish — Mini Pebble (${bl})`, [
         "Apply new mini pebble finish in homeowner-selected color.",
-        "Perform exposure wash / acid wash as required for finish exposure.",
-        `Fill ${bl} after finish exposure process.`]);
+        "Perform exposure wash / acid wash as required for finish exposure."]);
     } else {
       it(`New Interior Finish — ${g.name} (${bl})`, [
-        `Apply new ${g.name.toLowerCase()} finish in homeowner-selected color.`,
-        `Fill ${bl} after finish application.`]);
+        `Apply new ${g.name.toLowerCase()} finish in homeowner-selected color.`]);
     }
   });
   // tile scope — remove old, install new; note group range on ceramic
@@ -2773,7 +2781,7 @@ function scopeHTML(c, plan){
       const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
       const subs = [
         `Remove and haul away existing waterline tile around ${bl}.`,
-        `Install new ${grp.name.toLowerCase()} waterline tile and set to finish.`
+        `Install new ${grp.name.toLowerCase()} waterline tile.`
       ];
       if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
       it(`Waterline Tile Replacement — ${grp.name} (${bl})`, subs);
@@ -2784,7 +2792,7 @@ function scopeHTML(c, plan){
       (named||[]).forEach(n=>{
         const subs=[
           `Remove and haul away existing ${n.label.toLowerCase()} tile on the ${which}.`,
-          `Install new ${(tname||"Group 1–4").toLowerCase()} tile at the ${n.label.toLowerCase()} and set to finish.`
+          `Install new ${(tname||"Group 1–4").toLowerCase()} tile at the ${n.label.toLowerCase()}.`
         ];
         if(ttype==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
         it(`${n.label} Tile Replacement — ${tname||"Group 1–4"} (${which})`, subs);
@@ -2802,7 +2810,7 @@ function scopeHTML(c, plan){
       const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
       const subs = [
         `Remove and haul away existing spillway tile on the ${bl}.`,
-        `Install new ${grp.name.toLowerCase()} spillway tile and set to finish.`
+        `Install new ${grp.name.toLowerCase()} spillway tile.`
       ];
       if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
       it(`Spillway Tile Replacement — ${grp.name} (${bl})`, subs);
@@ -2941,7 +2949,7 @@ function termsHTML(c, plan, F){
       <ul>
         ${payLines.map(p=>`<li>${esc(p.label)}: <b>${usd(p.amount)}</b></li>`).join("")}
       </ul>
-      ${ui.payments.mode!=="custom" ? `<p style="font-size:10px;color:#6b7a8d;margin-top:2px">Deposit does not exceed the lesser of 10% or $1,000 per California Business &amp; Professions Code §7159. Progress payment reflects the value of work performed through the demolition and preparation phase.</p>` : ""}
+
       <div class="t-h">3. Accepted Payment Methods</div>
       <p class="q-pay-line"><b>Cash</b> · <b>Check</b> payable to &ldquo;3M Pools Inc.&rdquo; · <b>Wire</b> (instructions on request) · <b>Zelle</b> to (909) 630-4300 <span class="q-pay-note">— include project address &amp; name in the memo</span>.</p>
 
@@ -3084,7 +3092,7 @@ function buildQuoteDoc(c){
       </div>
       <div class="q-party">
         <div class="h">PREPARED BY</div>
-        <div class="b">${CO.prep}</div>
+        <div class="b">${CO.rep}</div>
         <div class="s">Direct line: ${CO.directLine}<br>${CO.email}</div>
       </div>
     </div>
