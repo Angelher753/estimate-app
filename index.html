@@ -1662,6 +1662,7 @@ const ui = {
   spaShape:  "none",
   pSides: ["","","",""],
   sSides: ["","","",""],
+  demoManualOff:false,   // true once you explicitly turn Demo off — stops the auto-enable from fighting you
   addon: { pTile:false, pCope:false, sTile:false, sCope:false, demo:false, permit:false,
             pSpill:false, sSpill:false, pStep:false, sStep:false, pSkim:false, sSkim:false },
   // Repeatable extra-LF segments per tile/coping section (waterline + spillway + …).
@@ -2111,6 +2112,7 @@ function renderPayments(){
 /* ════════════ ADD-ONS ════════════ */
 function toggleAddon(key){
   ui.addon[key] = !ui.addon[key];
+  if(key==="demo") ui.demoManualOff = !ui.addon.demo;   // remember an explicit "off" so we don't re-force it on
   const map = { pTile:"pTileTog", pCope:"pCopeTog", sTile:"sTileTog", sCope:"sCopeTog", demo:"demoTog", permit:"permitTog",
                 pSpill:"pSpillTog", sSpill:"sSpillTog", pStep:"pStepTog", sStep:"sStepTog", pSkim:"pSkimTog", sSkim:"sSkimTog" };
   $(map[key]).classList.toggle("on", ui.addon[key]);
@@ -2129,6 +2131,15 @@ function step(id, d){
 /* ════════════ LIVE RECALC (LF chips only — no prices) ════════════ */
 function recalc(){
   const p = poolLF(), s = spaLF(), t = p+s;
+
+  // Demo is virtually always part of the job — turn it on automatically the
+  // moment real pool/spa dimensions exist, so it\'s never forgotten in the field.
+  // Respects a deliberate manual "off" — never fights that choice.
+  if(t>0 && !ui.addon.demo && !ui.demoManualOff){
+    ui.addon.demo = true;
+    $("demoTog").classList.add("on");
+  }
+
   $("poolChip").textContent = p.toFixed(1)+" LF";
   $("spaChip").textContent  = s.toFixed(1)+" LF";
   $("poolChip").classList.toggle("live", p>0);
