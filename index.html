@@ -103,6 +103,12 @@ body{
 .rc-collapse{max-height:0;overflow:hidden;transition:max-height .28s ease}
 .rc-collapse.open{max-height:2400px}
 
+.sub-toggle{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:2px 0 8px;font-family:var(--sans)}
+.sub-toggle .chev{width:10px;height:6px;flex-shrink:0;color:var(--muted-2);transition:transform .2s}
+.sub-toggle.open .chev{transform:rotate(180deg);color:var(--navy)}
+.sub-collapse{max-height:0;overflow:hidden;transition:max-height .26s ease}
+.sub-collapse.open{max-height:600px}
+
 /* ════════════════════ PILLS ════════════════════ */
 .pills{display:flex;gap:6px;margin-bottom:14px}
 .pill{
@@ -382,6 +388,8 @@ select.inp{
 .rc-methods button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 .rc-btn{width:100%;margin-top:12px;padding:15px;border:none;border-radius:12px;background:var(--navy);color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--sans);letter-spacing:.2px}
 .rc-btn:active{transform:scale(.99)}
+.rc-clear{padding:15px 20px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--muted);font-size:14px;font-weight:800;cursor:pointer;font-family:var(--sans);white-space:nowrap;flex-shrink:0}
+.rc-clear:active{background:#fde8e8;border-color:#dc2626;color:#b42318}
 
 /* receipt document */
 .rc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:14px;border-bottom:2.5px solid var(--navy);margin-bottom:18px}
@@ -466,6 +474,7 @@ select.inp{
 .tile-type .x-seg{flex:1}
 .tile-type .x-seg button{flex:1}
 .tile-hint{font-size:11px;color:var(--muted-2);margin-top:7px;line-height:1.4}
+.tile-hint.rate-tbd{color:#b45309;font-weight:700;background:#fffbeb;border:1px solid #f5d989;border-radius:7px;padding:7px 9px}
 .seg-row.tile .seg-lf{width:84px}
 .seg-row .seg-h{width:74px;flex-shrink:0}
 .seg-eff{font-size:11px;font-weight:800;color:var(--navy);white-space:nowrap;font-variant-numeric:tabular-nums;align-self:center;min-width:62px;text-align:right}
@@ -531,9 +540,9 @@ html.q-open body{overflow:hidden}
 .q-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 10px calc(26px + env(safe-area-inset-bottom))}
 .q-hint{text-align:center;color:rgba(255,255,255,.85);font-size:11.5px;margin:0 14px 12px;line-height:1.45}
 
-.pg{background:#fff;max-width:760px;margin:0 auto 16px;padding:28px 30px;
+.pg{background:#fff;max-width:860px;margin:0 auto 16px;padding:26px 30px;
   border-radius:6px;box-shadow:0 10px 36px rgba(0,0,0,.35);
-  font-size:11.5px;line-height:1.45;color:#1a2433}
+  font-size:12px;line-height:1.45;color:#1a2433}
 .pg p{margin:0 0 5px}
 
 .q-brand{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
@@ -574,9 +583,9 @@ html.q-open body{overflow:hidden}
 .q-items tr.q-tot td{border-bottom:none;border-top:2.5px solid var(--navy);padding-top:8px;
   font-weight:900;font-size:14px;color:var(--navy)}
 
-.q-terms p{font-size:10.5px;color:#34445a;margin:0 0 4px;line-height:1.45}
-.q-terms .t-h{font-weight:800;color:#1a2433;font-size:11px;margin:8px 0 2px}
-.q-terms ul{margin:1px 0 5px 14px;padding:0;font-size:10.5px;color:#34445a}
+.q-terms p{font-size:11px;color:#34445a;margin:0 0 5px;line-height:1.5}
+.q-terms .t-h{font-weight:800;color:#1a2433;font-size:11.5px;margin:9px 0 3px}
+.q-terms ul{margin:2px 0 6px 15px;padding:0;font-size:11px;color:#34445a}
 .q-terms li{margin-bottom:2px}
 
 .q-special{background:#fffbeb;border:1.5px solid #f5d989;border-radius:7px;padding:8px 12px;margin:9px 0;font-size:10.5px;color:#6b4e0c}
@@ -705,7 +714,7 @@ html.q-open body{overflow:hidden}
       </div>
       <div class="adder" id="pTileAdder">
         <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pTileType">
-          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pTile','ceramic')">Ceramic · $35</button>
+          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pTile','ceramic')">Group 1–4 · $35</button>
           <button type="button" data-tt="glass" onclick="setTileType('pTile','glass')">Glass · $55</button>
         </div></div>
         <div class="segs" id="pTileSegs"></div>
@@ -726,6 +735,57 @@ html.q-open body{overflow:hidden}
         </div></div>
         <div class="segs" id="pCopeSegs"></div>
         <button type="button" class="seg-add" onclick="addSeg('pCope')">＋ Add measurement</button>
+      </div>
+
+      <!-- pool spillway tile -->
+      <div class="tog" id="pSpillTog" onclick="toggleAddon('pSpill')" style="margin-top:8px">
+        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="nm">Spillway Tile<small>separate line — own label on the quote</small></div>
+        <div class="rt" id="pSpillLFchip">—</div>
+      </div>
+      <div class="adder" id="pSpillAdder">
+        <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pSpillType">
+          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pSpill','ceramic')">Group 1–4 · $35</button>
+          <button type="button" data-tt="glass" onclick="setTileType('pSpill','glass')">Glass · $55</button>
+        </div></div>
+        <div class="two">
+          <div class="fld"><label class="lbl">Length</label>
+            <div class="unit-wrap"><input id="pSpillLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
+          </div>
+          <div class="fld"><label class="lbl">Height</label>
+            <div class="unit-wrap"><input id="pSpillH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
+          </div>
+        </div>
+        <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
+      </div>
+
+      <!-- pool step tile -->
+      <div class="tog" id="pStepTog" onclick="toggleAddon('pStep')" style="margin-top:8px">
+        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="nm">Step Tile<small>tile strip on steps — separate line</small></div>
+        <div class="rt" id="pStepLFchip">—</div>
+      </div>
+      <div class="adder" id="pStepAdder">
+        <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pStepType">
+          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pStep','ceramic')">Group 1–4</button>
+          <button type="button" data-tt="glass" onclick="setTileType('pStep','glass')">Glass</button>
+        </div></div>
+        <div class="two">
+          <div class="fld"><label class="lbl">Length</label>
+            <div class="unit-wrap"><input id="pStepLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
+          </div>
+          <div class="fld"><label class="lbl">Height</label>
+            <div class="unit-wrap"><input id="pStepH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
+          </div>
+        </div>
+        <div class="tile-hint rate-tbd">Rate not set yet — this stays off the printed quote until Angel/Mario confirm pricing.</div>
+      </div>
+
+      <!-- pool skimmer -->
+      <div class="tog" id="pSkimTog" onclick="toggleAddon('pSkim')" style="margin-top:8px">
+        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="nm">Skimmer Replacement<small>remove &amp; replace existing skimmer</small></div>
+        <div class="rt">$2,500</div>
       </div>
 
     </div>
@@ -818,7 +878,7 @@ html.q-open body{overflow:hidden}
         </div>
         <div class="adder" id="sTileAdder">
           <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sTileType">
-            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sTile','ceramic')">Ceramic · $35</button>
+            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sTile','ceramic')">Group 1–4 · $35</button>
             <button type="button" data-tt="glass" onclick="setTileType('sTile','glass')">Glass · $55</button>
           </div></div>
           <div class="segs" id="sTileSegs"></div>
@@ -839,6 +899,57 @@ html.q-open body{overflow:hidden}
           </div></div>
           <div class="segs" id="sCopeSegs"></div>
           <button type="button" class="seg-add" onclick="addSeg('sCope')">＋ Add measurement</button>
+        </div>
+
+        <!-- spa spillway tile -->
+        <div class="tog" id="sSpillTog" onclick="toggleAddon('sSpill')" style="margin-top:8px">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Spillway Tile<small>separate line — own label on the quote</small></div>
+          <div class="rt" id="sSpillLFchip">—</div>
+        </div>
+        <div class="adder" id="sSpillAdder">
+          <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sSpillType">
+            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sSpill','ceramic')">Group 1–4 · $35</button>
+            <button type="button" data-tt="glass" onclick="setTileType('sSpill','glass')">Glass · $55</button>
+          </div></div>
+          <div class="two">
+            <div class="fld"><label class="lbl">Length</label>
+              <div class="unit-wrap"><input id="sSpillLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
+            </div>
+            <div class="fld"><label class="lbl">Height</label>
+              <div class="unit-wrap"><input id="sSpillH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
+            </div>
+          </div>
+          <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
+        </div>
+
+        <!-- spa step tile -->
+        <div class="tog" id="sStepTog" onclick="toggleAddon('sStep')" style="margin-top:8px">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Step Tile<small>tile strip on steps — separate line</small></div>
+          <div class="rt" id="sStepLFchip">—</div>
+        </div>
+        <div class="adder" id="sStepAdder">
+          <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sStepType">
+            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sStep','ceramic')">Group 1–4</button>
+            <button type="button" data-tt="glass" onclick="setTileType('sStep','glass')">Glass</button>
+          </div></div>
+          <div class="two">
+            <div class="fld"><label class="lbl">Length</label>
+              <div class="unit-wrap"><input id="sStepLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
+            </div>
+            <div class="fld"><label class="lbl">Height</label>
+              <div class="unit-wrap"><input id="sStepH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
+            </div>
+          </div>
+          <div class="tile-hint rate-tbd">Rate not set yet — this stays off the printed quote until Angel/Mario confirm pricing.</div>
+        </div>
+
+        <!-- spa skimmer -->
+        <div class="tog" id="sSkimTog" onclick="toggleAddon('sSkim')" style="margin-top:8px">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Skimmer Replacement<small>remove &amp; replace existing skimmer</small></div>
+          <div class="rt">$2,500</div>
         </div>
       </div>
 
@@ -863,28 +974,35 @@ html.q-open body{overflow:hidden}
       </div>
 
       <div class="div"></div>
-      <div class="sub">LIGHTING</div>
-
-      <div class="stp" id="lHVC_stp">
-        <div class="info"><div class="nm">HV Color Light</div><div class="pr">High voltage</div></div>
-        <div class="stepper"><button onclick="step('lHVC',-1)">−</button><span class="q" id="lHVC">0</span><button onclick="step('lHVC',1)">＋</button></div>
-      </div>
-      <div class="stp" id="lHVW_stp">
-        <div class="info"><div class="nm">HV White Light</div><div class="pr">High voltage</div></div>
-        <div class="stepper"><button onclick="step('lHVW',-1)">−</button><span class="q" id="lHVW">0</span><button onclick="step('lHVW',1)">＋</button></div>
-      </div>
-      <div class="stp" id="lLVC_stp">
-        <div class="info"><div class="nm">LV Color Light</div><div class="pr">Low voltage</div></div>
-        <div class="stepper"><button onclick="step('lLVC',-1)">−</button><span class="q" id="lLVC">0</span><button onclick="step('lLVC',1)">＋</button></div>
+      <button type="button" class="sub-toggle" id="lightSubToggle" onclick="toggleLightingSub()">
+        <span class="sub">LIGHTING</span>
+        <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sub-collapse" id="lightSubCollapse">
+        <div class="stp" id="lHVC_stp">
+          <div class="info"><div class="nm">HV Color Light</div><div class="pr">High voltage</div></div>
+          <div class="stepper"><button onclick="step('lHVC',-1)">−</button><span class="q" id="lHVC">0</span><button onclick="step('lHVC',1)">＋</button></div>
+        </div>
+        <div class="stp" id="lHVW_stp">
+          <div class="info"><div class="nm">HV White Light</div><div class="pr">High voltage</div></div>
+          <div class="stepper"><button onclick="step('lHVW',-1)">−</button><span class="q" id="lHVW">0</span><button onclick="step('lHVW',1)">＋</button></div>
+        </div>
+        <div class="stp" id="lLVC_stp">
+          <div class="info"><div class="nm">LV Color Light</div><div class="pr">Low voltage</div></div>
+          <div class="stepper"><button onclick="step('lLVC',-1)">−</button><span class="q" id="lLVC">0</span><button onclick="step('lLVC',1)">＋</button></div>
+        </div>
       </div>
 
     </div>
   </section>
 
-  <!-- ══════════════ ADDITIONAL ITEMS & DISCOUNT ══════════════ -->
+  <!-- ══════════════ ADDITIONAL ITEMS & DISCOUNT (collapsible — field speed) ══════════════ -->
   <div class="card">
-    <div class="card-hd"><div class="ttl"><span class="dot"></span>ADDITIONAL ITEMS &amp; DISCOUNT</div></div>
-    <div class="card-bd">
+    <button type="button" class="card-hd rc-cardtoggle" id="xCardToggle" onclick="toggleExtrasCard()">
+      <div class="ttl"><span class="dot"></span>ADDITIONAL ITEMS &amp; DISCOUNT</div>
+      <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="rc-collapse" id="xCollapse"><div class="card-bd">
       <div class="x-list" id="xList"></div>
       <button type="button" class="x-add" onclick="addExtraItem()">＋ Add Item</button>
 
@@ -899,13 +1017,16 @@ html.q-open body{overflow:hidden}
           <div class="unit-wrap" style="flex:1"><input id="discVal" class="inp" type="number" inputmode="decimal" min="0" placeholder="0"><span class="unit" id="discUnit">$</span></div>
         </div>
       </div>
-    </div>
+    </div></div>
   </div>
 
-  <!-- ══════════════ PAYMENT SCHEDULE ══════════════ -->
+  <!-- ══════════════ PAYMENT SCHEDULE (collapsible — field speed) ══════════════ -->
   <div class="card">
-    <div class="card-hd"><div class="ttl"><span class="dot"></span>PAYMENT SCHEDULE</div></div>
-    <div class="card-bd">
+    <button type="button" class="card-hd rc-cardtoggle" id="payCardToggle" onclick="togglePaymentCard()">
+      <div class="ttl"><span class="dot"></span>PAYMENT SCHEDULE</div>
+      <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="rc-collapse" id="payCollapse"><div class="card-bd">
       <div class="x-seg" id="paySeg" style="margin-bottom:11px">
         <button type="button" data-pm="auto" class="on" onclick="setPayMode('auto')" style="flex:1">Automatic</button>
         <button type="button" data-pm="custom" onclick="setPayMode('custom')" style="flex:1">Custom (edit / match old quote)</button>
@@ -919,7 +1040,7 @@ html.q-open body{overflow:hidden}
         </div>
         <div class="pay-sum" id="paySum"></div>
       </div>
-    </div>
+    </div></div>
   </div>
 
   <!-- ══════════════ PAYMENT RECEIPT (collapsible — field speed) ══════════════ -->
@@ -975,7 +1096,10 @@ html.q-open body{overflow:hidden}
         <textarea id="rcNote" class="inp" rows="2" placeholder="e.g. Check held pending deposit"></textarea>
       </div>
 
-      <button type="button" class="rc-btn" onclick="openReceipt()">Create Receipt PDF</button>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button type="button" class="rc-btn" onclick="openReceipt()" style="flex:1;margin-top:0">Create Receipt PDF</button>
+        <button type="button" class="rc-clear" onclick="clearReceiptForm()" title="Wipe every field on this receipt">Clear</button>
+      </div>
     </div></div>
   </div>
 
@@ -1510,16 +1634,16 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
    Pricing config (internal). Edit rates here only.
    ════════════════════════════════════════════════════════════ */
 const CFG = {
-  demo:   25,    // $/LF — pool+spa perimeter only
+  demo:   26,    // $/LF — pool+spa perimeter only (was 25)
   tile:   35,    // legacy ceramic rate (kept for back-compat)
   tileRates: { ceramic:35, glass:55 },   // $/LF per 6" band
-  tileName:  { ceramic:"Ceramic", glass:"Glass" },
+  tileName:  { ceramic:"Group 1–4", glass:"Glass" },
   coping: 45,    // legacy rate (kept for back-compat)
   copingRates: { pour:45, stone:65 },
   copingName:  { pour:"Pour-in-Place", stone:"Stone" },
   permit: 900,   // flat
   QUOTE_MULT: 1.10,            // green number = actual cost × this (10% buffer)
-  finish: { none:0, plaster:60, mini:80, micro:115, hydrazzo:155, glass:155 },
+  finish: { none:0, plaster:64, mini:84, micro:118, hydrazzo:160, glass:160 },  // was 60/80/115/155/155
   finishName: { none:"None", plaster:"Plaster", mini:"Mini Pebble", micro:"Micro Pebble", hydrazzo:"Hydrazzo", glass:"Glass Bead" },
   // Boss-mandated minimum CUSTOMER price for a SPA-ONLY job (no pool in the quote).
   // Only the finishes below have a floor; others have none yet.
@@ -1528,7 +1652,12 @@ const CFG = {
     { id:"lHVC", name:"HV Color", rate:1500 },
     { id:"lHVW", name:"HV White", rate:1200 },
     { id:"lLVC", name:"LV Color", rate:950  }
-  ]
+  ],
+  // Spillway tile uses the SAME per-6"-band rates as waterline tile (real price).
+  // Step/tile-strip rate is not decided yet — null means it contributes $0 and stays
+  // OFF the printed quote until a real number is set here.
+  stepTileRates: { ceramic:null, glass:null },
+  skimmer: 2500   // flat, per structure — remove & replace existing skimmer
 };
 const STORE_KEY = "mmm_pools_estimator_v1";
 
@@ -1543,11 +1672,12 @@ const ui = {
   spaShape:  "none",
   pSides: ["","","",""],
   sSides: ["","","",""],
-  addon: { pTile:false, pCope:false, sTile:false, sCope:false, demo:false, permit:false },
+  addon: { pTile:false, pCope:false, sTile:false, sCope:false, demo:false, permit:false,
+            pSpill:false, sSpill:false, pStep:false, sStep:false, pSkim:false, sSkim:false },
   // Repeatable extra-LF segments per tile/coping section (waterline + spillway + …).
   // Each: {id, label, lf}. Summed into that section's LF.
   segs: { pTile:[], pCope:[], sTile:[], sCope:[] },
-  tileType:   { pTile:"ceramic", sTile:"ceramic" },   // ceramic | glass
+  tileType:   { pTile:"ceramic", sTile:"ceramic", pSpill:"ceramic", sSpill:"ceramic", pStep:"ceramic", sStep:"ceramic" },   // ceramic | glass
   copingType: { pCope:"pour",    sCope:"pour"    },   // pour | stone
   lights: { lHVC:0, lHVW:0, lLVC:0 },
   quoteNum: null,
@@ -1780,6 +1910,18 @@ function segEff(seg, key){
   return lf;
 }
 function segSum(key){ return (ui.segs[key]||[]).reduce((a,seg)=>a+segEff(seg,key),0); }
+// Named measurements (e.g. "water wall") so they print as their own line on both
+// the scope of work AND the itemizer — no ambiguity about what the extra LF was for.
+function labeledSegs(key){
+  return (ui.segs[key]||[])
+    .filter(s=> (s.label||"").trim() && segEff(s,key)>0)
+    .map(s=>({ label:(s.label||"").trim(), lf:segEff(s,key), id:s.id }));
+}
+function unlabeledSegSum(key){
+  return (ui.segs[key]||[])
+    .filter(s=> !(s.label||"").trim())
+    .reduce((a,s)=>a+segEff(s,key),0);
+}
 function setTileType(key, type){ ui.tileType[key]=type; renderTileType(key); segsChanged(); }
 function renderTileType(key){
   const seg=$(key+"Type"); if(!seg) return;
@@ -1836,14 +1978,10 @@ function setSeq(n){ n=parseInt(n); if(Number.isFinite(n)&&n>0){ try{ localStorag
 
 /* ════════════ PAYMENT SCHEDULE (auto formula OR custom editable) ════════════ */
 let _payId=1; function newPayId(){ return "py"+(_payId++)+"_"+Date.now().toString(36); }
-// Final-payment holdback scales with job size. Small jobs keep a tight $1,000 so
-// nothing is left dangling; larger jobs leave more at the end so the customer
-// doesn't feel the middle payment is carrying everything.
+// Final payment is ALWAYS $1,000 on automatic, no matter the job size or scope.
+// The middle progress payment(s) carry the rest — that's the protection.
 function defaultHoldback(F){
-  if(F < 5000)  return 1000;
-  if(F < 8000)  return 1500;
-  if(F < 15000) return 2000;
-  return 2500;
+  return 1000;
 }
 function computeAutoPayments(F){
   const dep = Math.min(Math.round(F*0.10), 1000);
@@ -1868,11 +2006,22 @@ function computeAutoPayments(F){
     const share2 = splitBucket - share1;
     const pp1 = demoInPP1 + share1;
     const pp2 = share2;
+    // Name ONLY the work actually in this job — never mention coping if we're not
+    // doing coping, never mention tile if we're not doing tile.
+    const doTile = ui.addon.pTile||ui.addon.sTile||ui.addon.pSpill||ui.addon.sSpill||
+                   (ui.addon.pStep&&LAST.pStepCost>0)||(ui.addon.sStep&&LAST.sStepCost>0);
+    const doCope = ui.addon.pCope||ui.addon.sCope;
+    const parts=[]; if(doTile) parts.push("tile"); if(doCope) parts.push("coping");
+    const list = parts.length===2 ? "tile and coping" : (parts[0]||"tile");
+    const removeList = ["existing finish"].concat(parts.map(x=>"existing "+x));
+    const removeTxt = removeList.length>2
+      ? removeList.slice(0,-1).join(", ")+", and "+removeList[removeList.length-1]
+      : removeList.join(" and ");
     if(pp2 < 200){
-      schedule.push({label:"Progress Payment — due upon chip-out and installation of new tile and coping", amount:pp1+pp2});
+      schedule.push({label:`Progress Payment — due upon chip-out and installation of new ${list}`, amount:pp1+pp2});
     } else {
-      schedule.push({label:"Progress Payment 1 — due upon chip-out and removal of existing finish, tile, and coping", amount:pp1});
-      schedule.push({label:"Progress Payment 2 — due upon installation of new tile and coping", amount:pp2});
+      schedule.push({label:`Progress Payment 1 — due upon chip-out and removal of ${removeTxt}`, amount:pp1});
+      schedule.push({label:`Progress Payment 2 — due upon installation of new ${list}`, amount:pp2});
     }
   } else {
     // Plaster / mini pebble alone: chip-out and finish application happen the same
@@ -1950,12 +2099,12 @@ function renderPayments(){
 /* ════════════ ADD-ONS ════════════ */
 function toggleAddon(key){
   ui.addon[key] = !ui.addon[key];
-  const map = { pTile:"pTileTog", pCope:"pCopeTog", sTile:"sTileTog", sCope:"sCopeTog", demo:"demoTog", permit:"permitTog" };
+  const map = { pTile:"pTileTog", pCope:"pCopeTog", sTile:"sTileTog", sCope:"sCopeTog", demo:"demoTog", permit:"permitTog",
+                pSpill:"pSpillTog", sSpill:"sSpillTog", pStep:"pStepTog", sStep:"sStepTog", pSkim:"pSkimTog", sSkim:"sSkimTog" };
   $(map[key]).classList.toggle("on", ui.addon[key]);
-  if(key==="pTile") $("pTileAdder").classList.toggle("open", ui.addon[key]);
-  if(key==="pCope") $("pCopeAdder").classList.toggle("open", ui.addon[key]);
-  if(key==="sTile") $("sTileAdder").classList.toggle("open", ui.addon[key]);
-  if(key==="sCope") $("sCopeAdder").classList.toggle("open", ui.addon[key]);
+  const adderMap = { pTile:"pTileAdder", pCope:"pCopeAdder", sTile:"sTileAdder", sCope:"sCopeAdder",
+                      pSpill:"pSpillAdder", sSpill:"sSpillAdder", pStep:"pStepAdder", sStep:"sStepAdder" };
+  if(adderMap[key]) $(adderMap[key]).classList.toggle("open", ui.addon[key]);
   recalc(); save();
 }
 function step(id, d){
@@ -1980,6 +2129,13 @@ function recalc(){
   $("sTileLF").textContent = ui.addon.sTile ? (s+segSum("sTile")).toFixed(1)+" LF" : "—";
   $("sCopeLF").textContent = ui.addon.sCope ? (s+segSum("sCope")).toFixed(1)+" LF" : "—";
   $("demoLF").textContent  = ui.addon.demo  ? t.toFixed(1)+" LF" : "—";
+
+  // spillway / step chips (effective LF, height-multiplied)
+  const effLF=(lfId,hId)=>{ const lf=num($(lfId).value), h=num($(hId).value)||6; return lf*(h/6); };
+  if($("pSpillLFchip")) $("pSpillLFchip").textContent = ui.addon.pSpill ? effLF("pSpillLF","pSpillH").toFixed(1)+" LF" : "—";
+  if($("sSpillLFchip")) $("sSpillLFchip").textContent = ui.addon.sSpill ? effLF("sSpillLF","sSpillH").toFixed(1)+" LF" : "—";
+  if($("pStepLFchip"))  $("pStepLFchip").textContent  = ui.addon.pStep  ? effLF("pStepLF","pStepH").toFixed(1)+" LF"  : "—";
+  if($("sStepLFchip"))  $("sStepLFchip").textContent  = ui.addon.sStep  ? effLF("sStepLF","sStepH").toFixed(1)+" LF"  : "—";
 }
 
 /* ════════════ FULL CALCULATION ════════════ */
@@ -1987,21 +2143,32 @@ function recalc(){
    One canonical, ordered list feeds BOTH the breakdown editor and the PDF.
    Default price = cost × buffer; per-line override in ui.prices takes over.   */
 function replasterLines(c){
-  const L=[]; const add=(key,label,sub,cost,floor)=>{ if(cost>0) L.push({key,label,sub,cost,price:0,floor:floor||0}); };
+  const L=[]; const add=(key,label,sub,cost,floor,noBuffer)=>{ if(cost>0) L.push({key,label,sub,cost,price:0,floor:floor||0,noBuffer:!!noBuffer}); };
   add("pFin", `Pool — ${c.pFinName} Interior Finish`, c.p>0?`${c.p.toFixed(1)} LF`:"", c.pFinishCost);
   const sFloor = (c.spaOnly && CFG.spaOnlyMin[c.sFinKey]) ? CFG.spaOnlyMin[c.sFinKey] : 0;
   add("sFin", `Spa — ${c.sFinName} Interior Finish`,  c.s>0?`${c.s.toFixed(1)} LF`:"", c.sFinishCost, sFloor);
   add("demo", "Demolition & Debris Haul-Away", `${c.t.toFixed(1)} LF`, c.demoCost);
-  add("pTile",`${c.pTileName||"Ceramic"} Tile Replacement — Pool`, `${c.pTileLF.toFixed(1)} LF`, c.pTileCost);
-  add("sTile",`${c.sTileName||"Ceramic"} Tile Replacement — Spa`,  `${c.sTileLF.toFixed(1)} LF`, c.sTileCost);
-  add("pCope",`${c.pCopeName||"Pour-in-Place"} Coping — Pool`, `${c.pCopeLF.toFixed(1)} LF`, c.pCopeCost);
-  add("sCope",`${c.sCopeName||"Pour-in-Place"} Coping — Spa`,  `${c.sCopeLF.toFixed(1)} LF`, c.sCopeCost);
+  add("pTile",`${c.pTileName||"Group 1–4"} Waterline Tile Replacement — Pool`, `${c.pTileBaseLF.toFixed(1)} LF`, c.pTileBaseCost);
+  (c.pTileNamed||[]).forEach(n=> add("pTile_"+n.id, `${c.pTileName||"Group 1–4"} ${n.label} Tile Replacement — Pool`, `${n.lf.toFixed(1)} LF`, n.cost));
+  add("sTile",`${c.sTileName||"Group 1–4"} Waterline Tile Replacement — Spa`,  `${c.sTileBaseLF.toFixed(1)} LF`, c.sTileBaseCost);
+  (c.sTileNamed||[]).forEach(n=> add("sTile_"+n.id, `${c.sTileName||"Group 1–4"} ${n.label} Tile Replacement — Spa`, `${n.lf.toFixed(1)} LF`, n.cost));
+  add("pCope",`${c.pCopeName||"Pour-in-Place"} Coping Replacement — Pool`, `${c.pCopeBaseLF.toFixed(1)} LF`, c.pCopeBaseCost);
+  (c.pCopeNamed||[]).forEach(n=> add("pCope_"+n.id, `${c.pCopeName||"Pour-in-Place"} ${n.label} Coping Replacement — Pool`, `${n.lf.toFixed(1)} LF`, n.cost));
+  add("sCope",`${c.sCopeName||"Pour-in-Place"} Coping Replacement — Spa`,  `${c.sCopeBaseLF.toFixed(1)} LF`, c.sCopeBaseCost);
+  (c.sCopeNamed||[]).forEach(n=> add("sCope_"+n.id, `${c.sCopeName||"Pour-in-Place"} ${n.label} Coping Replacement — Spa`, `${n.lf.toFixed(1)} LF`, n.cost));
+  add("pSpill",`${c.pSpillName||"Group 1–4"} Spillway Tile Replacement — Pool`, c.pSpillLF>0?`${c.pSpillLF.toFixed(1)} LF`:"", c.pSpillCost);
+  add("sSpill",`${c.sSpillName||"Group 1–4"} Spillway Tile Replacement — Spa`,  c.sSpillLF>0?`${c.sSpillLF.toFixed(1)} LF`:"", c.sSpillCost);
+  add("pStep",`${c.pStepName||"Group 1–4"} Step Tile Replacement — Pool`, c.pStepLF>0?`${c.pStepLF.toFixed(1)} LF`:"", c.pStepCost);
+  add("sStep",`${c.sStepName||"Group 1–4"} Step Tile Replacement — Spa`,  c.sStepLF>0?`${c.sStepLF.toFixed(1)} LF`:"", c.sStepCost);
+  // Skimmer is a flat set PRICE ($2,500), not a cost to mark up — quote it exactly.
+  add("pSkim","Skimmer Replacement — Pool","",c.pSkimCost,0,true);
+  add("sSkim","Skimmer Replacement — Spa","",c.sSkimCost,0,true);
   c.lightItems.forEach(li=> L.push({key:"light_"+li.name.replace(/\s+/g,""), label:`${li.name.replace("HV","High-Voltage").replace("LV","Low-Voltage")} Pool Light`, sub:`Qty ${li.qty}`, cost:li.cost, price:0}));
   add("permit","City Permit","",c.permitCost);
   L.forEach(l=> l.price = linePrice(l));
   return L;
 }
-function defaultLinePrice(line){ return Math.max(Math.round(line.cost * CFG.QUOTE_MULT), line.floor||0); }
+function defaultLinePrice(line){ return Math.max(Math.round(line.cost * (line.noBuffer?1:CFG.QUOTE_MULT)), line.floor||0); }
 function linePrice(line){
   const o = ui.prices ? ui.prices[line.key] : undefined;
   if(o!==undefined && o!==null && o!==""){ const v=num(o); if(v>=0) return Math.round(v); }
@@ -2027,12 +2194,55 @@ function compute(){
   const sCopeRate = CFG.copingRates[ui.copingType.sCope] || CFG.copingRates.pour;
   const pCopeCost = ui.addon.pCope ? pCopeLF*pCopeRate : 0;
   const sCopeCost = ui.addon.sCope ? sCopeLF*sCopeRate : 0;
+
+  // Split each section into its BASE run (perimeter + unlabeled extras) and any
+  // NAMED measurements, so a labeled run like "water wall" gets its own line on
+  // the scope of work and the itemizer instead of vanishing into a lump sum.
+  const mkNamed=(key,rate,on)=> on ? labeledSegs(key).map(n=>({...n, cost:n.lf*rate})) : [];
+  const pTileNamed = mkNamed("pTile", pTileRate, ui.addon.pTile);
+  const sTileNamed = mkNamed("sTile", sTileRate, ui.addon.sTile);
+  const pCopeNamed = mkNamed("pCope", pCopeRate, ui.addon.pCope);
+  const sCopeNamed = mkNamed("sCope", sCopeRate, ui.addon.sCope);
+  const pTileBaseLF = ui.addon.pTile ? p + unlabeledSegSum("pTile") : 0;
+  const sTileBaseLF = ui.addon.sTile ? s + unlabeledSegSum("sTile") : 0;
+  const pCopeBaseLF = ui.addon.pCope ? p + unlabeledSegSum("pCope") : 0;
+  const sCopeBaseLF = ui.addon.sCope ? s + unlabeledSegSum("sCope") : 0;
+  const pTileBaseCost = pTileBaseLF*pTileRate;
+  const sTileBaseCost = sTileBaseLF*sTileRate;
+  const pCopeBaseCost = pCopeBaseLF*pCopeRate;
+  const sCopeBaseCost = sCopeBaseLF*sCopeRate;
   const permitCost = ui.addon.permit ? CFG.permit : 0;
+
+  // Spillway tile — its own dedicated line, real price today (same $/6" band rates).
+  const pSpillLFraw = num($("pSpillLF").value), pSpillH = num($("pSpillH").value)||6;
+  const sSpillLFraw = num($("sSpillLF").value), sSpillH = num($("sSpillH").value)||6;
+  const pSpillLF = ui.addon.pSpill ? pSpillLFraw*(pSpillH/6) : 0;
+  const sSpillLF = ui.addon.sSpill ? sSpillLFraw*(sSpillH/6) : 0;
+  const pSpillRate = CFG.tileRates[ui.tileType.pSpill] || CFG.tileRates.ceramic;
+  const sSpillRate = CFG.tileRates[ui.tileType.sSpill] || CFG.tileRates.ceramic;
+  const pSpillCost = ui.addon.pSpill ? pSpillLF*pSpillRate : 0;
+  const sSpillCost = ui.addon.sSpill ? sSpillLF*sSpillRate : 0;
+
+  // Step tile (tile strip) — same structure, but rate is not set yet (null in CFG).
+  // Stays at $0 and off the printed quote until a real rate is configured.
+  const pStepLFraw = num($("pStepLF").value), pStepH = num($("pStepH").value)||6;
+  const sStepLFraw = num($("sStepLF").value), sStepH = num($("sStepH").value)||6;
+  const pStepLF = ui.addon.pStep ? pStepLFraw*(pStepH/6) : 0;
+  const sStepLF = ui.addon.sStep ? sStepLFraw*(sStepH/6) : 0;
+  const pStepRate = CFG.stepTileRates[ui.tileType.pStep];
+  const sStepRate = CFG.stepTileRates[ui.tileType.sStep];
+  const pStepCost = ui.addon.pStep && pStepRate ? pStepLF*pStepRate : 0;
+  const sStepCost = ui.addon.sStep && sStepRate ? sStepLF*sStepRate : 0;
+
+  // Skimmer replacement — flat, per structure.
+  const pSkimCost = ui.addon.pSkim ? CFG.skimmer : 0;
+  const sSkimCost = ui.addon.sSkim ? CFG.skimmer : 0;
 
   let lightCost=0; const lightLines=[]; const lightItems=[];
   CFG.lights.forEach(l=>{ const q=ui.lights[l.id]; if(q>0){ const cost=q*l.rate; lightCost+=cost; lightLines.push(`${l.name} ×${q}`); lightItems.push({name:l.name, qty:q, cost}); } });
 
-  const actual = pFinishCost+sFinishCost+demoCost+pTileCost+sTileCost+pCopeCost+sCopeCost+permitCost+lightCost;
+  const actual = pFinishCost+sFinishCost+demoCost+pTileCost+sTileCost+pCopeCost+sCopeCost+permitCost+lightCost
+                +pSpillCost+sSpillCost+pStepCost+sStepCost+pSkimCost+sSkimCost;
   const quote  = actual*CFG.QUOTE_MULT;
 
   // spa-only = spa has length, pool does not appear in this quote
@@ -2047,7 +2257,14 @@ function compute(){
     pTileLF, sTileLF, pCopeLF, sCopeLF,
     pTileName:CFG.tileName[ui.tileType.pTile],   sTileName:CFG.tileName[ui.tileType.sTile],
     pCopeName:CFG.copingName[ui.copingType.pCope], sCopeName:CFG.copingName[ui.copingType.sCope],
-    pTileCost, sTileCost, pCopeCost, sCopeCost, permitCost, lightItems
+    pTileCost, sTileCost, pCopeCost, sCopeCost, permitCost, lightItems,
+    pTileBaseLF, sTileBaseLF, pCopeBaseLF, sCopeBaseLF,
+    pTileBaseCost, sTileBaseCost, pCopeBaseCost, sCopeBaseCost,
+    pTileNamed, sTileNamed, pCopeNamed, sCopeNamed,
+    pSpillLF, sSpillLF, pSpillCost, sSpillCost, pStepLF, sStepLF, pStepCost, sStepCost,
+    pSpillName:CFG.tileName[ui.tileType.pSpill], sSpillName:CFG.tileName[ui.tileType.sSpill],
+    pStepName:CFG.tileName[ui.tileType.pStep],   sStepName:CFG.tileName[ui.tileType.sStep],
+    pSkimCost, sSkimCost
   });
   const replQuote = lines.reduce((a,l)=>a+l.price,0);
 
@@ -2071,6 +2288,9 @@ function compute(){
     pTileExtraLF,sTileExtraLF,pCopeExtraLF,sCopeExtraLF,
     pFinishCost,sFinishCost,demoCost,
     pTileCost,sTileCost,pCopeCost,sCopeCost,permitCost,
+    pSpillLF,sSpillLF,pSpillCost,sSpillCost,pStepLF,sStepLF,pStepCost,sStepCost,pSkimCost,sSkimCost,
+    pTileNamed,sTileNamed,pCopeNamed,sCopeNamed,
+    pTileBaseLF,sTileBaseLF,pCopeBaseLF,sCopeBaseLF,
     lightLines, lightItems, actual, quote,
     xItems, customTotal, replQuote, discAmt, discName, customerTotal, floor,
     spaOnly, lines
@@ -2267,6 +2487,18 @@ function toggleReceiptCard(){
   const open = $("rcCollapse").classList.toggle("open");
   $("rcCardToggle").classList.toggle("open", open);
 }
+function toggleExtrasCard(){
+  const open = $("xCollapse").classList.toggle("open");
+  $("xCardToggle").classList.toggle("open", open);
+}
+function togglePaymentCard(){
+  const open = $("payCollapse").classList.toggle("open");
+  $("payCardToggle").classList.toggle("open", open);
+}
+function toggleLightingSub(){
+  const open = $("lightSubCollapse").classList.toggle("open");
+  $("lightSubToggle").classList.toggle("open", open);
+}
 
 /* ════════════ PRESS-AND-HOLD REVEAL (actual cost) ════════════ */
 (function(){
@@ -2351,7 +2583,8 @@ function saveEst(){
 const INPUT_IDS = ["pLen","pLenIn","pWid","pWidIn","pManLF","pExtra","pFinish",
   "sLen","sLenIn","sWid","sWidIn","sDiam","sDiamIn","sManLF","sExtra","sFinish",
   "jobName","custName","jobAddr","finalHold","specNotes","jobNotes",
-  "rcAmt","rcDate","rcRef","rcFrom","rcAddr","rcBal","rcSeq","rcNote"];
+  "rcAmt","rcDate","rcRef","rcFrom","rcAddr","rcBal","rcSeq","rcNote",
+  "pSpillLF","pSpillH","sSpillLF","sSpillH","pStepLF","pStepH","sStepLF","sStepH"];
 
 function save(){
   try{
@@ -2387,6 +2620,9 @@ function load(){
   if(!Array.isArray(ui.payments.items)) ui.payments.items=[];
   if(!ui.receipt) ui.receipt={payIdx:"0",method:"Check"};
   if(!ui.receipt.method) ui.receipt.method="Check";
+  // defaults for saves made before Spillway/Step Tile/Skimmer existed
+  ["pSpill","sSpill","pStep","sStep","pSkim","sSkim"].forEach(k=>{ if(ui.addon[k]===undefined) ui.addon[k]=false; });
+  ["pSpill","sSpill","pStep","sStep"].forEach(k=>{ if(!ui.tileType[k]) ui.tileType[k]="ceramic"; });
   // migrate legacy single Extra-LF values into a segment (one-time)
   if(data.fields){
     const mig={pTile:"pTileExtra",pCope:"pCopeExtra",sTile:"sTileExtra",sCope:"sCopeExtra"};
@@ -2401,11 +2637,13 @@ function load(){
   // fields
   if(data.fields) INPUT_IDS.forEach(id=>{ const el=$(id); if(el && data.fields[id]!==undefined) el.value=data.fields[id]; });
   // add-ons
-  ["pTile","pCope","sTile","sCope","demo","permit"].forEach(k=>{
+  ["pTile","pCope","sTile","sCope","demo","permit","pSpill","sSpill","pStep","sStep","pSkim","sSkim"].forEach(k=>{
     const on=!!(ui.addon&&ui.addon[k]);
-    const map={pTile:"pTileTog",pCope:"pCopeTog",sTile:"sTileTog",sCope:"sCopeTog",demo:"demoTog",permit:"permitTog"};
+    const map={pTile:"pTileTog",pCope:"pCopeTog",sTile:"sTileTog",sCope:"sCopeTog",demo:"demoTog",permit:"permitTog",
+               pSpill:"pSpillTog",sSpill:"sSpillTog",pStep:"pStepTog",sStep:"sStepTog",pSkim:"pSkimTog",sSkim:"sSkimTog"};
     $(map[k]).classList.toggle("on", on);
-    const adder={pTile:"pTileAdder",pCope:"pCopeAdder",sTile:"sTileAdder",sCope:"sCopeAdder"}[k];
+    const adder={pTile:"pTileAdder",pCope:"pCopeAdder",sTile:"sTileAdder",sCope:"sCopeAdder",
+                 pSpill:"pSpillAdder",sSpill:"sSpillAdder",pStep:"pStepAdder",sStep:"sStepAdder"}[k];
     if(adder) $(adder).classList.toggle("open", on);
   });
   // lights
@@ -2413,7 +2651,7 @@ function load(){
     $(l.id+"_stp").querySelector(".stepper").classList.toggle("hot", q>0); });
   // segments + tile types
   ["pTile","pCope","sTile","sCope"].forEach(renderSegs);
-  ["pTile","sTile"].forEach(renderTileType);
+  ["pTile","sTile","pSpill","sSpill","pStep","sStep"].forEach(renderTileType);
   ["pCope","sCope"].forEach(renderCopingType);
   // payment schedule
   const psg=$("paySeg");
@@ -2505,8 +2743,7 @@ function scopeHTML(c, plan){
   }
   if(plan.bodies.length){
     it("Prep for New Finish", [
-      "Prepare existing surface for proper bond.",
-      "Apply bond coat as needed for new finish installation."]);
+      "Clean and prepare existing demoed surface for the new plaster."]);
   }
   plan.groups.forEach(g=>{
     const bl = g.whichs.length===2 ? "pool and spa" : g.whichs[0];
@@ -2528,8 +2765,8 @@ function scopeHTML(c, plan){
   // tile scope — remove old, install new; note group range on ceramic
   if(ui.addon.pTile || ui.addon.sTile){
     const tileGroups = [];
-    if(ui.addon.pTile) tileGroups.push({which:"pool", name:CFG.tileName[ui.tileType.pTile]||"Ceramic", type:ui.tileType.pTile});
-    if(ui.addon.sTile) tileGroups.push({which:"spa",  name:CFG.tileName[ui.tileType.sTile]||"Ceramic", type:ui.tileType.sTile});
+    if(ui.addon.pTile) tileGroups.push({which:"pool", name:CFG.tileName[ui.tileType.pTile]||"Group 1–4", type:ui.tileType.pTile});
+    if(ui.addon.sTile) tileGroups.push({which:"spa",  name:CFG.tileName[ui.tileType.sTile]||"Group 1–4", type:ui.tileType.sTile});
     const byType = {};
     tileGroups.forEach(tg=>{ (byType[tg.name]=byType[tg.name]||{name:tg.name,type:tg.type,whichs:[]}).whichs.push(tg.which); });
     Object.values(byType).forEach(grp=>{
@@ -2538,9 +2775,64 @@ function scopeHTML(c, plan){
         `Remove and haul away existing waterline tile around ${bl}.`,
         `Install new ${grp.name.toLowerCase()} waterline tile and set to finish.`
       ];
-      if(grp.type==="ceramic") subs.push("Owner selects tile from standard ceramic selection (Groups 1–4).");
+      if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
       it(`Waterline Tile Replacement — ${grp.name} (${bl})`, subs);
     });
+    // each NAMED measurement becomes its own scope item (e.g. "Water Wall Tile Replacement")
+    [["pool",c.pTileNamed,CFG.tileName[ui.tileType.pTile],ui.tileType.pTile],
+     ["spa", c.sTileNamed,CFG.tileName[ui.tileType.sTile],ui.tileType.sTile]].forEach(([which,named,tname,ttype])=>{
+      (named||[]).forEach(n=>{
+        const subs=[
+          `Remove and haul away existing ${n.label.toLowerCase()} tile on the ${which}.`,
+          `Install new ${(tname||"Group 1–4").toLowerCase()} tile at the ${n.label.toLowerCase()} and set to finish.`
+        ];
+        if(ttype==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
+        it(`${n.label} Tile Replacement — ${tname||"Group 1–4"} (${which})`, subs);
+      });
+    });
+  }
+  // spillway tile — its own scope item, own label, no ambiguity with waterline tile
+  if(ui.addon.pSpill || ui.addon.sSpill){
+    const spillGroups = [];
+    if(ui.addon.pSpill) spillGroups.push({which:"pool", name:CFG.tileName[ui.tileType.pSpill]||"Group 1–4", type:ui.tileType.pSpill});
+    if(ui.addon.sSpill) spillGroups.push({which:"spa",  name:CFG.tileName[ui.tileType.sSpill]||"Group 1–4", type:ui.tileType.sSpill});
+    const byType = {};
+    spillGroups.forEach(g=>{ (byType[g.name]=byType[g.name]||{name:g.name,type:g.type,whichs:[]}).whichs.push(g.which); });
+    Object.values(byType).forEach(grp=>{
+      const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
+      const subs = [
+        `Remove and haul away existing spillway tile on the ${bl}.`,
+        `Install new ${grp.name.toLowerCase()} spillway tile and set to finish.`
+      ];
+      if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
+      it(`Spillway Tile Replacement — ${grp.name} (${bl})`, subs);
+    });
+  }
+  // step tile — own scope item, only appears once a real rate is set (cost > 0)
+  if((ui.addon.pStep && c.pStepCost>0) || (ui.addon.sStep && c.sStepCost>0)){
+    const stepGroups = [];
+    if(ui.addon.pStep && c.pStepCost>0) stepGroups.push({which:"pool", name:CFG.tileName[ui.tileType.pStep]||"Group 1–4", type:ui.tileType.pStep});
+    if(ui.addon.sStep && c.sStepCost>0) stepGroups.push({which:"spa",  name:CFG.tileName[ui.tileType.sStep]||"Group 1–4", type:ui.tileType.sStep});
+    const byType = {};
+    stepGroups.forEach(g=>{ (byType[g.name]=byType[g.name]||{name:g.name,type:g.type,whichs:[]}).whichs.push(g.which); });
+    Object.values(byType).forEach(grp=>{
+      const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
+      const subs = [
+        `Remove and haul away existing step tile on the ${bl}.`,
+        `Install new ${grp.name.toLowerCase()} step tile and set to finish.`
+      ];
+      if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
+      it(`Step Tile Replacement — ${grp.name} (${bl})`, subs);
+    });
+  }
+  // skimmer replacement
+  if(ui.addon.pSkim || ui.addon.sSkim){
+    const bl = (ui.addon.pSkim && ui.addon.sSkim) ? "pool and spa" : (ui.addon.pSkim ? "pool" : "spa");
+    it(`Skimmer Replacement (${bl})`, [
+      `Remove existing skimmer on the ${bl}.`,
+      "Install new skimmer, matched and sealed to existing plumbing.",
+      "Pressure test connection."
+    ]);
   }
   // coping scope — separate entry per structure/type combo
   if(ui.addon.pCope || ui.addon.sCope){
@@ -2557,6 +2849,17 @@ function scopeHTML(c, plan){
         `Install new ${grp.name.toLowerCase()} coping.`,
         "Reset bond and seal as needed."
       ]);
+    });
+    // each NAMED coping measurement becomes its own scope item
+    [["pool",c.pCopeNamed,CFG.copingName[ui.copingType.pCope]],
+     ["spa", c.sCopeNamed,CFG.copingName[ui.copingType.sCope]]].forEach(([which,named,cname])=>{
+      (named||[]).forEach(n=>{
+        it(`${n.label} Coping Replacement — ${cname||"Pour-in-Place"} (${which})`, [
+          `Remove and haul away existing coping at the ${n.label.toLowerCase()} on the ${which}.`,
+          `Install new ${(cname||"Pour-in-Place").toLowerCase()} coping at the ${n.label.toLowerCase()}.`,
+          "Reset bond and seal as needed."
+        ]);
+      });
     });
   }
   // lighting scope — remove old, install chosen fixtures
@@ -2603,14 +2906,25 @@ function termsHTML(c, plan, F){
   }
 
   // ── Dynamic exclusions ────────────────────────────────────────────────
-  let excl = ["tile replacement","coping replacement","plumbing repair","structural crack repair",
+  let excl = ["tile replacement","coping replacement, resealing, caulking, or mastic work around existing coping","plumbing repair","structural crack repair",
               "skimmer replacement","equipment repair or replacement","electrical work",
               "deck or hardscape repair","engineering or design fees",
               "chemical startup or water balancing","water fill (Owner provides water at Owner\'s cost)",
               "ongoing pool or spa maintenance","hidden repairs discovered after draining or demolition"];
-  if(ui.addon.pTile||ui.addon.sTile) excl = excl.filter(e=>e!=="tile replacement");
-  if(ui.addon.pCope||ui.addon.sCope) excl = excl.filter(e=>e!=="coping replacement");
+  const anyTile = ui.addon.pTile||ui.addon.sTile||ui.addon.pSpill||ui.addon.sSpill||
+                  (ui.addon.pStep&&c.pStepCost>0)||(ui.addon.sStep&&c.sStepCost>0);
+  if(anyTile) excl = excl.filter(e=>e!=="tile replacement");
+  if(ui.addon.pCope||ui.addon.sCope) excl = excl.filter(e=>e!=="coping replacement, resealing, caulking, or mastic work around existing coping");
   if(ui.addon.permit)                excl = excl.filter(e=>e!=="permits");
+  if(ui.addon.pSkim||ui.addon.sSkim) excl = excl.filter(e=>e!=="skimmer replacement");
+  // tile work selected without step tile → be explicit that step/trim tile isn't included
+  if(anyTile && !((ui.addon.pStep&&c.pStepCost>0)||(ui.addon.sStep&&c.sStepCost>0))){
+    excl.push("step/trim tile");
+  }
+  // tile work selected without spillway tile → be explicit
+  if((ui.addon.pTile||ui.addon.sTile) && !(ui.addon.pSpill||ui.addon.sSpill)){
+    excl.push("spillway tile");
+  }
   if(c.lightItems.length)            excl = excl.map(e=> e==="electrical work" ? "electrical work beyond the listed lighting replacement" : e);
 
   const spec = $("specNotes").value.trim();
@@ -2640,24 +2954,30 @@ function termsHTML(c, plan, F){
       <p>Unless listed in this proposal, the following are excluded: ${excl.join("; ")}.</p>
 
       <div class="t-h">6. Hidden &amp; Changed Conditions</div>
-      <p>Pre-existing and hidden conditions are the Owner's responsibility. If unforeseen conditions (structural or shell damage, failing plumbing or equipment, undisclosed prior repairs, rebar or gunite defects, etc.) are discovered after draining or demolition, Contractor will notify Owner and a written change order may be issued for the additional repair. Additional work is priced separately and must be approved in writing before it proceeds. Contractor is not responsible for pre-existing conditions not created by Contractor.</p>
+      <p>Pre-existing and hidden conditions are the Owner's responsibility. If unforeseen conditions (structural or shell damage, failing plumbing or equipment, undisclosed prior repairs, rebar or gunite defects, etc.) are discovered after draining or demolition, Contractor will notify Owner and a written change order may be issued for the additional repair. Multiple or unusually thick coats of existing plaster discovered during demolition, requiring removal beyond a single layer, are also considered an unforeseen condition subject to a written change order. Additional work is priced separately and must be approved in writing before it proceeds. Contractor is not responsible for pre-existing conditions not created by Contractor.</p>
 
-      <div class="t-h">7. Owner Responsibilities</div>
+      <div class="t-h">7. Entire Agreement</div>
+      <p>This signed proposal, its incorporated documents, and any signed change orders are the complete agreement between the parties. Conversations, verbal statements, recommendations, or separate estimates do not change the scope, price, or terms of this agreement unless added in a signed written change order. No employee, salesperson, installer, or representative has authority to modify this agreement verbally.</p>
+
+      <div class="t-h">8. Owner Responsibilities</div>
       <p>Owner shall: (a) provide unobstructed access to the work site; (b) supply water for filling the ${plan.label||"pool"} at Owner's cost; (c) ensure working electrical power is available for startup; and (d) maintain proper water chemistry following startup. Chemical balancing and ongoing pool maintenance are Owner's responsibility.</p>
 
-      <div class="t-h">8. Finish Color &amp; Appearance</div>
+      <div class="t-h">9. Finish Color &amp; Appearance</div>
       <p>Color samples are representative only. Mottling, shading, and tonal variation are inherent to cementitious finishes and are not workmanship defects.</p>
 
-      <div class="t-h">9. Progress Payments and Suspension of Work</div>
+      <div class="t-h">10. Selection Confirmation</div>
+      <p>Homeowner shall confirm color and material selections for plaster/pebble finish, tile, and coping in writing — by text message, email, or signature — prior to installation. Contractor may send a photograph of the selected sample to Homeowner for written approval. Selections not confirmed in writing are not part of this agreement.</p>
+
+      <div class="t-h">11. Progress Payments and Suspension of Work</div>
       <p>Each progress payment is due upon completion of the corresponding stage of work and delivery of the invoice. If a payment is not received when due, Contractor will make a reasonable good-faith effort to contact Owner and provide written notice of the past-due amount. Contractor may suspend work, deliveries, and scheduling until the payment is received in cleared funds. Any suspension will extend the project schedule by the period of nonpayment and any reasonable time required to remobilize and reschedule the work. Contractor's decision to continue working, delay collection, accept a late payment, or grant a courtesy extension will not waive the amount owed or Contractor's right to enforce future payment requirements unless Contractor agrees otherwise in writing.</p>
 
-      <div class="t-h">10. Continued Nonpayment</div>
+      <div class="t-h">12. Continued Nonpayment</div>
       <p>If an undisputed progress payment or final payment remains unpaid for ten calendar days after Contractor provides written past-due notice, the unpaid balance will accrue simple interest at the lesser of ten percent per year or the maximum rate permitted by law, beginning on the eleventh day after notice. Contractor may thereafter pursue the remedies available under this Agreement and California law, including suspension or termination of the remaining work, collection proceedings, and applicable mechanics lien remedies. Before initiating legal proceedings, Contractor will make a reasonable good-faith effort to resolve the nonpayment directly with Owner. In any legal proceeding arising from nonpayment, the prevailing party may recover reasonable attorney fees and costs to the extent permitted by law.</p>
 
-      <div class="t-h">11. Right to Cancel</div>
+      <div class="t-h">13. Right to Cancel</div>
       <p>Owner may cancel this contract before midnight of the third business day after signing by delivering written notice of cancellation to ${CO.name}. Because work often begins the next day at Owner's request, if Contractor has already performed work or furnished materials at the time of cancellation, Owner shall pay Contractor for all work performed and materials furnished through the date of cancellation, to the extent permitted by law.</p>
 
-      <div class="t-h">12. Proposal Validity</div>
+      <div class="t-h">14. Proposal Validity</div>
       <p>This proposal expires 30 days from the date on page 1. Material and labor pricing is subject to change after expiration.</p>
 
       ${specBlock}
@@ -2679,8 +2999,8 @@ function termsHTML(c, plan, F){
 
       <div class="q-sign">
         <div class="col">
-          <div class="pre">${CO.prep}</div>
-          <div class="cap">CONTRACTOR AUTHORIZED REPRESENTATIVE · ${CO.lic.toUpperCase()}</div>
+          <div class="pre">${CO.rep}</div>
+          <div class="cap">CONTRACTOR · ${CO.lic.toUpperCase()}</div>
         </div>
         <div class="col">
           <div class="ln"></div><div class="cap">CONTRACTOR SIGNATURE</div>
@@ -2772,7 +3092,7 @@ function buildQuoteDoc(c){
     ${scopeHTML(c, plan)}
     <div class="q-sec">INVESTMENT</div>
     <table class="q-items">
-      <tr><th>Description</th><th>Amount</th></tr>
+      <tr><th>Itemizer</th><th>Amount</th></tr>
       ${rows}
       <tr class="q-tot"><td>TOTAL</td><td class="amt">${usd(F)}</td></tr>
     </table>
@@ -2961,7 +3281,7 @@ function receiptScheduleLines(){
   if(!LAST) return [];
   try{ return getPaymentLines(LAST.customerTotal)||[]; }catch(err){ return []; }
 }
-function renderReceiptForm(){
+function renderReceiptForm(skipAutoFill){
   const sel=$("rcPay"); if(!sel) return;
   const lines=receiptScheduleLines();
   const cur=(ui.receipt&&ui.receipt.payIdx)!==undefined ? String(ui.receipt.payIdx) : "0";
@@ -2979,7 +3299,7 @@ function renderReceiptForm(){
   if($("rcSeq") && !$("rcSeq").value)   $("rcSeq").value   = getRcptSeq();
   if($("rcFrom") && !$("rcFrom").value) $("rcFrom").value  = $("custName").value;
   if($("rcAddr") && !$("rcAddr").value) $("rcAddr").value  = $("jobAddr").value;
-  autoFillReceiptAmount();
+  if(!skipAutoFill) autoFillReceiptAmount();
 }
 function toggleReceiptRef(){
   const m=(ui.receipt&&ui.receipt.method)||"Check";
@@ -3014,6 +3334,17 @@ function autoFillReceiptAmount(){
 function onReceiptPaySelect(){
   ui.receipt.payIdx = $("rcPay").value;
   autoFillReceiptAmount(); save();
+}
+// Wipe the receipt form so the next payment starts clean (keeps the receipt counter).
+function clearReceiptForm(){
+  ["rcAmt","rcRef","rcFrom","rcAddr","rcBal","rcNote"].forEach(id=>{ const el=$(id); if(el) el.value=""; });
+  $("rcDate").value = todayInputValue();
+  $("rcSeq").value  = getRcptSeq();
+  ui.receipt.method = "Check";
+  ui.receipt.payIdx = "0";
+  renderReceiptForm(true);            // don't auto-refill the amount we just cleared
+  ["rcAmt","rcBal","rcFrom","rcAddr"].forEach(id=>{ const el=$(id); if(el) el.value=""; });
+  save();
 }
 
 function buildReceiptDoc(){
@@ -3217,6 +3548,9 @@ function loadProject(input){
       if(!ui.copingType) ui.copingType={pCope:"pour",sCope:"pour"};
       if(!ui.payments)   ui.payments={mode:"auto",items:[]};
       if(!ui.receipt)    ui.receipt={payIdx:"0",method:"Check"};
+      if(!ui.addon)      ui.addon={};
+      ["pSpill","sSpill","pStep","sStep","pSkim","sSkim"].forEach(k=>{ if(ui.addon[k]===undefined) ui.addon[k]=false; });
+      ["pSpill","sSpill","pStep","sStep"].forEach(k=>{ if(!ui.tileType[k]) ui.tileType[k]="ceramic"; });
       setShapeQuiet("pool",ui.poolShape||"rect");
       setShapeQuiet("spa", ui.spaShape||"none");
       renderSides("pool"); renderSides("spa");
@@ -3231,7 +3565,17 @@ function loadProject(input){
         const tog={pTile:"pTileTog",pCope:"pCopeTog",sTile:"sTileTog",sCope:"sCopeTog"}[k];
         if(tog) $(tog).classList.toggle("on",!!(ui.addon&&ui.addon[k]));
       });
-      ["pTile","sTile"].forEach(renderTileType);
+      ["pSpill","sSpill","pStep","sStep"].forEach(k=>{
+        const adder={pSpill:"pSpillAdder",sSpill:"sSpillAdder",pStep:"pStepAdder",sStep:"sStepAdder"}[k];
+        if(adder) $(adder).classList.toggle("open",!!(ui.addon&&ui.addon[k]));
+        const tog={pSpill:"pSpillTog",sSpill:"sSpillTog",pStep:"pStepTog",sStep:"sStepTog"}[k];
+        if(tog) $(tog).classList.toggle("on",!!(ui.addon&&ui.addon[k]));
+      });
+      ["pSkim","sSkim"].forEach(k=>{
+        const tog={pSkim:"pSkimTog",sSkim:"sSkimTog"}[k];
+        if(tog) $(tog).classList.toggle("on",!!(ui.addon&&ui.addon[k]));
+      });
+      ["pTile","sTile","pSpill","sSpill","pStep","sStep"].forEach(renderTileType);
       ["pCope","sCope"].forEach(renderCopingType);
       CFG.lights.forEach(l=>{ const q=(ui.lights&&ui.lights[l.id])||0; $(l.id).textContent=q; $(l.id+"_stp").querySelector(".stepper").classList.toggle("hot",q>0); });
       ["demo","permit"].forEach(k=>{ const tog={demo:"demoTog",permit:"permitTog"}[k]; if(tog) $(tog).classList.toggle("on",!!(ui.addon&&ui.addon[k])); });
