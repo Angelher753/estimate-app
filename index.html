@@ -3236,28 +3236,62 @@ function closeQuote(){
 /* ════════════ PDF BUILD + SHARE ════════════ */
 // Render a quote page node to a canvas at a fixed letter-proportioned width,
 // independent of the device's screen size.
-// Capture width matches the letter sheet's aspect so nothing gets squeezed.
-// 816px = 8.5in at 96dpi, i.e. exactly one letter page wide. Padding here becomes
-// the PRINT margin (48px ≈ 0.5in), so text fills the sheet properly instead of
-// sitting in a narrow column with huge dead space on both sides.
-const PDF_CAPTURE_W = 816;
-const PDF_MARGIN_PX = 48;
-async function nodeToCanvas(srcNode){
-  const holder = document.createElement("div");
-  holder.style.cssText = `position:fixed;left:-99999px;top:0;width:${PDF_CAPTURE_W}px;background:#fff;z-index:-1;`;
-  const clone = srcNode.cloneNode(true);
-  clone.style.width = PDF_CAPTURE_W + "px";
+// ── PDF capture sizing ───────────────────────────────────────────────────────
+// The capture width is what decides BOTH how wide the content renders AND how
+// much of it fits on a sheet. Content laid out at width W is drawn across the
+// full 612pt page, so the scale factor is 612/W: a WIDER capture means text
+// reflows shorter and shrinks more, letting a long page fit one sheet while
+// still filling the full width. That's the lever used below.
+//
+// A letter page is 816 x 1056 px at 96dpi. Content fits ONE sheet when
+//   heightPx <= widthPx * (792/612)  ==  widthPx * 1.294
+// So we start at true letter width and widen only as much as needed to make
+// each quote page land on exactly one sheet — never narrowing, never centering.
+const PDF_BASE_W   = 816;    // 8.5in @ 96dpi — the ideal (largest text)
+const PDF_MAX_W    = 1500;   // don't shrink text past readable fine print
+const PDF_MARGIN_RATIO = 0.059;   // ≈ 0.5in margin, kept proportional to width
+const PAGE_RATIO   = 792/612;     // letter height:width in PDF points
+
+function stylePdfClone(clone, w){
+  clone.style.width = w + "px";
   clone.style.maxWidth = "none";
   clone.style.margin = "0";
-  clone.style.padding = PDF_MARGIN_PX + "px";
+  clone.style.padding = Math.round(w*PDF_MARGIN_RATIO) + "px";
   clone.style.boxSizing = "border-box";
   clone.style.boxShadow = "none";
   clone.style.borderRadius = "0";
+}
+
+// Find the smallest capture width at which this node fits a single sheet.
+function fitCaptureWidth(srcNode){
+  const holder = document.createElement("div");
+  holder.style.cssText = "position:fixed;left:-99999px;top:0;background:#fff;z-index:-1;";
+  const clone = srcNode.cloneNode(true);
+  holder.appendChild(clone);
+  document.body.appendChild(holder);
+  let chosen = PDF_MAX_W;
+  try{
+    for(let w = PDF_BASE_W; w <= PDF_MAX_W; w += 20){
+      holder.style.width = w + "px";
+      stylePdfClone(clone, w);
+      // fits one sheet when its rendered height stays within the page ratio
+      if(clone.offsetHeight <= w * PAGE_RATIO){ chosen = w; break; }
+    }
+  } finally { holder.remove(); }
+  return chosen;
+}
+
+async function nodeToCanvas(srcNode, forceWidth){
+  const w = forceWidth || fitCaptureWidth(srcNode);
+  const holder = document.createElement("div");
+  holder.style.cssText = `position:fixed;left:-99999px;top:0;width:${w}px;background:#fff;z-index:-1;`;
+  const clone = srcNode.cloneNode(true);
+  stylePdfClone(clone, w);
   holder.appendChild(clone);
   document.body.appendChild(holder);
   try{
     return await html2canvas(clone, {scale:3, backgroundColor:"#ffffff", logging:false,
-      width:PDF_CAPTURE_W, windowWidth:PDF_CAPTURE_W});
+      width:w, windowWidth:w});
   } finally {
     holder.remove();
   }
@@ -3271,6 +3305,17 @@ async function nodeToCanvas(srcNode){
 function addCanvasAsPages(pdf, canvas, pageW, pageH, startNewPageFirst){
   const scale = pageW / canvas.width;         // scale factor to make the content exactly one page wide
   const sliceHeightPx = Math.floor(pageH / scale);  // how many source pixels fit in one page height
+
+  // Rounding guard: if the content overruns a single sheet by only a hair, nudge
+  // it to fit rather than spilling a nearly-empty extra page. A <3% vertical
+  // adjustment is invisible; the width still fills the sheet completely.
+  if(canvas.height > sliceHeightPx && canvas.height <= sliceHeightPx*1.03){
+    const data = canvas.toDataURL("image/png");
+    if(startNewPageFirst) pdf.addPage();
+    pdf.addImage(data, "PNG", 0, 0, pageW, pageH, undefined, "FAST");
+    return 1;
+  }
+
   const totalSlices = Math.max(1, Math.ceil(canvas.height / sliceHeightPx));
   for(let s=0; s<totalSlices; s++){
     const sy = s * sliceHeightPx;
