@@ -2836,6 +2836,13 @@ function scopeHTML(c, plan){
         `Apply new ${g.name.toLowerCase()} finish in homeowner-selected color.`]);
     }
   });
+  // Single source for the tile install/selection sentence, so ceramic ("Group 1–4")
+  // and glass both read correctly and the wording can never drift between sections.
+  const tileInstallLine = (type, where) =>
+    type==="ceramic"
+      ? `Install new Group 1–4 tile at the ${where}, per homeowner\'s selection at Ontario Pool Tile (standard/typical size — excludes large-format tile).`
+      : `Install new glass tile at the ${where}, per homeowner\'s selection.`;
+
   // tile scope — remove old, install new; note group range on ceramic
   if(ui.addon.pTile || ui.addon.sTile){
     const tileGroups = [];
@@ -2847,10 +2854,9 @@ function scopeHTML(c, plan){
       const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
       const subs = [
         `Remove and haul away existing waterline tile around ${bl}.`,
-        `Install new ${grp.name.toLowerCase()} waterline tile.`
+        tileInstallLine(grp.type, "waterline")
       ];
-      if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
-      it(`Waterline Tile Replacement — ${grp.name} (${bl})`, subs);
+      it(`Waterline Tile Replacement — ${bl}`, subs);
     });
     // each NAMED measurement becomes its own scope item (e.g. "Water Wall Tile Replacement")
     [["pool",c.pTileNamed,CFG.tileName[ui.tileType.pTile],ui.tileType.pTile],
@@ -2858,10 +2864,9 @@ function scopeHTML(c, plan){
       (named||[]).forEach(n=>{
         const subs=[
           `Remove and haul away existing ${n.label.toLowerCase()} tile on the ${which}.`,
-          `Install new ${(tname||"Group 1–4").toLowerCase()} tile at the ${n.label.toLowerCase()}.`
+          tileInstallLine(ttype, n.label.toLowerCase())
         ];
-        if(ttype==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
-        it(`${n.label} Tile Replacement — ${tname||"Group 1–4"} (${which})`, subs);
+        it(`${n.label} Tile Replacement — ${which}`, subs);
       });
     });
   }
@@ -2876,10 +2881,9 @@ function scopeHTML(c, plan){
       const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
       const subs = [
         `Remove and haul away existing spillway tile on the ${bl}.`,
-        `Install new ${grp.name.toLowerCase()} spillway tile.`
+        tileInstallLine(grp.type, "spillway")
       ];
-      if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
-      it(`Spillway Tile Replacement — ${grp.name} (${bl})`, subs);
+      it(`Spillway Tile Replacement — ${bl}`, subs);
     });
   }
   // step tile — own scope item(s); supports many steps with different measurements
@@ -2893,10 +2897,11 @@ function scopeHTML(c, plan){
       const bl = grp.whichs.length===2 ? "pool and spa" : grp.whichs[0];
       const subs = [
         `Remove and haul away existing step tile on the ${bl}.`,
-        `Install new ${grp.name.toLowerCase()} step tile and set to finish.`
+        grp.type==="ceramic"
+          ? `Install new Group 1–4 step tile and set to finish, per homeowner\'s selection at Ontario Pool Tile (standard/typical size — excludes large-format tile).`
+          : `Install new glass step tile and set to finish, per homeowner\'s selection.`
       ];
-      if(grp.type==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
-      it(`Step Tile Replacement — ${grp.name} (${bl})`, subs);
+      it(`Step Tile Replacement — ${bl}`, subs);
     });
   }
   // each NAMED step measurement becomes its own scope item (e.g. "Step 2 Tile Replacement")
@@ -2905,10 +2910,11 @@ function scopeHTML(c, plan){
     (named||[]).forEach(n=>{
       const subs=[
         `Remove and haul away existing ${n.label.toLowerCase()} step tile on the ${which}.`,
-        `Install new ${(tname||"Group 1–4").toLowerCase()} tile at the ${n.label.toLowerCase()} and set to finish.`
+        ttype==="ceramic"
+          ? `Install new Group 1–4 tile at the ${n.label.toLowerCase()} and set to finish, per homeowner\'s selection at Ontario Pool Tile (standard/typical size — excludes large-format tile).`
+          : `Install new glass tile at the ${n.label.toLowerCase()} and set to finish, per homeowner\'s selection.`
       ];
-      if(ttype==="ceramic") subs.push("Owner selects tile from Groups 1–4 at Ontario Pool Tile.");
-      it(`${n.label} Step Tile Replacement — ${tname||"Group 1–4"} (${which})`, subs);
+      it(`${n.label} Step Tile Replacement — ${which}`, subs);
     });
   });
   // skimmer replacement
@@ -3004,6 +3010,8 @@ function termsHTML(c, plan, F, validInfo){
   if(ui.addon.pCope||ui.addon.sCope) excl = excl.filter(e=>e!=="coping replacement, resealing, caulking, or mastic work around existing coping");
   if(ui.addon.permit)                excl = excl.filter(e=>e!=="permits");
   if(ui.addon.pSkim||ui.addon.sSkim) excl = excl.filter(e=>e!=="skimmer replacement");
+  // large-format / premium tile is never included in the standard tile allowance
+  if(anyTile) excl.push("large-format or premium tile beyond the standard Group 1–4 selection");
   // tile work selected without step tile → be explicit that step/trim tile isn't included
   if(anyTile && !((ui.addon.pStep&&c.pStepCost>0)||(ui.addon.sStep&&c.sStepCost>0))){
     excl.push("step/trim tile");
@@ -3228,19 +3236,28 @@ function closeQuote(){
 /* ════════════ PDF BUILD + SHARE ════════════ */
 // Render a quote page node to a canvas at a fixed letter-proportioned width,
 // independent of the device's screen size.
+// Capture width matches the letter sheet's aspect so nothing gets squeezed.
+// 816px = 8.5in at 96dpi, i.e. exactly one letter page wide. Padding here becomes
+// the PRINT margin (48px ≈ 0.5in), so text fills the sheet properly instead of
+// sitting in a narrow column with huge dead space on both sides.
+const PDF_CAPTURE_W = 816;
+const PDF_MARGIN_PX = 48;
 async function nodeToCanvas(srcNode){
   const holder = document.createElement("div");
-  holder.style.cssText = "position:fixed;left:-99999px;top:0;width:768px;background:#fff;z-index:-1;";
+  holder.style.cssText = `position:fixed;left:-99999px;top:0;width:${PDF_CAPTURE_W}px;background:#fff;z-index:-1;`;
   const clone = srcNode.cloneNode(true);
-  clone.style.width = "768px";
+  clone.style.width = PDF_CAPTURE_W + "px";
   clone.style.maxWidth = "none";
   clone.style.margin = "0";
+  clone.style.padding = PDF_MARGIN_PX + "px";
+  clone.style.boxSizing = "border-box";
   clone.style.boxShadow = "none";
   clone.style.borderRadius = "0";
   holder.appendChild(clone);
   document.body.appendChild(holder);
   try{
-    return await html2canvas(clone, {scale:3, backgroundColor:"#ffffff", logging:false, width:768, windowWidth:768});
+    return await html2canvas(clone, {scale:3, backgroundColor:"#ffffff", logging:false,
+      width:PDF_CAPTURE_W, windowWidth:PDF_CAPTURE_W});
   } finally {
     holder.remove();
   }
@@ -3290,8 +3307,8 @@ async function buildPdfBlob(){
   for(let p=1; p<=total; p++){
     pdf.setPage(p);
     pdf.setFont(undefined, "normal"); pdf.setFontSize(8); pdf.setTextColor(139,153,171);
-    pdf.text(`${CO.name} · ${CO.lic}`, 30, pageH-18);
-    pdf.text(`${qn?qn+" · ":""}Page ${p} of ${total}`, pageW-30, pageH-18, {align:"right"});
+    pdf.text(`${CO.name} · ${CO.lic}`, 36, pageH-20);
+    pdf.text(`${qn?qn+" · ":""}Page ${p} of ${total}`, pageW-36, pageH-20, {align:"right"});
   }
   return pdf.output("blob");
 }
