@@ -107,7 +107,8 @@ body{
 .sub-toggle .chev{width:10px;height:6px;flex-shrink:0;color:var(--muted-2);transition:transform .2s}
 .sub-toggle.open .chev{transform:rotate(180deg);color:var(--navy)}
 .sub-collapse{max-height:0;overflow:hidden;transition:max-height .26s ease}
-.sub-collapse.open{max-height:600px}
+.sub-collapse.open{max-height:3000px}
+.sub-badge{font-weight:800;color:#1e8a53;letter-spacing:0}
 
 /* ════════════════════ PILLS ════════════════════ */
 .pills{display:flex;gap:6px;margin-bottom:14px}
@@ -726,64 +727,68 @@ html.q-open body{overflow:hidden}
         <div class="tile-hint">Priced per 6&quot; band. Set height per run — a 12&quot; spillway counts double.</div>
       </div>
 
-      <!-- pool coping -->
-      <div class="tog" id="pCopeTog" onclick="toggleAddon('pCope')" style="margin-top:8px">
-        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="nm">Coping<small>remove old · install new</small></div>
-        <div class="rt" id="pCopeLF">—</div>
-      </div>
-      <div class="adder" id="pCopeAdder">
-        <div class="tile-type"><span class="tt-lbl">Type</span><div class="x-seg" id="pCopeType">
-          <button type="button" data-ct="pour" class="on" onclick="setCopingType('pCope','pour')">Pour-in-Place · $45</button>
-          <button type="button" data-ct="stone" onclick="setCopingType('pCope','stone')">Stone · $65</button>
-        </div></div>
-        <div class="segs" id="pCopeSegs"></div>
-        <button type="button" class="seg-add" onclick="addSeg('pCope')">＋ Add measurement</button>
-      </div>
-
-      <!-- pool spillway tile -->
-      <div class="tog" id="pSpillTog" onclick="toggleAddon('pSpill')" style="margin-top:8px">
-        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="nm">Spillway Tile<small>separate line — own label on the quote</small></div>
-        <div class="rt" id="pSpillLFchip">—</div>
-      </div>
-      <div class="adder" id="pSpillAdder">
-        <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pSpillType">
-          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pSpill','ceramic')">Group 1–4 · $35</button>
-          <button type="button" data-tt="glass" onclick="setTileType('pSpill','glass')">Glass · $55</button>
-        </div></div>
-        <div class="two">
-          <div class="fld"><label class="lbl">Length</label>
-            <div class="unit-wrap"><input id="pSpillLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
-          </div>
-          <div class="fld"><label class="lbl">Height</label>
-            <div class="unit-wrap"><input id="pSpillH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
-          </div>
+      <!-- pool extra features (coping, spillway, step tile, skimmer) — collapsible -->
+      <div class="div"></div>
+      <button type="button" class="sub-toggle" id="pMoreToggle" onclick="toggleMoreFeatures('p')">
+        <span class="sub">MORE POOL FEATURES<span class="sub-badge" id="pMoreBadge"></span></span>
+        <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="sub-collapse" id="pMoreCollapse">
+        <div class="tog" id="pCopeTog" onclick="toggleAddon('pCope')">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Coping<small>remove old · install new</small></div>
+          <div class="rt" id="pCopeLF">—</div>
         </div>
-        <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
-      </div>
+        <div class="adder" id="pCopeAdder">
+          <div class="tile-type"><span class="tt-lbl">Type</span><div class="x-seg" id="pCopeType">
+            <button type="button" data-ct="pour" class="on" onclick="setCopingType('pCope','pour')">Pour-in-Place · $45</button>
+            <button type="button" data-ct="stone" onclick="setCopingType('pCope','stone')">Stone · $65</button>
+          </div></div>
+          <div class="segs" id="pCopeSegs"></div>
+          <button type="button" class="seg-add" onclick="addSeg('pCope')">＋ Add measurement</button>
+        </div>
 
-      <!-- pool step tile -->
-      <div class="tog" id="pStepTog" onclick="toggleAddon('pStep')" style="margin-top:8px">
-        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="nm">Step Tile<small>tile strip on steps — separate line</small></div>
-        <div class="rt" id="pStepLFchip">—</div>
-      </div>
-      <div class="adder" id="pStepAdder">
-        <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pStepType">
-          <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pStep','ceramic')">Group 1–4 · $35</button>
-          <button type="button" data-tt="glass" onclick="setTileType('pStep','glass')">Glass · $55</button>
-        </div></div>
-        <div class="segs" id="pStepSegs"></div>
-        <button type="button" class="seg-add" onclick="addSeg('pStep')">＋ Add measurement (Step 1, Step 2…)</button>
-        <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
-      </div>
+        <div class="tog" id="pSpillTog" onclick="toggleAddon('pSpill')" style="margin-top:8px">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Spillway Tile<small>separate line — own label on the quote</small></div>
+          <div class="rt" id="pSpillLFchip">—</div>
+        </div>
+        <div class="adder" id="pSpillAdder">
+          <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pSpillType">
+            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pSpill','ceramic')">Group 1–4 · $35</button>
+            <button type="button" data-tt="glass" onclick="setTileType('pSpill','glass')">Glass · $55</button>
+          </div></div>
+          <div class="two">
+            <div class="fld"><label class="lbl">Length</label>
+              <div class="unit-wrap"><input id="pSpillLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
+            </div>
+            <div class="fld"><label class="lbl">Height</label>
+              <div class="unit-wrap"><input id="pSpillH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
+            </div>
+          </div>
+          <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
+        </div>
 
-      <!-- pool skimmer -->
-      <div class="tog" id="pSkimTog" onclick="toggleAddon('pSkim')" style="margin-top:8px">
-        <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <div class="nm">Skimmer Replacement<small>remove &amp; replace existing skimmer</small></div>
-        <div class="rt">$2,500</div>
+        <div class="tog" id="pStepTog" onclick="toggleAddon('pStep')" style="margin-top:8px">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Step Tile<small>tile strip on steps — separate line</small></div>
+          <div class="rt" id="pStepLFchip">—</div>
+        </div>
+        <div class="adder" id="pStepAdder">
+          <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="pStepType">
+            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('pStep','ceramic')">Group 1–4 · $35</button>
+            <button type="button" data-tt="glass" onclick="setTileType('pStep','glass')">Glass · $55</button>
+          </div></div>
+          <div class="segs" id="pStepSegs"></div>
+          <button type="button" class="seg-add" onclick="addSeg('pStep')">＋ Add measurement (Step 1, Step 2…)</button>
+          <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
+        </div>
+
+        <div class="tog" id="pSkimTog" onclick="toggleAddon('pSkim')" style="margin-top:8px">
+          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="nm">Skimmer Replacement<small>remove &amp; replace existing skimmer</small></div>
+          <div class="rt">$2,500</div>
+        </div>
       </div>
 
     </div>
@@ -884,67 +889,70 @@ html.q-open body{overflow:hidden}
           <div class="tile-hint">Priced per 6&quot; band. Set height per run — a 12&quot; spillway counts double.</div>
         </div>
 
-        <!-- spa coping -->
-        <div class="tog" id="sCopeTog" onclick="toggleAddon('sCope')" style="margin-top:8px">
-          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="nm">Coping<small>remove old · install new</small></div>
-          <div class="rt" id="sCopeLF">—</div>
-        </div>
-        <div class="adder" id="sCopeAdder">
-          <div class="tile-type"><span class="tt-lbl">Type</span><div class="x-seg" id="sCopeType">
-            <button type="button" data-ct="pour" class="on" onclick="setCopingType('sCope','pour')">Pour-in-Place · $45</button>
-            <button type="button" data-ct="stone" onclick="setCopingType('sCope','stone')">Stone · $65</button>
-          </div></div>
-          <div class="segs" id="sCopeSegs"></div>
-          <button type="button" class="seg-add" onclick="addSeg('sCope')">＋ Add measurement</button>
-        </div>
-
-        <!-- spa spillway tile -->
-        <div class="tog" id="sSpillTog" onclick="toggleAddon('sSpill')" style="margin-top:8px">
-          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="nm">Spillway Tile<small>separate line — own label on the quote</small></div>
-          <div class="rt" id="sSpillLFchip">—</div>
-        </div>
-        <div class="adder" id="sSpillAdder">
-          <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sSpillType">
-            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sSpill','ceramic')">Group 1–4 · $35</button>
-            <button type="button" data-tt="glass" onclick="setTileType('sSpill','glass')">Glass · $55</button>
-          </div></div>
-          <div class="two">
-            <div class="fld"><label class="lbl">Length</label>
-              <div class="unit-wrap"><input id="sSpillLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
-            </div>
-            <div class="fld"><label class="lbl">Height</label>
-              <div class="unit-wrap"><input id="sSpillH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
-            </div>
+        <!-- spa extra features (coping, spillway, step tile, skimmer) — collapsible -->
+        <div class="div"></div>
+        <button type="button" class="sub-toggle" id="sMoreToggle" onclick="toggleMoreFeatures('s')">
+          <span class="sub">MORE SPA FEATURES<span class="sub-badge" id="sMoreBadge"></span></span>
+          <svg class="chev" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="sub-collapse" id="sMoreCollapse">
+          <div class="tog" id="sCopeTog" onclick="toggleAddon('sCope')">
+            <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="nm">Coping<small>remove old · install new</small></div>
+            <div class="rt" id="sCopeLF">—</div>
           </div>
-          <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
-        </div>
+          <div class="adder" id="sCopeAdder">
+            <div class="tile-type"><span class="tt-lbl">Type</span><div class="x-seg" id="sCopeType">
+              <button type="button" data-ct="pour" class="on" onclick="setCopingType('sCope','pour')">Pour-in-Place · $45</button>
+              <button type="button" data-ct="stone" onclick="setCopingType('sCope','stone')">Stone · $65</button>
+            </div></div>
+            <div class="segs" id="sCopeSegs"></div>
+            <button type="button" class="seg-add" onclick="addSeg('sCope')">＋ Add measurement</button>
+          </div>
 
-        <!-- spa step tile -->
-        <div class="tog" id="sStepTog" onclick="toggleAddon('sStep')" style="margin-top:8px">
-          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="nm">Step Tile<small>tile strip on steps — separate line</small></div>
-          <div class="rt" id="sStepLFchip">—</div>
-        </div>
-        <div class="adder" id="sStepAdder">
-          <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sStepType">
-            <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sStep','ceramic')">Group 1–4 · $35</button>
-            <button type="button" data-tt="glass" onclick="setTileType('sStep','glass')">Glass · $55</button>
-          </div></div>
-          <div class="segs" id="sStepSegs"></div>
-          <button type="button" class="seg-add" onclick="addSeg('sStep')">＋ Add measurement (Step 1, Step 2…)</button>
-          <button type="button" class="seg-add seg-add-auto" onclick="addSpaStepAuto()">＋ Same as spa perimeter<span id="sStepAutoHint"></span></button>
-          <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
-        </div>
+          <div class="tog" id="sSpillTog" onclick="toggleAddon('sSpill')" style="margin-top:8px">
+            <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="nm">Spillway Tile<small>separate line — own label on the quote</small></div>
+            <div class="rt" id="sSpillLFchip">—</div>
+          </div>
+          <div class="adder" id="sSpillAdder">
+            <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sSpillType">
+              <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sSpill','ceramic')">Group 1–4 · $35</button>
+              <button type="button" data-tt="glass" onclick="setTileType('sSpill','glass')">Glass · $55</button>
+            </div></div>
+            <div class="two">
+              <div class="fld"><label class="lbl">Length</label>
+                <div class="unit-wrap"><input id="sSpillLF" class="inp" type="number" inputmode="decimal" min="0" step="0.5" placeholder="0"><span class="unit">LF</span></div>
+              </div>
+              <div class="fld"><label class="lbl">Height</label>
+                <div class="unit-wrap"><input id="sSpillH" class="inp" type="number" inputmode="decimal" min="0" step="1" placeholder="6"><span class="unit">in</span></div>
+              </div>
+            </div>
+            <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
+          </div>
 
-        <!-- spa skimmer -->
-        <div class="tog" id="sSkimTog" onclick="toggleAddon('sSkim')" style="margin-top:8px">
-          <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="nm">Skimmer Replacement<small>remove &amp; replace existing skimmer</small></div>
-          <div class="rt">$2,500</div>
+          <div class="tog" id="sStepTog" onclick="toggleAddon('sStep')" style="margin-top:8px">
+            <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="nm">Step Tile<small>tile strip on steps — separate line</small></div>
+            <div class="rt" id="sStepLFchip">—</div>
+          </div>
+          <div class="adder" id="sStepAdder">
+            <div class="tile-type"><span class="tt-lbl">Tile</span><div class="x-seg" id="sStepType">
+              <button type="button" data-tt="ceramic" class="on" onclick="setTileType('sStep','ceramic')">Group 1–4 · $35</button>
+              <button type="button" data-tt="glass" onclick="setTileType('sStep','glass')">Glass · $55</button>
+            </div></div>
+            <div class="segs" id="sStepSegs"></div>
+            <button type="button" class="seg-add" onclick="addSeg('sStep')">＋ Add measurement (Step 1, Step 2…)</button>
+            <button type="button" class="seg-add seg-add-auto" onclick="addSpaStepAuto()">＋ Same as spa perimeter<span id="sStepAutoHint"></span></button>
+            <div class="tile-hint">Priced per 6&quot; band, same as waterline tile.</div>
+          </div>
+
+          <div class="tog" id="sSkimTog" onclick="toggleAddon('sSkim')" style="margin-top:8px">
+            <div class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3.2 3.2L13 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="nm">Skimmer Replacement<small>remove &amp; replace existing skimmer</small></div>
+            <div class="rt">$2,500</div>
+          </div>
         </div>
-      </div>
 
     </div>
   </section>
@@ -1114,6 +1122,12 @@ html.q-open body{overflow:hidden}
       <div class="fld"><label class="lbl">Job Address</label><input id="jobAddr" class="inp" type="text" placeholder="Street, City, CA (appears on quote)"></div>
       <div class="fld"><label class="lbl">Final Holdback <span style="font-weight:500;color:var(--muted-2)">(auto if blank — amount left at walkthrough)</span></label>
         <div class="unit-wrap"><span class="unit" style="left:12px;right:auto;font-family:var(--mono)">$</span><input id="finalHold" class="inp" type="number" inputmode="decimal" min="0" step="100" placeholder="auto" style="padding-left:32px"></div>
+      </div>
+      <div class="fld"><label class="lbl">Proposal Deadline <span style="font-weight:500;color:var(--muted-2)">(blank = standard 15 days — use for urgency on a big discount)</span></label>
+        <div style="display:flex;gap:8px">
+          <input id="quoteDeadline" class="inp" type="date" style="flex:1" onchange="save()">
+          <button type="button" onclick="setDeadlineWeek()" style="padding:0 15px;border:1.5px solid var(--navy);border-radius:9px;background:#fff;color:var(--navy);font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap;font-family:var(--sans)">1 Week</button>
+        </div>
       </div>
       <div class="fld"><label class="lbl">Special Conditions <span style="font-weight:500;color:var(--muted-2)">(prints on quote)</span></label><textarea id="specNotes" class="inp" rows="2" placeholder="e.g. Existing waterline tile is aged/brittle; not responsible for tile loss during demo"></textarea></div>
       <div class="fld"><label class="lbl">Internal Notes <span style="font-weight:500;color:var(--muted-2)">(never on quote)</span></label><textarea id="jobNotes" class="inp" rows="2" placeholder="Anything to remember about this job"></textarea></div>
@@ -2133,6 +2147,7 @@ function step(id, d){
 /* ════════════ LIVE RECALC (LF chips only — no prices) ════════════ */
 function recalc(){
   const p = poolLF(), s = spaLF(), t = p+s;
+  refreshMoreBadges();
 
   // Demo is virtually always part of the job — turn it on automatically the
   // moment real pool/spa dimensions exist, so it\'s never forgotten in the field.
@@ -2535,6 +2550,27 @@ function toggleLightingSub(){
   const open = $("lightSubCollapse").classList.toggle("open");
   $("lightSubToggle").classList.toggle("open", open);
 }
+function setDeadlineWeek(){
+  const d = new Date(Date.now() + 7*86400000);
+  const p = n=>String(n).padStart(2,"0");
+  $("quoteDeadline").value = `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+  save();
+}
+function toggleMoreFeatures(which){
+  const collapse = $(which+"MoreCollapse"), toggle = $(which+"MoreToggle");
+  const open = collapse.classList.toggle("open");
+  toggle.classList.toggle("open", open);
+}
+// Badge on the collapsed header so an active Coping/Spillway/Step/Skimmer
+// selection is never invisible just because the section is tucked away.
+function refreshMoreBadges(){
+  const keys = ["Cope","Spill","Step","Skim"];
+  ["p","s"].forEach(side=>{
+    const n = keys.reduce((a,k)=> a + (ui.addon[side+k] ? 1 : 0), 0);
+    const badge = $(side+"MoreBadge");
+    if(badge) badge.textContent = n>0 ? ` · ${n} active` : "";
+  });
+}
 
 /* ════════════ PRESS-AND-HOLD REVEAL (actual cost) ════════════ */
 (function(){
@@ -2620,7 +2656,7 @@ const INPUT_IDS = ["pLen","pLenIn","pWid","pWidIn","pManLF","pExtra","pFinish",
   "sLen","sLenIn","sWid","sWidIn","sDiam","sDiamIn","sManLF","sExtra","sFinish",
   "jobName","custName","jobAddr","finalHold","specNotes","jobNotes",
   "rcAmt","rcDate","rcRef","rcFrom","rcAddr","rcBal","rcSeq","rcNote",
-  "pSpillLF","pSpillH","sSpillLF","sSpillH","pStepLF","pStepH","sStepLF","sStepH"];
+  "pSpillLF","pSpillH","sSpillLF","sSpillH","pStepLF","pStepH","sStepLF","sStepH","quoteDeadline"];
 
 function save(){
   try{
@@ -2724,6 +2760,11 @@ function resetAll(){
    PROPOSAL / QUOTE GENERATOR
    Page 1: scope + investment · Page 2: terms + signatures
    ════════════════════════════════════════════════ */
+// Single source of truth for proposal validity — feeds BOTH the "Valid Through"
+// date on page 1 AND the Proposal Validity clause text on page 2. Change this
+// ONE number and both update together; they can never drift apart again.
+const PROPOSAL_VALID_DAYS = 15;
+
 const CO = {
   name: "3M Pools Inc.",
   lic:  "CA Contractors Lic #1045078",
@@ -2928,7 +2969,8 @@ function scopeHTML(c, plan){
   return `<ol class="q-scope">${items.join("")}</ol>`;
 }
 
-function termsHTML(c, plan, F){
+function termsHTML(c, plan, F, validInfo){
+  validInfo = validInfo || { str:"", isOverride:false };
   // ── Payment schedule (auto formula OR custom editable lines) ──
   const payLines = getPaymentLines(F);
 
@@ -3023,7 +3065,9 @@ function termsHTML(c, plan, F){
       <p>Owner may cancel this contract before midnight of the third business day after signing by delivering written notice of cancellation to ${CO.name}. Because work often begins the next day at Owner's request, if Contractor has already performed work or furnished materials at the time of cancellation, Owner shall pay Contractor for all work performed and materials furnished through the date of cancellation, to the extent permitted by law.</p>
 
       <div class="t-h">14. Proposal Validity</div>
-      <p>This proposal expires 15 days from the date on page 1. Material and labor pricing is subject to change after expiration.</p>
+      <p>${validInfo.isOverride
+          ? `This proposal is valid through <b>${validInfo.str}</b>. Material and labor pricing is subject to change after that date.`
+          : `This proposal expires ${PROPOSAL_VALID_DAYS} days from the date on page 1. Material and labor pricing is subject to change after expiration.`}</p>
 
       ${specBlock}
 
@@ -3063,7 +3107,15 @@ function buildQuoteDoc(c){
   const qn = mintQuoteNum();
   const d = new Date();
   const dateStr  = d.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
-  const validStr = new Date(d.getTime()+30*86400000).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  // Deadline: standard 15 days by default, OR a manual override (specific date /
+  // "1 Week" quick-set) — e.g. urgency around a big discount. Computed ONCE here
+  // and passed into termsHTML so the printed date and the clause text can never
+  // say two different things.
+  const deadlineRaw = $("quoteDeadline").value;
+  const validStr = deadlineRaw
+    ? fmtDateInput(deadlineRaw)
+    : new Date(d.getTime()+PROPOSAL_VALID_DAYS*86400000).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  const validInfo = { str:validStr, isOverride:!!deadlineRaw };
   const cust = esc($("custName").value.trim());
   const addr = esc($("jobAddr").value.trim());
   const logoSrc = document.querySelector(".hd-icon img").src;
@@ -3148,7 +3200,7 @@ function buildQuoteDoc(c){
     ${optionalBlock}
     <div class="q-foot"><span>${CO.name} · ${CO.lic}</span><span>Page 1 of 2</span></div>`;
 
-  $("qp2").innerHTML = brand + termsHTML(c, plan, F) +
+  $("qp2").innerHTML = brand + termsHTML(c, plan, F, validInfo) +
     `<div class="q-foot"><span>${CO.name} · ${CO.lic}</span><span>Proposal ${qn} · Page 2 of 2</span></div>`;
 }
 
