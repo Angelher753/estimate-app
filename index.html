@@ -506,7 +506,9 @@ select.inp{
 .q-opt-d{font-weight:500;color:#5a6b80;font-size:10px;margin-top:1px}
 .q-opt-r{text-align:right;color:#2563eb;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
 .q-opt-r .q-fill{color:#6b7a8d;font-weight:600;font-size:10px}
-.q-pay-line{font-size:10.5px;color:#34445a;line-height:1.5;margin:0 0 4px}
+.q-pay-block{margin-top:10px;padding-top:8px;border-top:1px solid #e3eaf2}
+.q-pay-h{font-size:9px;font-weight:900;letter-spacing:1px;color:#7e8da0;margin-bottom:4px}
+.q-pay-line{font-size:10.5px;color:#34445a;line-height:1.5;margin:0}
 .q-pay-line b{color:var(--navy)}
 .q-pay-note{color:#6b7a8d}
 
@@ -2985,19 +2987,19 @@ function termsHTML(c, plan, F){
         ${payLines.map(p=>`<li>${esc(p.label)}: <b>${usd(p.amount)}</b></li>`).join("")}
       </ul>
 
-      <div class="t-h">3. Accepted Payment Methods</div>
-      <p class="q-pay-line"><b>Cash</b> · <b>Check</b> payable to &ldquo;3M Pools Inc.&rdquo; · <b>Wire</b> (instructions on request) · <b>Zelle</b> to (909) 630-4300 <span class="q-pay-note">— include project address &amp; name in the memo</span>.</p>
-
-      <div class="t-h">4. Property Access</div>
+      <div class="t-h">3. Property Access</div>
       <p>Owner grants Contractor the right to access the work site — including the backyard and pool/spa area — during normal construction hours permitted by local ordinance, from the date of contract signing through receipt of final payment. Contractor may enter for work, inspections, material delivery, and project management without prior notice during those hours. Contractor will exercise this right professionally and will minimize disruption to the property.</p>
 
       ${warr}
 
-      <div class="t-h">5. Exclusions</div>
+      <div class="t-h">4. Exclusions</div>
       <p>Unless listed in this proposal, the following are excluded: ${excl.join("; ")}.</p>
 
-      <div class="t-h">6. Hidden &amp; Changed Conditions</div>
+      <div class="t-h">5. Hidden &amp; Changed Conditions</div>
       <p>Pre-existing and hidden conditions are the Owner's responsibility. If unforeseen conditions (structural or shell damage, failing plumbing or equipment, undisclosed prior repairs, rebar or gunite defects, etc.) are discovered after draining or demolition, Contractor will notify Owner and a written change order may be issued for the additional repair. Multiple or unusually thick coats of existing plaster discovered during demolition, requiring removal beyond a single layer, are also considered an unforeseen condition subject to a written change order. Additional work is priced separately and must be approved in writing before it proceeds. Contractor is not responsible for pre-existing conditions not created by Contractor.</p>
+
+      <div class="t-h">6. Pool Substrate Verification</div>
+      <p>This agreement is based on Contractor's assessment that the pool/spa shell is gunite, shotcrete, or concrete construction suitable for a cementitious (plaster, pebble, or aggregate) interior finish. If Contractor determines, before or during the course of work, that the pool/spa is fiberglass, vinyl-liner, or another substrate incompatible with the scope of work described in this proposal, Contractor may cancel this agreement by written notice to Owner. Upon cancellation under this clause, Contractor will refund any deposit or payment received, less the reasonable cost of any labor or materials already provided, within 10 business days.</p>
 
       <div class="t-h">7. Entire Agreement</div>
       <p>This signed proposal, its incorporated documents, and any signed change orders are the complete agreement between the parties. Conversations, verbal statements, recommendations, or separate estimates do not change the scope, price, or terms of this agreement unless added in a signed written change order. No employee, salesperson, installer, or representative has authority to modify this agreement verbally.</p>
@@ -3021,7 +3023,7 @@ function termsHTML(c, plan, F){
       <p>Owner may cancel this contract before midnight of the third business day after signing by delivering written notice of cancellation to ${CO.name}. Because work often begins the next day at Owner's request, if Contractor has already performed work or furnished materials at the time of cancellation, Owner shall pay Contractor for all work performed and materials furnished through the date of cancellation, to the extent permitted by law.</p>
 
       <div class="t-h">14. Proposal Validity</div>
-      <p>This proposal expires 30 days from the date on page 1. Material and labor pricing is subject to change after expiration.</p>
+      <p>This proposal expires 15 days from the date on page 1. Material and labor pricing is subject to change after expiration.</p>
 
       ${specBlock}
 
@@ -3139,6 +3141,10 @@ function buildQuoteDoc(c){
       ${rows}
       <tr class="q-tot"><td>TOTAL</td><td class="amt">${usd(F)}</td></tr>
     </table>
+    <div class="q-pay-block">
+      <div class="q-pay-h">ACCEPTED PAYMENT METHODS</div>
+      <p class="q-pay-line"><b>Cash</b> · <b>Check</b> payable to &ldquo;3M Pools Inc.&rdquo; · <b>Wire</b> (instructions on request) · <b>Zelle</b> to (909) 630-4300 <span class="q-pay-note">— include project address &amp; name in the memo</span>.</p>
+    </div>
     ${optionalBlock}
     <div class="q-foot"><span>${CO.name} · ${CO.lic}</span><span>Page 1 of 2</span></div>`;
 
